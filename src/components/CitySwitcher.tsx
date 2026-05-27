@@ -19,10 +19,13 @@ export function CitySwitcher({
     if (open) {
       setQuery("");
       const t = setTimeout(() => inputRef.current?.focus(), 80);
-      document.documentElement.style.overflow = "hidden";
+      // Lock body scroll only — leave html alone so iOS Safari can still
+      // scroll the focused input into view when the keyboard opens.
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
       return () => {
         clearTimeout(t);
-        document.documentElement.style.overflow = "";
+        document.body.style.overflow = prev;
       };
     }
   }, [open]);
@@ -72,7 +75,7 @@ export function CitySwitcher({
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/40 backdrop-blur-md sm:items-center sm:justify-center"
+          className="fixed inset-0 z-50 flex flex-col justify-end bg-black/55 sm:items-center sm:justify-center"
           onClick={() => setOpen(false)}
         >
           <div
@@ -80,7 +83,7 @@ export function CitySwitcher({
             aria-modal="true"
             aria-label="اختر مدينة"
             onClick={(e) => e.stopPropagation()}
-            className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 max-h-[85vh] flex flex-col"
+            className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 max-h-[85dvh] flex flex-col"
             style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
             dir="rtl"
           >

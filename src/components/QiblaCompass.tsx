@@ -89,7 +89,7 @@ export function QiblaCompass({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col justify-end bg-black/40 backdrop-blur-md sm:items-center sm:justify-center"
+      className="fixed inset-0 z-50 flex flex-col justify-end bg-black/55 sm:items-center sm:justify-center"
       onClick={onClose}
     >
       <div
@@ -97,7 +97,7 @@ export function QiblaCompass({
         aria-modal="true"
         aria-label="القبلة"
         onClick={(e) => e.stopPropagation()}
-        className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 flex flex-col"
+        className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 max-h-[90dvh] overflow-y-auto flex flex-col"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         dir="rtl"
       >
