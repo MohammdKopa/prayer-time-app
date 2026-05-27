@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prayer Times
 
-## Getting Started
+A prayer clock with multi-source consensus. No ads, no bad times.
 
-First, run the development server:
+The clock displays prayer times computed **locally on the device** using Meeus-based astronomy (via [`adhan-js`](https://github.com/batoulapps/adhan-js)). Each time is cross-checked against 6 other calculation methods — when they disagree by more than 2 minutes, the UI shows a confidence badge so the user knows the time is contested rather than authoritative.
+
+## Status
+
+**MVP — single screen, hardcoded to Marl, NRW (51.6564, 7.0907).**
+
+Built 2026-05-27. Differentiator validated:
+- Local engine agrees with Aladhan MWL within 60s for all 5 prayers (see `scripts/validate.mts`).
+- 7 calculation methods displayed simultaneously (MWL, ISNA, Egyptian, Umm al-Qura, Diyanet, MoonsightingCommittee, MWL+Hanafi Asr).
+
+## Run locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # → http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Validate the engine
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx tsx scripts/validate.mts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Computes today's prayers for Marl via the local engine and diffs each one against Aladhan MWL. Exits non-zero if any prayer drifts > 120s.
 
-## Learn More
+## Deploy
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bash scripts/bundle.sh
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [DEPLOY.md](DEPLOY.md) for VPS setup (systemd + nginx).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## What's NOT in the MVP
 
-## Deploy on Vercel
+Parked for v2 (see `.claude/plans/lets-make-an-mvp-sequential-bird.md`):
+- Location picker / GPS / multi-city
+- Method picker UI (currently hardcoded to MWL with TwilightAngle high-lat rule)
+- Qibla compass, Hijri overlay, Adhan audio
+- localStorage settings
+- Tier 3 sources (masjid iqama feeds, moon-sighting committees)
+- Real service worker for cold-offline
+- Native iOS/Android wrap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Architecture
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+Browser (PWA, installable)
+└── ClockClient.tsx ('use client')
+    ├── computeDay(MARL.lat, MARL.lng) ──→ adhan-js × 7 methods
+    ├── computeConsensus(day)            ──→ spread + confidence
+    └── fetch('/api/sanity-check')       ──→ Aladhan watchdog
+                                              (console.warn if Δ>30s vs primary)
+```
+
+The clock displays `MWL` (Muslim World League, TwilightAngle high-lat rule). All other methods exist only to populate the confidence badge.
+
+## File map
+
+```
+src/
+├── app/
+│   ├── layout.tsx               viewport, manifest, fonts
+│   ├── page.tsx                 mounts <ClockClient location={MARL} />
+│   ├── globals.css              Tailwind 4 + ink/gold theme
+│   └── api/sanity-check/route.ts  Aladhan proxy (1h cache)
+├── components/
+│   ├── ClockClient.tsx          ticking clock, countdown, watchdog
+│   ├── PrayerRow.tsx            row with confidence pill
+│   └── ConfidenceBadge.tsx      coloured pill (high/medium/low)
+└── lib/
+    ├── prayer-engine.ts         computeDay() — wraps adhan-js
+    ├── methods.ts               7 calculation methods registry
+    ├── consensus.ts             computeConsensus() — spread + rating
+    ├── format.ts                time/countdown formatters, AR labels
+    └── location.ts              MARL hardcoded location
+```

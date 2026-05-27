@@ -1,0 +1,16 @@
+.git
+.gitignore
+.next
+node_modules
+dist
+.env*.local
+.vscode
+.idea
+*.log
+.DS_Store
+Thumbs.db
+README.md
+DEPLOY.md
+.claude
+scripts/bundle.sh
+scripts/validate.mts
