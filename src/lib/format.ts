@@ -73,3 +73,19 @@ export function formatDateAr(d: Date, tz?: string): string {
     timeZone: tz,
   }).format(d);
 }
+
+/** Arabic Hijri date like "١٢ ذو القعدة ١٤٤٧ هـ" (Umm al-Qura calendar). */
+export function formatHijriDateAr(d: Date, tz?: string): string {
+  const parts = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: tz,
+  }).formatToParts(d);
+  // The year part already includes "هـ" suffix in ar-SA, but normalize to be sure.
+  const day = parts.find((p) => p.type === "day")?.value ?? "";
+  const month = parts.find((p) => p.type === "month")?.value ?? "";
+  const year = parts.find((p) => p.type === "year")?.value ?? "";
+  const yearClean = year.replace(/هـ?$/u, "").trim();
+  return `${day} ${month} ${yearClean} هـ`;
+}

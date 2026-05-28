@@ -6,11 +6,13 @@ import { computeConsensus } from "@/lib/consensus";
 import {
   formatCountdownAr,
   formatDateAr,
+  formatHijriDateAr,
   formatHMS,
   PRAYER_LABEL_AR,
   toArabicDigits,
 } from "@/lib/format";
 import { type City, DEFAULT_CITY, findCity, NRW_TZ } from "@/lib/cities";
+import { useAzanPlayer } from "@/lib/azan";
 import { CitySwitcher } from "./CitySwitcher";
 import { PrayerRow } from "./PrayerRow";
 import { QiblaCompass } from "./QiblaCompass";
@@ -37,6 +39,8 @@ export function ClockClient() {
   const [flash, setFlash] = useState(false);
   const [qiblaOpen, setQiblaOpen] = useState(false);
   const flashTimer = useRef<number | null>(null);
+  const lastTickRef = useRef<Date | null>(null);
+  const azan = useAzanPlayer();
 
   useEffect(() => {
     const saved =
@@ -103,6 +107,25 @@ export function ClockClient() {
       isTomorrow: true as const,
     };
   }, [day, dayTomorrow, now]);
+
+  // Fire azan when 'now' crosses a prayer time (today only — fajr-tomorrow is
+  // handled by the next day's mount).
+  useEffect(() => {
+    if (!hydrated) return;
+    const prev = lastTickRef.current;
+    lastTickRef.current = now;
+    if (!prev) return;
+    const prevMs = prev.getTime();
+    const nowMs = now.getTime();
+    for (const p of PRAYER_ORDER) {
+      if (p === "sunrise") continue;
+      const t = day.primary.times[p].getTime();
+      if (t > prevMs && t <= nowMs) {
+        azan.play(p);
+        break;
+      }
+    }
+  }, [now, hydrated, day, azan]);
 
   // Sanity-check watchdog
   useEffect(() => {
@@ -173,9 +196,56 @@ export function ClockClient() {
       <header className="flex items-center justify-between gap-3">
         <CitySwitcher current={city} onChange={setCityAndPersist} />
         <div className="flex items-center gap-2">
-          <div className="ar text-xs text-bone-dim tracking-wide" dir="rtl">
-            {hydrated ? formatDateAr(now, NRW_TZ) : "—"}
+          <div className="ar flex flex-col items-end leading-tight" dir="rtl">
+            <span className="text-xs text-bone-dim tracking-wide">
+              {hydrated ? formatDateAr(now, NRW_TZ) : "—"}
+            </span>
+            <span className="text-[10px] text-gold/75 tracking-wide tnum">
+              {hydrated ? formatHijriDateAr(now, NRW_TZ) : "—"}
+            </span>
           </div>
+          <button
+            type="button"
+            onClick={() => {
+              void azan.toggleMute();
+            }}
+            className="glass glass-interactive inline-flex h-8 w-8 items-center justify-center rounded-full text-gold-soft hover:bg-white/[0.09] transition"
+            aria-label={azan.muted ? "تفعيل صوت الأذان" : "كتم صوت الأذان"}
+            title={azan.muted ? "تفعيل صوت الأذان" : "كتم صوت الأذان"}
+          >
+            {azan.muted ? (
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                <path d="M18.63 13A17.89 17.89 0 0 1 18 8" />
+                <path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14" />
+                <path d="M18 8a6 6 0 0 0-9.33-5" />
+                <line x1="3" y1="3" x2="21" y2="21" />
+              </svg>
+            ) : (
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              </svg>
+            )}
+          </button>
           <button
             type="button"
             onClick={() => setQiblaOpen(true)}
