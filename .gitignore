@@ -43,3 +43,10 @@ Thumbs.db
 
 # Generated docs / agent artifacts
 /.claude
+
+# Push subscriptions data (mounted as volume in prod)
+/data
+.dev.log
+
+# Worker has its own node_modules — installed fresh in Dockerfile
+/scripts/node_modules

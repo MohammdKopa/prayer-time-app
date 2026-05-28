@@ -13,7 +13,9 @@ import {
 } from "@/lib/format";
 import { type City, DEFAULT_CITY, findCity, NRW_TZ } from "@/lib/cities";
 import { useAzanPlayer } from "@/lib/azan";
+import { useBackgroundPush } from "@/lib/push-client";
 import { CitySwitcher } from "./CitySwitcher";
+import { InstallBanner } from "./InstallBanner";
 import { PrayerRow } from "./PrayerRow";
 import { QiblaCompass } from "./QiblaCompass";
 
@@ -41,6 +43,7 @@ export function ClockClient() {
   const flashTimer = useRef<number | null>(null);
   const lastTickRef = useRef<Date | null>(null);
   const azan = useAzanPlayer();
+  const push = useBackgroundPush();
 
   useEffect(() => {
     const saved =
@@ -55,21 +58,61 @@ export function ClockClient() {
     return () => clearInterval(id);
   }, []);
 
-  const setCityAndPersist = useCallback((c: City) => {
-    setCity((prev) => {
-      if (prev.id !== c.id) {
-        setFlash(true);
-        if (flashTimer.current) window.clearTimeout(flashTimer.current);
-        flashTimer.current = window.setTimeout(() => setFlash(false), 1500);
+  const setCityAndPersist = useCallback(
+    (c: City) => {
+      setCity((prev) => {
+        if (prev.id !== c.id) {
+          setFlash(true);
+          if (flashTimer.current) window.clearTimeout(flashTimer.current);
+          flashTimer.current = window.setTimeout(() => setFlash(false), 1500);
+        }
+        return c;
+      });
+      try {
+        window.localStorage.setItem(STORAGE_KEY, c.id);
+      } catch {
+        /* ignore */
       }
-      return c;
-    });
-    try {
-      window.localStorage.setItem(STORAGE_KEY, c.id);
-    } catch {
-      /* ignore */
+      // If background notifications are on, the server needs the new city.
+      void push.syncCity(c);
+    },
+    [push],
+  );
+
+  // Combined bell action: toggle audio mute AND (when enabling) try to set up
+  // background pushes. If the user denies the OS prompt, audio still works
+  // while the tab is open — degrade gracefully.
+  const handleBellClick = useCallback(async () => {
+    if (azan.muted) {
+      await azan.toggleMute(); // unlocks + unmutes
+      if (push.state !== "unsupported" && push.state !== "denied") {
+        await push.enable(city);
+      }
+    } else {
+      await azan.toggleMute(); // mutes
+      if (push.state === "subscribed") {
+        await push.disable();
+      }
     }
-  }, []);
+  }, [azan, push, city]);
+
+  // Listen for the SW's "play this prayer now" message that fires when the
+  // user taps a background notification.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
+      return;
+    }
+    const handler = (event: MessageEvent) => {
+      const data = event.data as { type?: string; prayer?: string } | null;
+      if (data?.type === "play-azan" && data.prayer) {
+        azan.play(data.prayer as PrayerName);
+      }
+    };
+    navigator.serviceWorker.addEventListener("message", handler);
+    return () => {
+      navigator.serviceWorker.removeEventListener("message", handler);
+    };
+  }, [azan]);
 
   const dateKey = useMemo(() => {
     const fmt = new Intl.DateTimeFormat("en-CA", {
@@ -207,9 +250,10 @@ export function ClockClient() {
           <button
             type="button"
             onClick={() => {
-              void azan.toggleMute();
+              void handleBellClick();
             }}
-            className="glass glass-interactive inline-flex h-8 w-8 items-center justify-center rounded-full text-gold-soft hover:bg-white/[0.09] transition"
+            disabled={push.busy}
+            className="glass glass-interactive relative inline-flex h-8 w-8 items-center justify-center rounded-full text-gold-soft hover:bg-white/[0.09] transition disabled:opacity-60"
             aria-label={azan.muted ? "تفعيل صوت الأذان" : "كتم صوت الأذان"}
             title={azan.muted ? "تفعيل صوت الأذان" : "كتم صوت الأذان"}
           >
@@ -244,6 +288,13 @@ export function ClockClient() {
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
               </svg>
+            )}
+            {!azan.muted && push.state === "subscribed" && (
+              <span
+                aria-hidden="true"
+                className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-good ring-1 ring-[#04100c]"
+                title="إشعارات الخلفية مفعّلة"
+              />
             )}
           </button>
           <button
@@ -337,6 +388,9 @@ export function ClockClient() {
           />
         ))}
       </section>
+
+      {/* ── Install-to-home-screen banner ─────────────────── */}
+      {hydrated && <InstallBanner />}
 
       {/* ── Footer ────────────────────────────────────────── */}
       <footer className="mt-6 flex flex-col items-center gap-1.5 text-center">

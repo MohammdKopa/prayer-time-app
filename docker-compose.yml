@@ -12,12 +12,41 @@ services:
     environment:
       NODE_ENV: production
       NEXT_TELEMETRY_DISABLED: "1"
+      VAPID_PUBLIC: "${VAPID_PUBLIC}"
+      VAPID_PRIVATE: "${VAPID_PRIVATE}"
+      VAPID_SUBJECT: "${VAPID_SUBJECT:-mailto:hello@prayer.kametrix.com}"
+      PUSH_STORE_PATH: "/app/data/subscriptions.json"
+    volumes:
+      - ./data:/app/data
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:3000/"]
       interval: 30s
       timeout: 5s
       start_period: 15s
       retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  push-worker:
+    # Reuse the same image — no second build needed.
+    image: prayer-times:latest
+    container_name: prayer-times-worker
+    restart: unless-stopped
+    # Wait for the main image to be built by the prayer-times service.
+    depends_on:
+      - prayer-times
+    environment:
+      NODE_ENV: production
+      VAPID_PUBLIC: "${VAPID_PUBLIC}"
+      VAPID_PRIVATE: "${VAPID_PRIVATE}"
+      VAPID_SUBJECT: "${VAPID_SUBJECT:-mailto:hello@prayer.kametrix.com}"
+      PUSH_STORE_PATH: "/app/data/subscriptions.json"
+    volumes:
+      - ./data:/app/data
+    command: ["node", "/app/scripts/push-worker.mjs"]
     logging:
       driver: json-file
       options:

@@ -9,6 +9,12 @@ RUN apk add --no-cache libc6-compat
 COPY package.json package-lock.json* ./
 RUN npm ci --no-audit --no-fund
 
+# ── 1b. worker deps (separate so the worker has its own node_modules) ─
+FROM node:22-alpine AS workerdeps
+WORKDIR /worker
+COPY scripts/package.json scripts/package-lock.json* ./
+RUN npm install --no-audit --no-fund --omit=dev
+
 # ── 2. build ─────────────────────────────────────────────────────────
 FROM node:22-alpine AS builder
 WORKDIR /app
@@ -36,6 +42,12 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# Push-worker script + its isolated node_modules — runs as a separate
+# docker-compose service using the same image.
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+COPY --from=workerdeps --chown=nextjs:nodejs /worker/node_modules ./scripts/node_modules
+# Subscriptions directory — mounted as a host volume in prod for persistence.
+RUN mkdir -p ./data && chown nextjs:nodejs ./data
 
 USER nextjs
 EXPOSE 3000
