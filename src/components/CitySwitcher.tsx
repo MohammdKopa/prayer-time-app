@@ -14,6 +14,9 @@ export function CitySwitcher({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  // Tracks the on-screen (visual) viewport so the sheet stays above the
+  // software keyboard instead of being covered by it.
+  const [vp, setVp] = useState<{ top: number; height: number } | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -37,6 +40,26 @@ export function CitySwitcher({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  // Size the overlay to the visual viewport so the search box rides above the
+  // keyboard. visualViewport.height shrinks when the keyboard opens (Android)
+  // or stays full while offsetTop shifts (iOS) — both handled here.
+  useEffect(() => {
+    if (!open) {
+      setVp(null);
+      return;
+    }
+    const vvp = window.visualViewport;
+    if (!vvp) return;
+    const update = () => setVp({ top: vvp.offsetTop, height: vvp.height });
+    update();
+    vvp.addEventListener("resize", update);
+    vvp.addEventListener("scroll", update);
+    return () => {
+      vvp.removeEventListener("resize", update);
+      vvp.removeEventListener("scroll", update);
+    };
   }, [open]);
 
   const filtered = useMemo(() => {
@@ -76,6 +99,7 @@ export function CitySwitcher({
       {open && (
         <div
           className="fixed inset-0 z-50 flex flex-col justify-end bg-black/55 sm:items-center sm:justify-center"
+          style={vp ? { top: vp.top, height: vp.height } : undefined}
           onClick={() => setOpen(false)}
         >
           <div
@@ -83,7 +107,7 @@ export function CitySwitcher({
             aria-modal="true"
             aria-label="اختر مدينة"
             onClick={(e) => e.stopPropagation()}
-            className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 max-h-[85dvh] flex flex-col"
+            className="glass glass-strong w-full max-w-md rounded-t-3xl sm:rounded-3xl sm:m-4 max-h-full sm:max-h-[85vh] flex flex-col"
             style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
             dir="rtl"
           >
