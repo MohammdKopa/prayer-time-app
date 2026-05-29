@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "mosques:fetch": "node scripts/fetch-mosques.mjs"
   },
   "dependencies": {
     "@types/web-push": "^3.6.4",

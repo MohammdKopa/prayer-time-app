@@ -1,0 +1,2515 @@
+[
+  {
+    "id": "osm-node-1850265664",
+    "cityId": "aachen",
+    "name": "Al-Imam Malik Moschee",
+    "latitude": 50.7748454,
+    "longitude": 6.0981514
+  },
+  {
+    "id": "osm-node-9672178080",
+    "cityId": "aachen",
+    "name": "Alevitisches Kulturzentrum Aachen und Umgebung e.V.",
+    "address": "Jülicher Straße 63, 52070 Aachen",
+    "latitude": 50.7795297,
+    "longitude": 6.099166
+  },
+  {
+    "id": "osm-way-77884491",
+    "cityId": "aachen",
+    "name": "Bilal-Moschee",
+    "address": "Professor-Pirlet-Straße 20, 52074 Aachen",
+    "latitude": 50.779663,
+    "longitude": 6.0714904
+  },
+  {
+    "id": "osm-way-175339730",
+    "cityId": "aachen",
+    "name": "Bosnische Moschee Aachen (Dzemat Aachen)",
+    "address": "Josefstraße 158, 52080 Aachen",
+    "latitude": 50.7842488,
+    "longitude": 6.1543633
+  },
+  {
+    "id": "osm-node-565024099",
+    "cityId": "aachen",
+    "name": "Islamische Gemeinschaft",
+    "latitude": 50.772522,
+    "longitude": 6.1259961
+  },
+  {
+    "id": "osm-node-6712788490",
+    "cityId": "aachen",
+    "name": "Islamische Gemeinschaft e.V.",
+    "address": "Harscampstraße 20, 52062 Aachen",
+    "latitude": 50.773839,
+    "longitude": 6.0908118
+  },
+  {
+    "id": "osm-way-500995296",
+    "cityId": "aachen",
+    "name": "Mansoor Moschee",
+    "address": "Feldstraße 47, 52070 Aachen",
+    "latitude": 50.7911135,
+    "longitude": 6.1140652
+  },
+  {
+    "id": "osm-node-11982937772",
+    "cityId": "aachen",
+    "name": "Masjed Assunnah",
+    "latitude": 50.7772853,
+    "longitude": 6.0970318
+  },
+  {
+    "id": "osm-node-6712788491",
+    "cityId": "aachen",
+    "name": "Türkischer Integrations- und Bildungsverein Aachen e.V.",
+    "address": "Robert-Koch-Straße 28, 52066 Aachen",
+    "latitude": 50.7683989,
+    "longitude": 6.1149137
+  },
+  {
+    "id": "osm-way-160272848",
+    "cityId": "aachen",
+    "name": "Yunus-Emre-Moschee",
+    "address": "Stolberger Straße 209, 52068 Aachen",
+    "latitude": 50.7769116,
+    "longitude": 6.1217347
+  },
+  {
+    "id": "osm-node-3813304423",
+    "cityId": "bielefeld",
+    "name": "Bosniakischer Kulturverein Selam e. V.",
+    "address": "Ziegelstraße 67, 33609 Bielefeld",
+    "latitude": 52.0360221,
+    "longitude": 8.5712939
+  },
+  {
+    "id": "osm-node-3818494383",
+    "cityId": "bielefeld",
+    "name": "Islamisches Zentrum Bielefeld",
+    "latitude": 52.0252071,
+    "longitude": 8.5397069
+  },
+  {
+    "id": "osm-node-7617839974",
+    "cityId": "bielefeld",
+    "name": "Kasr-i Şirin",
+    "address": "Detmolder Straße 89, 33604 Bielefeld",
+    "latitude": 52.0101639,
+    "longitude": 8.5411386
+  },
+  {
+    "id": "osm-way-176401806",
+    "cityId": "bielefeld",
+    "name": "Masjid-Tauhid-Moschee",
+    "address": "August-Bebel-Straße 43a, 33602 Bielefeld",
+    "latitude": 52.0290511,
+    "longitude": 8.5402736
+  },
+  {
+    "id": "osm-node-3922112952",
+    "cityId": "bielefeld",
+    "name": "Merkez Cami-i",
+    "address": "Ernst-Rein-Straße 32, 33613 Bielefeld",
+    "latitude": 52.0345852,
+    "longitude": 8.533706
+  },
+  {
+    "id": "osm-node-6472215787",
+    "cityId": "bielefeld",
+    "name": "Mevlana Camii",
+    "address": "Herforder Straße 108, 33602 Bielefeld",
+    "latitude": 52.0325991,
+    "longitude": 8.5413972
+  },
+  {
+    "id": "osm-node-6472215788",
+    "cityId": "bielefeld",
+    "name": "Süleymaniye Camii",
+    "address": "Herforder Straße 107, 33602 Bielefeld",
+    "latitude": 52.0333004,
+    "longitude": 8.5416986
+  },
+  {
+    "id": "osm-node-2654258256",
+    "cityId": "bielefeld",
+    "name": "Türkisch-Aserbaidschanischer-Kulturverein e.V.",
+    "address": "Eisenbahnstraße 38, 33647 Bielefeld",
+    "latitude": 51.9986552,
+    "longitude": 8.5002145
+  },
+  {
+    "id": "osm-node-7662946455",
+    "cityId": "bielefeld",
+    "name": "Ulu Camii Brackwede",
+    "address": "Gaswerkstraße 21, 33647 Bielefeld",
+    "latitude": 51.9926413,
+    "longitude": 8.5028728
+  },
+  {
+    "id": "osm-way-98740702",
+    "cityId": "bielefeld",
+    "name": "Vatan-Moschee",
+    "address": "Windelsbleicher Straße 56, 33647 Bielefeld",
+    "latitude": 51.9801211,
+    "longitude": 8.5172063
+  },
+  {
+    "id": "osm-way-162125035",
+    "cityId": "bielefeld",
+    "name": "Yunus-Emre-Moschee",
+    "latitude": 52.0217166,
+    "longitude": 8.5554242
+  },
+  {
+    "id": "osm-way-627168946",
+    "cityId": "bochum",
+    "name": "Alevitische Gemeinde",
+    "address": "Helenenstraße 5-11, 44793 Bochum",
+    "latitude": 51.4781536,
+    "longitude": 7.2020256
+  },
+  {
+    "id": "osm-way-98021044",
+    "cityId": "bochum",
+    "name": "DİTİB-Moschee Bochum-Langendreer",
+    "address": "Ümminger Straße 2c, 44892 Bochum",
+    "latitude": 51.4781065,
+    "longitude": 7.3011039
+  },
+  {
+    "id": "osm-way-113734201",
+    "cityId": "bochum",
+    "name": "Ditib-Zentralmoschee",
+    "address": "Schmidtstraße 29, 44793 Bochum",
+    "latitude": 51.4786793,
+    "longitude": 7.2127928
+  },
+  {
+    "id": "osm-node-3577442862",
+    "cityId": "bochum",
+    "name": "Eyüp Sultan Camii",
+    "latitude": 51.4796562,
+    "longitude": 7.1410394
+  },
+  {
+    "id": "osm-way-703443585",
+    "cityId": "bochum",
+    "name": "Fatih-Camii",
+    "address": "Humboldtstraße 33a, 44787 Bochum",
+    "latitude": 51.4785986,
+    "longitude": 7.2147537
+  },
+  {
+    "id": "osm-way-885827691",
+    "cityId": "bochum",
+    "name": "Islamische Gemeinde Bochum",
+    "latitude": 51.4710518,
+    "longitude": 7.2110197
+  },
+  {
+    "id": "osm-node-2177314174",
+    "cityId": "bochum",
+    "name": "Islamischer Kulturverein Bochum e.V.",
+    "address": "Querenburger Straße 65, 44789 Bochum",
+    "latitude": 51.4637104,
+    "longitude": 7.2335191
+  },
+  {
+    "id": "osm-node-3653898820",
+    "cityId": "bochum",
+    "name": "Kultur Center Bosna Bochum e.V.",
+    "address": "Hochstraße 92, 44866 Bochum",
+    "latitude": 51.4798986,
+    "longitude": 7.147356
+  },
+  {
+    "id": "osm-node-883398219",
+    "cityId": "bonn",
+    "name": "Al Ansar Moschee",
+    "address": "Bonner Straße 93, 53173 Bonn",
+    "latitude": 50.68934,
+    "longitude": 7.1495527
+  },
+  {
+    "id": "osm-way-47078432",
+    "cityId": "bonn",
+    "name": "Arabisches Zentrum (Al-Muhsinin-Moschee)",
+    "address": "Schwarzer Weg 40, 53227 Bonn",
+    "latitude": 50.7356369,
+    "longitude": 7.1371714
+  },
+  {
+    "id": "osm-way-49531066",
+    "cityId": "bonn",
+    "name": "Assonnah-Moschee",
+    "address": "Siemensstraße 102, 53121 Bonn",
+    "latitude": 50.736086,
+    "longitude": 7.0602235
+  },
+  {
+    "id": "osm-way-74740104",
+    "cityId": "bonn",
+    "name": "Bad Godesberg Camii",
+    "address": "Koblenzer Straße 107, 53177 Bonn",
+    "latitude": 50.6811218,
+    "longitude": 7.1623637
+  },
+  {
+    "id": "osm-node-3531042437",
+    "cityId": "bonn",
+    "name": "Bonner Moschee",
+    "address": "Maxstraße 54, 53111 Bonn",
+    "latitude": 50.7387906,
+    "longitude": 7.0928371
+  },
+  {
+    "id": "osm-node-1301991217",
+    "cityId": "bonn",
+    "name": "DITIB-Moschee",
+    "latitude": 50.7366402,
+    "longitude": 7.0867075
+  },
+  {
+    "id": "osm-way-172418104",
+    "cityId": "bonn",
+    "name": "Dzemat Hajr",
+    "address": "An der Esche 24, 53111 Bonn",
+    "latitude": 50.7429434,
+    "longitude": 7.1013036
+  },
+  {
+    "id": "osm-node-600410346",
+    "cityId": "bonn",
+    "name": "Medina Moschee",
+    "address": "Theaterstraße 12, 53111 Bonn",
+    "latitude": 50.7396226,
+    "longitude": 7.1008071
+  },
+  {
+    "id": "osm-way-151079107",
+    "cityId": "bonn",
+    "name": "Moscheeverein Al Muhajirin",
+    "address": "Brühler Straße 28, 53119 Bonn",
+    "latitude": 50.7408327,
+    "longitude": 7.0699319
+  },
+  {
+    "id": "osm-way-74735942",
+    "cityId": "bonn",
+    "name": "Süleymaniye Moschee",
+    "address": "Kölnstraße 361, 53117 Bonn",
+    "latitude": 50.7485791,
+    "longitude": 7.0800466
+  },
+  {
+    "id": "osm-node-1570006408",
+    "cityId": "bottrop",
+    "name": "DITIP Türkisch-Islamische Union",
+    "latitude": 51.5202233,
+    "longitude": 6.945442
+  },
+  {
+    "id": "osm-node-4353918901",
+    "cityId": "castrop",
+    "name": "Mevlana Camii",
+    "latitude": 51.5628479,
+    "longitude": 7.3773186
+  },
+  {
+    "id": "osm-node-4726743277",
+    "cityId": "castrop",
+    "name": "Yunus-Emre-Camii-Moschee",
+    "latitude": 51.5572235,
+    "longitude": 7.3826948
+  },
+  {
+    "id": "osm-way-90752102",
+    "cityId": "detmold",
+    "name": "Islamisches Kommunikationszentrum Detmold e.V.",
+    "address": "Industriestraße 60, 32756 Detmold",
+    "latitude": 51.943035,
+    "longitude": 8.8663783
+  },
+  {
+    "id": "osm-way-90533596",
+    "cityId": "detmold",
+    "name": "Merkez Camii",
+    "address": "Lemgoer Straße 41, 32756 Detmold",
+    "latitude": 51.9459376,
+    "longitude": 8.8795973
+  },
+  {
+    "id": "osm-way-225059575",
+    "cityId": "dorsten",
+    "name": "Fatih Camii",
+    "address": "Am Holzplatz 17, 46284 Dorsten",
+    "latitude": 51.6717128,
+    "longitude": 6.9730567
+  },
+  {
+    "id": "osm-node-11846683127",
+    "cityId": "dorsten",
+    "name": "Selimiye Moschee",
+    "latitude": 51.6703995,
+    "longitude": 6.9772224
+  },
+  {
+    "id": "osm-node-6137584887",
+    "cityId": "dortmund",
+    "name": "Abu Bakr Moschee",
+    "address": "Carl-Holtschneider-Straße 8a, 44145 Dortmund",
+    "latitude": 51.5289601,
+    "longitude": 7.4632746
+  },
+  {
+    "id": "osm-node-6138115790",
+    "cityId": "dortmund",
+    "name": "Al-Fath Moschee",
+    "address": "Mallinckrodtstraße 186a, 44147 Dortmund",
+    "latitude": 51.5237606,
+    "longitude": 7.4563872
+  },
+  {
+    "id": "osm-way-55995733",
+    "cityId": "dortmund",
+    "name": "Anadolu Camii Moschee",
+    "latitude": 51.5255474,
+    "longitude": 7.4597889
+  },
+  {
+    "id": "osm-node-6138138085",
+    "cityId": "dortmund",
+    "name": "Bosnische Moschee - Islamisches Kulturzentrum e.V.",
+    "address": "Derner Straße 94, 44339 Dortmund",
+    "latitude": 51.5453593,
+    "longitude": 7.4842446
+  },
+  {
+    "id": "osm-node-6137556396",
+    "cityId": "dortmund",
+    "name": "Darussalam Moschee",
+    "address": "Burgholzstraße 41, 44145 Dortmund",
+    "latitude": 51.5272948,
+    "longitude": 7.463988
+  },
+  {
+    "id": "osm-way-55211050",
+    "cityId": "dortmund",
+    "name": "DITIB Ayasofya Moschee Scharnhorst",
+    "address": "Wambeler Holz 70, 44328 Dortmund",
+    "latitude": 51.5405927,
+    "longitude": 7.5186984
+  },
+  {
+    "id": "osm-node-6138142379",
+    "cityId": "dortmund",
+    "name": "Dortmund Merkez Büyük Cami",
+    "address": "Kielstraße 12, 44145 Dortmund",
+    "latitude": 51.5213843,
+    "longitude": 7.4662768
+  },
+  {
+    "id": "osm-node-546821158",
+    "cityId": "dortmund",
+    "name": "Eving Selimiye Camii",
+    "latitude": 51.5495109,
+    "longitude": 7.4692413
+  },
+  {
+    "id": "osm-way-52524716",
+    "cityId": "dortmund",
+    "name": "Eyüp Sultan Moschee",
+    "address": "Haydnstraße 66, 44145 Dortmund",
+    "latitude": 51.526454,
+    "longitude": 7.4631999
+  },
+  {
+    "id": "osm-way-53161105",
+    "cityId": "dortmund",
+    "name": "Hanif Moschee / Bildungszentrum e.V.",
+    "address": "Uhlandstraße 150, 44147 Dortmund",
+    "latitude": 51.5305699,
+    "longitude": 7.4555196
+  },
+  {
+    "id": "osm-node-6137563366",
+    "cityId": "dortmund",
+    "name": "Ibadullah Camii - Türkisch Islamischer Kulturverein",
+    "address": "Altenderner Straße 63, 44329 Dortmund",
+    "latitude": 51.5692181,
+    "longitude": 7.5207002
+  },
+  {
+    "id": "osm-node-3316282743",
+    "cityId": "dortmund",
+    "name": "Islamisches Kulturzentrum \"Bedr\" e.V. Dortmund",
+    "address": "Schüchtermannstraße 33, 44145 Dortmund",
+    "latitude": 51.5262076,
+    "longitude": 7.4694923
+  },
+  {
+    "id": "osm-node-6173327153",
+    "cityId": "dortmund",
+    "name": "Islamisches Kulturzentrum \"Hidajeti\"",
+    "address": "Bornstraße 111a, 44145 Dortmund",
+    "latitude": 51.5239564,
+    "longitude": 7.4712542
+  },
+  {
+    "id": "osm-node-10684122548",
+    "cityId": "dortmund",
+    "name": "Kocatepe Camii Dortmund",
+    "address": "Schlosserstraße 45, 44145 Dortmund",
+    "latitude": 51.5263398,
+    "longitude": 7.4815454
+  },
+  {
+    "id": "osm-node-6138134843",
+    "cityId": "dortmund",
+    "name": "Marokkanisch-Islamische Begegnungsstätte",
+    "address": "Schüruferstraße 256, 44269 Dortmund",
+    "latitude": 51.4927685,
+    "longitude": 7.5445172
+  },
+  {
+    "id": "osm-node-6138158835",
+    "cityId": "dortmund",
+    "name": "Mescid-i Kuba",
+    "address": "Kieferstraße 25, 44225 Dortmund",
+    "latitude": 51.4722349,
+    "longitude": 7.4322404
+  },
+  {
+    "id": "osm-way-127789054",
+    "cityId": "dortmund",
+    "name": "Moschee Dortmund-Derne",
+    "address": "Altenderner Straße 10, 44329 Dortmund",
+    "latitude": 51.5672625,
+    "longitude": 7.5265579
+  },
+  {
+    "id": "osm-way-53928301",
+    "cityId": "dortmund",
+    "name": "Omar Ibn Al-Khattab Moschee - islamisch marokkanisches Kulturzentrum e.V.",
+    "address": "Hirtenstraße 17, 44145 Dortmund",
+    "latitude": 51.5281156,
+    "longitude": 7.4855417
+  },
+  {
+    "id": "osm-node-631095519",
+    "cityId": "dortmund",
+    "name": "Osman Gazi Moschee",
+    "latitude": 51.5270986,
+    "longitude": 7.4047466
+  },
+  {
+    "id": "osm-way-53103936",
+    "cityId": "dortmund",
+    "name": "Süleyman Camii",
+    "address": "Parsevalstraße 156, 44369 Dortmund",
+    "latitude": 51.5351588,
+    "longitude": 7.4098266
+  },
+  {
+    "id": "osm-node-6138168328",
+    "cityId": "dortmund",
+    "name": "Sultan Ahmet Camii - Islamischer Verein Dortmund e.V.",
+    "address": "Ofenstraße 3a, 44147 Dortmund",
+    "latitude": 51.5130187,
+    "longitude": 7.4387
+  },
+  {
+    "id": "osm-way-418513335",
+    "cityId": "dortmund",
+    "name": "Sultan Ahmet Camii Dortmund-Hörde",
+    "address": "Friedensweg 1, 44263 Dortmund",
+    "latitude": 51.481548,
+    "longitude": 7.5061038
+  },
+  {
+    "id": "osm-node-6138171543",
+    "cityId": "dortmund",
+    "name": "Tadschikische Gesellschaft NUR e. V.",
+    "address": "Oesterholzstraße 8, 44145 Dortmund",
+    "latitude": 51.5208166,
+    "longitude": 7.4795834
+  },
+  {
+    "id": "osm-way-53334433",
+    "cityId": "dortmund",
+    "name": "Ulu Cami",
+    "address": "Gründlingsweg 1, 44339 Dortmund",
+    "latitude": 51.5434101,
+    "longitude": 7.4784419
+  },
+  {
+    "id": "osm-node-6173209126",
+    "cityId": "dortmund",
+    "name": "Verein zur Förderung der Intergration und Bildung in Dortmund Eving e.V.",
+    "address": "Bergstraße 33, 44339 Dortmund",
+    "latitude": 51.5501156,
+    "longitude": 7.458474
+  },
+  {
+    "id": "osm-node-8382387467",
+    "cityId": "dortmund",
+    "name": "Veysel Karani Camii",
+    "latitude": 51.5100994,
+    "longitude": 7.380503
+  },
+  {
+    "id": "osm-way-41585831",
+    "cityId": "dortmund",
+    "name": "Wali e.V.",
+    "address": "Krückenweg 70, 44225 Dortmund",
+    "latitude": 51.4867123,
+    "longitude": 7.4363048
+  },
+  {
+    "id": "osm-way-55837872",
+    "cityId": "dortmund",
+    "name": "Yeni Cami -Moschee des Verbandes der Islamischen Kulturzentren ( VIKZ )",
+    "address": "Bachstraße 7, 44147 Dortmund",
+    "latitude": 51.5254003,
+    "longitude": 7.4559869
+  },
+  {
+    "id": "osm-node-5173880921",
+    "cityId": "duesseldorf",
+    "name": "al-Markaz al-Islami - Islamisches Zentrum e.V.",
+    "address": "Worringer Straße 63, 40211 Düsseldorf",
+    "latitude": 51.2261311,
+    "longitude": 6.7961797
+  },
+  {
+    "id": "osm-way-75619022",
+    "cityId": "duesseldorf",
+    "name": "Alevitische Gemeinde Düsseldorf",
+    "address": "Am Kleinforst 3a, 40627 Düsseldorf",
+    "latitude": 51.2027694,
+    "longitude": 6.8530152
+  },
+  {
+    "id": "osm-node-5062381273",
+    "cityId": "duesseldorf",
+    "name": "Barla Medresesi Düsseldorf",
+    "address": "Münsterstraße 510, 40472 Düsseldorf",
+    "latitude": 51.2619778,
+    "longitude": 6.8098699
+  },
+  {
+    "id": "osm-node-5174269688",
+    "cityId": "duesseldorf",
+    "name": "Bosnisches Islamisches Kulturzentrum e.V.",
+    "address": "Niederstraße 1, 40223 Düsseldorf",
+    "latitude": 51.2080548,
+    "longitude": 6.7668722
+  },
+  {
+    "id": "osm-node-5543933143",
+    "cityId": "duesseldorf",
+    "name": "Deutsch Islamische Moschee Stiftung DIMS",
+    "address": "Bachstraße 148, 40217 Düsseldorf",
+    "latitude": 51.2100202,
+    "longitude": 6.7770398
+  },
+  {
+    "id": "osm-way-1454771012",
+    "cityId": "duesseldorf",
+    "name": "DİTİB Beyazit Camii",
+    "address": "Hansaallee 378, 40547 Düsseldorf",
+    "latitude": 51.2424352,
+    "longitude": 6.722243
+  },
+  {
+    "id": "osm-way-145128818",
+    "cityId": "duesseldorf",
+    "name": "DITIB Diyanet Merkez Camii Derendorf",
+    "address": "Münsterstraße 199, 40470 Düsseldorf",
+    "latitude": 51.247309,
+    "longitude": 6.7951895
+  },
+  {
+    "id": "osm-way-96613257",
+    "cityId": "duesseldorf",
+    "name": "Ditib Eller Cami -Türkischer Kulturverein",
+    "address": "Festenbergstraße 11, 40231 Düsseldorf",
+    "latitude": 51.2040643,
+    "longitude": 6.8412832
+  },
+  {
+    "id": "osm-node-3821471331",
+    "cityId": "duesseldorf",
+    "name": "El-Muhaxhirin-Moschee - Albanisches Kulturzentrum e.V.",
+    "address": "Mindener Straße 109, 40227 Düsseldorf",
+    "latitude": 51.2119075,
+    "longitude": 6.8115733
+  },
+  {
+    "id": "osm-way-122995427",
+    "cityId": "duesseldorf",
+    "name": "Fetih Camii Düsseldorf",
+    "address": "Oberbilker Allee 270a, 40227 Düsseldorf",
+    "latitude": 51.2100338,
+    "longitude": 6.8053197
+  },
+  {
+    "id": "osm-node-5174299002",
+    "cityId": "duesseldorf",
+    "name": "Fidan - Türkischer Kultur und Sport e.V",
+    "address": "Henkelstraße 7, 40589 Düsseldorf",
+    "latitude": 51.1757355,
+    "longitude": 6.8347245
+  },
+  {
+    "id": "osm-node-3243608897",
+    "cityId": "duesseldorf",
+    "name": "IKBS Düsseldorf Camii",
+    "address": "Ackerstraße 22, 40233 Düsseldorf",
+    "latitude": 51.2256255,
+    "longitude": 6.7975478
+  },
+  {
+    "id": "osm-node-5174398845",
+    "cityId": "duesseldorf",
+    "name": "Islamisch Albanisches Kulturzentrum e.V",
+    "address": "Westfalenstraße 36, 40472 Düsseldorf",
+    "latitude": 51.2628565,
+    "longitude": 6.8142425
+  },
+  {
+    "id": "osm-node-1562668263",
+    "cityId": "duesseldorf",
+    "name": "Masjid Ar-Rahman",
+    "address": "Ronsdorfer Straße 145, 40233 Düsseldorf",
+    "latitude": 51.2126181,
+    "longitude": 6.8151386
+  },
+  {
+    "id": "osm-way-533325456",
+    "cityId": "duesseldorf",
+    "name": "Masjid as-Salam",
+    "address": "Nürnberger Straße 21, 40599 Düsseldorf",
+    "latitude": 51.1709382,
+    "longitude": 6.8552078
+  },
+  {
+    "id": "osm-node-5173868394",
+    "cityId": "duesseldorf",
+    "name": "Masjid Omar / Marokkanisch - Islamische Moscheegemeinde e.V.",
+    "address": "Adersstraße 91, 40215 Düsseldorf",
+    "latitude": 51.2174941,
+    "longitude": 6.7885031
+  },
+  {
+    "id": "osm-way-294706161",
+    "cityId": "duesseldorf",
+    "name": "Masjid Tauba - Islamische Moschee-Gemeinde e.V.",
+    "address": "Westfalenstraße 92, 40472 Düsseldorf",
+    "latitude": 51.2642733,
+    "longitude": 6.8209373
+  },
+  {
+    "id": "osm-node-5173872869",
+    "cityId": "duesseldorf",
+    "name": "Maulana Moschee - Türk. Islamischer Verein e.V.",
+    "address": "Mintropstraße 24, 40215 Düsseldorf",
+    "latitude": 51.2180919,
+    "longitude": 6.7894943
+  },
+  {
+    "id": "osm-node-5543884774",
+    "cityId": "duesseldorf",
+    "name": "Sultan Murad Moschee",
+    "address": "Kölner Straße 146, 40227 Düsseldorf",
+    "latitude": 51.2205224,
+    "longitude": 6.7995473
+  },
+  {
+    "id": "osm-node-560880141",
+    "cityId": "duesseldorf",
+    "name": "Union der Roma - I.K.U.R. Düsseldorf. e.V",
+    "address": "Posener Straße 209, 40231 Düsseldorf",
+    "latitude": 51.2187899,
+    "longitude": 6.8403017
+  },
+  {
+    "id": "osm-way-203217381",
+    "cityId": "duisburg",
+    "name": "Ahl-al-Bait Islamisches Zentrum e.V.",
+    "nameAr": "مسجد مركز أهل البيت الإسلامي",
+    "address": "Rheinhauser Straße 143, 47053 Duisburg",
+    "latitude": 51.4196573,
+    "longitude": 6.7485665
+  },
+  {
+    "id": "osm-way-353521343",
+    "cityId": "duisburg",
+    "name": "Al-Haddschi-Bayram-Wali-Moschee",
+    "nameAr": "جامع الحاج بيرم ولي‎‎",
+    "address": "Wanheimer Straße 8, 47053 Duisburg",
+    "latitude": 51.4228261,
+    "longitude": 6.7541902
+  },
+  {
+    "id": "osm-way-171421273",
+    "cityId": "duisburg",
+    "name": "Almogamma Moschee",
+    "address": "Juliusstraße 10 - 14, 47053 Duisburg",
+    "latitude": 51.4305158,
+    "longitude": 6.7547796
+  },
+  {
+    "id": "osm-way-86208347",
+    "cityId": "duisburg",
+    "name": "Ayyub-Sultan-Moschee",
+    "nameAr": "جامع أيوب سلطان",
+    "address": "Ehinger Straße 93, 47249 Duisburg",
+    "latitude": 51.3799992,
+    "longitude": 6.7374986
+  },
+  {
+    "id": "osm-way-330267095",
+    "cityId": "duisburg",
+    "name": "Bosnische Moschee - Islamisches Kulturzentrum e.V.",
+    "nameAr": "مسجد مركز الثقافي الإسلامي",
+    "address": "Ziethenstraße 49, 47169 Duisburg",
+    "latitude": 51.5143161,
+    "longitude": 6.7580766
+  },
+  {
+    "id": "osm-way-134867151",
+    "cityId": "duisburg",
+    "name": "DITIB-Merkez-Moschee",
+    "nameAr": "المسجد المركزي",
+    "address": "Warbruckstraße 51, 47169 Duisburg",
+    "latitude": 51.5093525,
+    "longitude": 6.7538703
+  },
+  {
+    "id": "osm-node-5025391097",
+    "cityId": "duisburg",
+    "name": "Dschamie Aya Sufia",
+    "nameAr": "جامع آيا صوفيا",
+    "address": "Wanheimer Straße 301, 47055 Duisburg",
+    "latitude": 51.4025644,
+    "longitude": 6.7515359
+  },
+  {
+    "id": "osm-way-307906879",
+    "cityId": "duisburg",
+    "name": "Dschamie Yani Beeck",
+    "nameAr": "جامع يني بيك",
+    "address": "Lange Kamp 39, 47139 Duisburg",
+    "latitude": 51.4801,
+    "longitude": 6.7375517
+  },
+  {
+    "id": "osm-node-3925389377",
+    "cityId": "duisburg",
+    "name": "Duisburg Meiderich Haci Bayram Camii",
+    "nameAr": "جامع دويسبورغ مايدرش الحاج بيرم",
+    "address": "Duisburg",
+    "latitude": 51.4728184,
+    "longitude": 6.7825429
+  },
+  {
+    "id": "osm-way-123081256",
+    "cityId": "duisburg",
+    "name": "Fatih",
+    "nameAr": "مسجد الفاتح",
+    "address": "Dieselstraße 24, 47166 Duisburg",
+    "latitude": 51.4875213,
+    "longitude": 6.7406258
+  },
+  {
+    "id": "osm-node-11054197754",
+    "cityId": "duisburg",
+    "name": "Friemersheimer Bildungs- und Kulturverein e.V.",
+    "latitude": 51.3905455,
+    "longitude": 6.7085751
+  },
+  {
+    "id": "osm-way-203222468",
+    "cityId": "duisburg",
+    "name": "Hochfeld-Moschee",
+    "nameAr": "مسجد هوخفلد",
+    "address": "Hochfeldstraße 46, 47053 Duisburg",
+    "latitude": 51.4227102,
+    "longitude": 6.750891
+  },
+  {
+    "id": "osm-node-6020268091",
+    "cityId": "duisburg",
+    "name": "Homburger Verein zur Förderung der Bildung und Kultur e. V.",
+    "latitude": 51.4492072,
+    "longitude": 6.7042686
+  },
+  {
+    "id": "osm-way-201390582",
+    "cityId": "duisburg",
+    "name": "Islamisch Albanisches Kulturzentrum e.V.",
+    "nameAr": "جامع النور",
+    "address": "Krummenhakstraße 1, 47053 Duisburg",
+    "latitude": 51.4150898,
+    "longitude": 6.7620871
+  },
+  {
+    "id": "osm-way-307855354",
+    "cityId": "duisburg",
+    "name": "Islamische Kulturgemeinde",
+    "nameAr": "المجتمع الثقافة الإسلامية",
+    "address": "Arndtstraße 3, 47119 Duisburg",
+    "latitude": 51.4667285,
+    "longitude": 6.7298319
+  },
+  {
+    "id": "osm-way-202635814",
+    "cityId": "duisburg",
+    "name": "Madrasa Al-Furqan Moschee",
+    "nameAr": "مدرسة الفرقان",
+    "address": "Friedenstraße 6, 47053 Duisburg",
+    "latitude": 51.423891,
+    "longitude": 6.7554163
+  },
+  {
+    "id": "osm-node-3986328236",
+    "cityId": "duisburg",
+    "name": "Masdschid Ali",
+    "nameAr": "مسجد علي",
+    "address": "Kaiser-Wilhelm-Straße 247, 47169 Duisburg",
+    "latitude": 51.499662,
+    "longitude": 6.7518549
+  },
+  {
+    "id": "osm-way-329659625",
+    "cityId": "duisburg",
+    "name": "Masdschid Quba",
+    "nameAr": "مسجد قباء",
+    "address": "Oswaldstraße 29, 47178 Duisburg",
+    "latitude": 51.5372555,
+    "longitude": 6.7310618
+  },
+  {
+    "id": "osm-node-11944567236",
+    "cityId": "duisburg",
+    "name": "Massjid Ar-Rahman",
+    "address": "Feldstraße 23, 47169 Duisburg",
+    "latitude": 51.5056953,
+    "longitude": 6.7575339
+  },
+  {
+    "id": "osm-way-308015882",
+    "cityId": "duisburg",
+    "name": "Moschee",
+    "latitude": 51.4866679,
+    "longitude": 6.7525676
+  },
+  {
+    "id": "osm-node-2343118506",
+    "cityId": "duisburg",
+    "name": "Nour",
+    "latitude": 51.4873141,
+    "longitude": 6.7394096
+  },
+  {
+    "id": "osm-way-203244756",
+    "cityId": "duisburg",
+    "name": "Sandzaks Kulturzentrum \"San\" e.V.",
+    "address": "Brückenstraße 13, 47053 Duisburg",
+    "latitude": 51.4216749,
+    "longitude": 6.7529763
+  },
+  {
+    "id": "osm-way-307744207",
+    "cityId": "duisburg",
+    "name": "Suleymaniye Camii",
+    "address": "Hagenauer Straße 57, 47137 Duisburg",
+    "latitude": 51.476269,
+    "longitude": 6.783636
+  },
+  {
+    "id": "osm-way-301701352",
+    "cityId": "duisburg",
+    "name": "Sultan Ahmet Camii - Diyanet-Thyk-Islamischer Verein",
+    "address": "Friedrich-Ebert-Straße 116, 47119 Duisburg",
+    "latitude": 51.4647548,
+    "longitude": 6.7333392
+  },
+  {
+    "id": "osm-way-390881273",
+    "cityId": "duisburg",
+    "name": "Türkische Moschee",
+    "nameAr": "مسجد تركي",
+    "address": "Hauffstraße 53, 47166 Duisburg",
+    "latitude": 51.4993956,
+    "longitude": 6.7816031
+  },
+  {
+    "id": "osm-node-3971846492",
+    "cityId": "duisburg",
+    "name": "Uthman-II.-Moschee",
+    "nameAr": "جامع عثمان الثاني",
+    "address": "Steigerstraße 30, 47166 Duisburg",
+    "latitude": 51.4937546,
+    "longitude": 6.764174
+  },
+  {
+    "id": "osm-node-2343120209",
+    "cityId": "duisburg",
+    "name": "Yildirim",
+    "latitude": 51.4884248,
+    "longitude": 6.7418638
+  },
+  {
+    "id": "osm-way-307869791",
+    "cityId": "duisburg",
+    "name": "Yunus Emre Moschee",
+    "address": "Vohwinkelstraße 50, 47137 Duisburg",
+    "latitude": 51.466735,
+    "longitude": 6.7592163
+  },
+  {
+    "id": "osm-way-81080968",
+    "cityId": "essen",
+    "name": "Abu Bakr - Islamischer Bund e.V.",
+    "address": "Altenessener Straße 521, 45329 Essen",
+    "latitude": 51.505519,
+    "longitude": 7.007177
+  },
+  {
+    "id": "osm-way-278923137",
+    "cityId": "essen",
+    "name": "Alfaruq Moschee",
+    "address": "Bersonstraße 11, 45141 Essen",
+    "latitude": 51.4702791,
+    "longitude": 7.0017626
+  },
+  {
+    "id": "osm-node-421433621",
+    "cityId": "essen",
+    "name": "Ankara e.V.",
+    "address": "Altendorfer Straße 407, 45143 Essen",
+    "latitude": 51.4610612,
+    "longitude": 6.9676611
+  },
+  {
+    "id": "osm-node-6140794015",
+    "cityId": "essen",
+    "name": "Ditib - Bin Merkez Camii",
+    "address": "Helenenstraße 37-39, 45143 Essen",
+    "latitude": 51.4636942,
+    "longitude": 6.9816354
+  },
+  {
+    "id": "osm-way-1342658216",
+    "cityId": "essen",
+    "name": "Dzemat Essen e. V.",
+    "address": "Karnaper Straße 243, 45329 Essen",
+    "latitude": 51.5312993,
+    "longitude": 7.0120289
+  },
+  {
+    "id": "osm-node-6140775073",
+    "cityId": "essen",
+    "name": "El-Moahidin, Marokkanischer Verein e.V",
+    "address": "Overbergstraße 5, 45141 Essen",
+    "latitude": 51.4695299,
+    "longitude": 7.0124651
+  },
+  {
+    "id": "osm-way-405675086",
+    "cityId": "essen",
+    "name": "Ibn Aafan Moschee",
+    "address": "Bochumer Landstraße 122b, 45276 Essen",
+    "latitude": 51.4439028,
+    "longitude": 7.0895816
+  },
+  {
+    "id": "osm-way-246773863",
+    "cityId": "essen",
+    "name": "IGZ",
+    "address": "Meybuschhof 28, 45327 Essen",
+    "latitude": 51.4937419,
+    "longitude": 7.0485505
+  },
+  {
+    "id": "osm-node-3312430961",
+    "cityId": "essen",
+    "name": "Integrations- und Bildungszentrum Essen e.V.",
+    "address": "Altendorfer Straße 508, 45355 Essen",
+    "latitude": 51.4630964,
+    "longitude": 6.9563958
+  },
+  {
+    "id": "osm-node-9288302709",
+    "cityId": "essen",
+    "name": "Islamische Union",
+    "address": "Auf der Reihe 2, 45327 Essen",
+    "latitude": 51.4878172,
+    "longitude": 7.064551
+  },
+  {
+    "id": "osm-way-97719072",
+    "cityId": "essen",
+    "name": "Islamischer Verein der in Essen lebenden afghanischen Mitbürger e.V",
+    "address": "Hüttmannstraße 92, 45143 Essen",
+    "latitude": 51.4641751,
+    "longitude": 6.9709327
+  },
+  {
+    "id": "osm-way-280059080",
+    "cityId": "essen",
+    "name": "Jamia Masjid e.V.",
+    "address": "Thiesstraße 12, 45329 Essen",
+    "latitude": 51.5070916,
+    "longitude": 7.0065511
+  },
+  {
+    "id": "osm-way-103917675",
+    "cityId": "essen",
+    "name": "Kulturzentrum Dzemat e.V.",
+    "address": "Rahmstraße 253, 45326 Essen",
+    "latitude": 51.4963879,
+    "longitude": 7.0187116
+  },
+  {
+    "id": "osm-way-62212329",
+    "cityId": "essen",
+    "name": "Merkez-Moschee",
+    "address": "In der Hagenbeck 41, 45143 Essen",
+    "latitude": 51.4565236,
+    "longitude": 6.9659854
+  },
+  {
+    "id": "osm-way-93262428",
+    "cityId": "essen",
+    "name": "Mescidi Hicret",
+    "address": "Kupferdreher Straße 188a, 45257 Essen",
+    "latitude": 51.3892081,
+    "longitude": 7.0826758
+  },
+  {
+    "id": "osm-way-157863855",
+    "cityId": "essen",
+    "name": "Verein der türkischen Arbeitnehmer zur islamischen Zusammenarbeit",
+    "address": "Westfalenstraße 202 - 204, 45276 Essen",
+    "latitude": 51.4426311,
+    "longitude": 7.0674704
+  },
+  {
+    "id": "osm-node-1911059435",
+    "cityId": "essen",
+    "name": "Yavuz-Sultan-Selil-cami-i",
+    "latitude": 51.4693664,
+    "longitude": 7.081146
+  },
+  {
+    "id": "osm-way-83206448",
+    "cityId": "essen",
+    "name": "Yeni Cami",
+    "address": "Heßlerstraße 115, 45329 Essen",
+    "latitude": 51.5091228,
+    "longitude": 7.0197445
+  },
+  {
+    "id": "osm-way-28006759",
+    "cityId": "gelsenkirchen",
+    "name": "Al-Aksa-Moschee",
+    "address": "Am Freistuhl 16, 45896 Gelsenkirchen",
+    "latitude": 51.6002935,
+    "longitude": 7.0535916
+  },
+  {
+    "id": "osm-node-6030319856",
+    "cityId": "gelsenkirchen",
+    "name": "Al-Noor Moschee",
+    "address": "Münchener Straße 73, 45881 Gelsenkirchen",
+    "latitude": 51.5200057,
+    "longitude": 7.0968292
+  },
+  {
+    "id": "osm-node-1587253921",
+    "cityId": "gelsenkirchen",
+    "name": "Arrahman Moschee",
+    "latitude": 51.5348618,
+    "longitude": 7.1004486
+  },
+  {
+    "id": "osm-node-2135141618",
+    "cityId": "gelsenkirchen",
+    "name": "Barbaros Yeni Camii",
+    "latitude": 51.4893942,
+    "longitude": 7.0843326
+  },
+  {
+    "id": "osm-node-6141072711",
+    "cityId": "gelsenkirchen",
+    "name": "DITIB - Buer Merkez Camii",
+    "address": "Horster Straße 156, 45897 Gelsenkirchen",
+    "latitude": 51.5675032,
+    "longitude": 7.0462163
+  },
+  {
+    "id": "osm-way-58425837",
+    "cityId": "gelsenkirchen",
+    "name": "Fatih Moschee",
+    "latitude": 51.5052826,
+    "longitude": 7.0486598
+  },
+  {
+    "id": "osm-way-322376766",
+    "cityId": "gelsenkirchen",
+    "name": "ISBZ Nebevi Moschee",
+    "address": "Schüngelbergstraße 25, 45897 Gelsenkirchen",
+    "latitude": 51.5673872,
+    "longitude": 7.0417566
+  },
+  {
+    "id": "osm-way-121287299",
+    "cityId": "gelsenkirchen",
+    "name": "Mevlana Camii",
+    "address": "Fischerstraße 154, 45899 Gelsenkirchen",
+    "latitude": 51.5222371,
+    "longitude": 7.0184848
+  },
+  {
+    "id": "osm-node-1611660889",
+    "cityId": "gelsenkirchen",
+    "name": "Tugra Kultur Zentrum",
+    "latitude": 51.5125723,
+    "longitude": 7.1139592
+  },
+  {
+    "id": "osm-way-322470650",
+    "cityId": "gelsenkirchen",
+    "name": "VIKZ Moscheegemeinde Horst",
+    "address": "Industriestraße 22, 45899 Gelsenkirchen",
+    "latitude": 51.5355505,
+    "longitude": 7.0229918
+  },
+  {
+    "id": "osm-node-4378088877",
+    "cityId": "gelsenkirchen",
+    "name": "ZIB-Zentrum für Integration und Bildung in GE e.V.",
+    "address": "Ahlmannshof 33, 45889 Gelsenkirchen",
+    "latitude": 51.5264461,
+    "longitude": 7.1113877
+  },
+  {
+    "id": "osm-way-150406399",
+    "cityId": "gladbeck",
+    "name": "Moschee Wielandstraße",
+    "address": "Wielandstraße 17, 45968 Gladbeck",
+    "latitude": 51.5654857,
+    "longitude": 7.0046314
+  },
+  {
+    "id": "osm-node-8017361770",
+    "cityId": "hagen",
+    "name": "Ahl-al-Bayt-Moschee",
+    "nameAr": "مسجد أهل البيت",
+    "address": "Bodelschwinghplatz 1, 58089 Hagen",
+    "latitude": 51.3554217,
+    "longitude": 7.4551963
+  },
+  {
+    "id": "osm-way-147962421",
+    "cityId": "hagen",
+    "name": "As-Siddiq-Moschee",
+    "nameAr": "مسجد الصديق",
+    "address": "Fehrbelliner Straße 36a, 58089 Hagen",
+    "latitude": 51.3684445,
+    "longitude": 7.4626454
+  },
+  {
+    "id": "osm-node-4204153790",
+    "cityId": "hagen",
+    "name": "Bosnische Moschee",
+    "nameAr": "مسجد البوسني",
+    "address": "Augustastraße 22, 58089 Hagen",
+    "latitude": 51.3576851,
+    "longitude": 7.460331
+  },
+  {
+    "id": "osm-way-658929842",
+    "cityId": "hagen",
+    "name": "DITIB-Zentralmoschee Hagen",
+    "nameAr": "مسجد هاغن التركي المركزي",
+    "address": "Märkischer Ring 11a, 58097 Hagen",
+    "latitude": 51.3645587,
+    "longitude": 7.4649539
+  },
+  {
+    "id": "osm-way-127572523",
+    "cityId": "hagen",
+    "name": "Islamische Kurdische Gemeinde",
+    "nameAr": "مسجد الشيخ محمد الأمين",
+    "address": "Körnerstraße 94, 58095 Hagen",
+    "latitude": 51.3631011,
+    "longitude": 7.4652123
+  },
+  {
+    "id": "osm-node-4204153791",
+    "cityId": "hagen",
+    "name": "Islamischer Kulturverein Hagen",
+    "nameAr": "الجمعية الثقافية الإسلامية هاغن",
+    "address": "Minervastraße 10, 58089 Hagen",
+    "latitude": 51.353189,
+    "longitude": 7.4540064
+  },
+  {
+    "id": "osm-node-3520162412",
+    "cityId": "hagen",
+    "name": "Mevlana Moschee",
+    "nameAr": "مسجد مولانا",
+    "address": "Eckeseyer Straße 176, 58089 Hagen",
+    "latitude": 51.3817407,
+    "longitude": 7.4522114
+  },
+  {
+    "id": "osm-node-8017330585",
+    "cityId": "hagen",
+    "name": "Milli-Görüsch-Ulu-Moschee Hagen",
+    "nameAr": "مسجد الرؤية الوطنية هاغن الكبير",
+    "address": "Elberfelder Straße 86, 58095 Hagen",
+    "latitude": 51.3597536,
+    "longitude": 7.463055
+  },
+  {
+    "id": "osm-way-142475267",
+    "cityId": "hagen",
+    "name": "Moschee Hagen",
+    "nameAr": "جامع هاغن",
+    "address": "Körnerstraße 79, 58095 Hagen",
+    "latitude": 51.3626939,
+    "longitude": 7.4643857
+  },
+  {
+    "id": "osm-way-451930502",
+    "cityId": "hagen",
+    "name": "Moschee Hagen-Hohenlimburg",
+    "nameAr": "جامع هاغن هونلمبورغ",
+    "address": "Kronenburgstraße 14, 58119 Hagen",
+    "latitude": 51.3445375,
+    "longitude": 7.5759558
+  },
+  {
+    "id": "osm-node-8017361771",
+    "cityId": "hagen",
+    "name": "Moscheeverein Ahl-al-Bayt-Dschami",
+    "nameAr": "جمعية مسجد الجامع أهل البيت",
+    "address": "Märkischer Ring 81, 58097 Hagen",
+    "latitude": 51.3605235,
+    "longitude": 7.4768613
+  },
+  {
+    "id": "osm-way-155636439",
+    "cityId": "hagen",
+    "name": "Nafthat-al-Iman-Moschee",
+    "nameAr": "مسجد نفحات الإيمان",
+    "address": "Bergischer Ring 99, 58095 Hagen",
+    "latitude": 51.3580622,
+    "longitude": 7.4616071
+  },
+  {
+    "id": "osm-way-293242467",
+    "cityId": "hagen",
+    "name": "Sultan-Ahmad-Moschee",
+    "nameAr": "مسجد السلطان أحمد",
+    "address": "Im Mühlenwert 3a, 58135 Hagen",
+    "latitude": 51.3424962,
+    "longitude": 7.4061009
+  },
+  {
+    "id": "osm-way-264890247",
+    "cityId": "hagen",
+    "name": "Türkisch Islamische Gemeinde zu Wetter e.V.",
+    "latitude": 51.381535,
+    "longitude": 7.3907578
+  },
+  {
+    "id": "osm-node-7188454719",
+    "cityId": "hamm",
+    "name": "Arrahman Moschee",
+    "latitude": 51.6465398,
+    "longitude": 7.7577602
+  },
+  {
+    "id": "osm-way-285703906",
+    "cityId": "hamm",
+    "name": "As Salam Moschee",
+    "address": "Spenglerstraße 1, 59067 Hamm",
+    "latitude": 51.668055,
+    "longitude": 7.7688228
+  },
+  {
+    "id": "osm-node-7335692401",
+    "cityId": "hamm",
+    "name": "Camii Girisi - Bildungs- und Kulturverein Hamm-Zentrum e.V.",
+    "address": "Wilhelmstraße 117, 59067 Hamm",
+    "latitude": 51.6694259,
+    "longitude": 7.7964158
+  },
+  {
+    "id": "osm-way-457716078",
+    "cityId": "hamm",
+    "name": "DITIB - Ulu Camii",
+    "latitude": 51.6622098,
+    "longitude": 7.7504828
+  },
+  {
+    "id": "osm-node-4071927371",
+    "cityId": "hamm",
+    "name": "Dzema'at Hamm",
+    "latitude": 51.7080255,
+    "longitude": 7.8333217
+  },
+  {
+    "id": "osm-way-335921742",
+    "cityId": "hamm",
+    "name": "Eyyup Sultan Moschee",
+    "address": "Große Werlstraße 27, 59077 Hamm",
+    "latitude": 51.643761,
+    "longitude": 7.7585121
+  },
+  {
+    "id": "osm-way-335921356",
+    "cityId": "hamm",
+    "name": "Fatih Camii",
+    "address": "59077 Hamm",
+    "latitude": 51.6468592,
+    "longitude": 7.7616272
+  },
+  {
+    "id": "osm-way-307163278",
+    "cityId": "hamm",
+    "name": "IGMG - Fatih sultan genclik merkezi",
+    "address": "Albert-Funk-Straße 118, 59077 Hamm",
+    "latitude": 51.6693313,
+    "longitude": 7.7516482
+  },
+  {
+    "id": "osm-way-129502100",
+    "cityId": "hamm",
+    "name": "Mevlana Camii",
+    "address": "Hammer Straße 128-130, 59075 Hamm",
+    "latitude": 51.692927,
+    "longitude": 7.7551721
+  },
+  {
+    "id": "osm-node-2429873573",
+    "cityId": "hamm",
+    "name": "Selimiye Camii",
+    "address": "Hammer Straße 193, 59075 Hamm",
+    "latitude": 51.6903837,
+    "longitude": 7.7672256
+  },
+  {
+    "id": "osm-way-307163175",
+    "cityId": "hamm",
+    "name": "Suleymaniye Camii",
+    "latitude": 51.6681933,
+    "longitude": 7.7522753
+  },
+  {
+    "id": "osm-node-1780418411",
+    "cityId": "hamm",
+    "name": "Ulu Camii",
+    "latitude": 51.6627103,
+    "longitude": 7.7501413
+  },
+  {
+    "id": "osm-way-133305101",
+    "cityId": "hamm",
+    "name": "Yeşil Camii",
+    "address": "Heessener Straße 125, 59073 Hamm",
+    "latitude": 51.696843,
+    "longitude": 7.8267415
+  },
+  {
+    "id": "osm-way-108436415",
+    "cityId": "hamm",
+    "name": "Yunus-Emre-Moschee",
+    "address": "Hülskamp 16, 59073 Hamm",
+    "latitude": 51.7027471,
+    "longitude": 7.8260426
+  },
+  {
+    "id": "osm-way-252358051",
+    "cityId": "hamm",
+    "name": "Zentral Moschee Hamm",
+    "address": "Brüggenweg 2, 59067 Hamm",
+    "latitude": 51.6756932,
+    "longitude": 7.8008006
+  },
+  {
+    "id": "osm-node-2060721440",
+    "cityId": "herne",
+    "name": "Fathi Merkez Camii",
+    "latitude": 51.5681209,
+    "longitude": 7.2113865
+  },
+  {
+    "id": "osm-node-3425806258",
+    "cityId": "herne",
+    "name": "Herne Merkez Camii",
+    "address": "Mont-Cenis-Straße 17, 44623 Herne",
+    "latitude": 51.5384616,
+    "longitude": 7.2274538
+  },
+  {
+    "id": "osm-node-4480218553",
+    "cityId": "herne",
+    "name": "Holthausener Bildung und Kulturverein e.V.",
+    "address": "Castroper Straße 377, 44627 Herne",
+    "latitude": 51.5488943,
+    "longitude": 7.2803675
+  },
+  {
+    "id": "osm-node-5351761681",
+    "cityId": "herne",
+    "name": "Verband der Islamischen Kulturzentren e.V.",
+    "address": "Ringstraße 55, 44627 Herne",
+    "latitude": 51.5384317,
+    "longitude": 7.2630566
+  },
+  {
+    "id": "osm-way-876279822",
+    "cityId": "iserlohn",
+    "name": "Eyüp Sultan Camii",
+    "latitude": 51.3348768,
+    "longitude": 7.641058
+  },
+  {
+    "id": "osm-way-880771732",
+    "cityId": "iserlohn",
+    "name": "Salam Moschee",
+    "address": "Barendorfer Bruch 15, 58640 Iserlohn",
+    "latitude": 51.407302,
+    "longitude": 7.6925284
+  },
+  {
+    "id": "osm-node-4351750019",
+    "cityId": "iserlohn",
+    "name": "Türkisch-Islamischer Verein e.V. - Hemer Merkez Camii",
+    "latitude": 51.3803704,
+    "longitude": 7.7676561
+  },
+  {
+    "id": "osm-node-6162536525",
+    "cityId": "koeln",
+    "name": "Abbes Alschakeri Gemeinde e.V.",
+    "address": "Delmenhorster Straße 2, 50735 Köln",
+    "latitude": 51.0005148,
+    "longitude": 6.9537801
+  },
+  {
+    "id": "osm-way-154252494",
+    "cityId": "koeln",
+    "name": "Abubakr Moschee",
+    "address": "Höninger Weg 5, 50969 Köln",
+    "latitude": 50.9207284,
+    "longitude": 6.9411444
+  },
+  {
+    "id": "osm-node-6326145492",
+    "cityId": "koeln",
+    "name": "Afghanischer Kulturverein Köln Meschenich e.V.",
+    "address": "Alte Brühler Straße 12, 50997 Köln",
+    "latitude": 50.8631516,
+    "longitude": 6.9236753
+  },
+  {
+    "id": "osm-node-6110231583",
+    "cityId": "koeln",
+    "name": "Al-Nur Moschee",
+    "address": "Miltenberger Straße 2, 51103 Köln",
+    "latitude": 50.937644,
+    "longitude": 7.0189587
+  },
+  {
+    "id": "osm-way-154248459",
+    "cityId": "koeln",
+    "name": "Alevitische Gemeinde Deutschland (Cemevi)",
+    "latitude": 50.9420637,
+    "longitude": 6.8918503
+  },
+  {
+    "id": "osm-way-154239341",
+    "cityId": "koeln",
+    "name": "Alevitische Gemeinde Köln (Cemevi)",
+    "address": "Alpenrosenweg 6, 50769 Köln",
+    "latitude": 51.0195868,
+    "longitude": 6.9167814
+  },
+  {
+    "id": "osm-way-62103251",
+    "cityId": "koeln",
+    "name": "Alevitisches Gemeindehaus Hacı Bektaş Veli (Cemevi)",
+    "address": "Montanusstraße 20, 51065 Köln",
+    "latitude": 50.959433,
+    "longitude": 7.013246
+  },
+  {
+    "id": "osm-way-327120725",
+    "cityId": "koeln",
+    "name": "Aliyyül-Murteza-Moschee",
+    "latitude": 50.9565866,
+    "longitude": 6.9108814
+  },
+  {
+    "id": "osm-way-245394436",
+    "cityId": "koeln",
+    "name": "ATIB Weidenpesch Zentralmoschee",
+    "address": "Neusser Straße 553, 50737 Köln",
+    "latitude": 50.9798781,
+    "longitude": 6.947271
+  },
+  {
+    "id": "osm-node-1668880517",
+    "cityId": "koeln",
+    "name": "Ayasofya-Moschee",
+    "address": "An der Fuhr 3, 50997 Köln",
+    "latitude": 50.8631779,
+    "longitude": 6.9271108
+  },
+  {
+    "id": "osm-way-337665148",
+    "cityId": "koeln",
+    "name": "Bait-un-Nasr Moschee",
+    "address": "Eichhornstraße 2-4, 50735 Köln",
+    "latitude": 50.9746809,
+    "longitude": 6.9655481
+  },
+  {
+    "id": "osm-way-154047788",
+    "cityId": "koeln",
+    "name": "Bosnische Moschee",
+    "latitude": 50.9503416,
+    "longitude": 6.9119637
+  },
+  {
+    "id": "osm-way-153990041",
+    "cityId": "koeln",
+    "name": "Chorweiler Zentralmoschee",
+    "address": "Morsestraße 9a, 50769 Köln",
+    "latitude": 51.0378625,
+    "longitude": 6.9257167
+  },
+  {
+    "id": "osm-way-151467218",
+    "cityId": "koeln",
+    "name": "DITIB-Zentralmoschee",
+    "address": "Venloer Straße 160, 50823 Köln",
+    "latitude": 50.9457294,
+    "longitude": 6.9282995
+  },
+  {
+    "id": "osm-way-154324397",
+    "cityId": "koeln",
+    "name": "Ehl-i Beyt Moschee - Schiitische Gemeinde",
+    "address": "Bergisch Gladbacher Straße 180, 51063 Köln",
+    "latitude": 50.9645236,
+    "longitude": 7.0211882
+  },
+  {
+    "id": "osm-way-154059444",
+    "cityId": "koeln",
+    "name": "El-Furkan Moschee",
+    "address": "Andreaestraße 14, 51063 Köln",
+    "latitude": 50.9601392,
+    "longitude": 7.0005751
+  },
+  {
+    "id": "osm-way-246482078",
+    "cityId": "koeln",
+    "name": "Eyüp Sultan Moschee",
+    "address": "Vietorstraße 70, 51103 Köln",
+    "latitude": 50.9408099,
+    "longitude": 7.0002675
+  },
+  {
+    "id": "osm-way-154054993",
+    "cityId": "koeln",
+    "name": "Fatih-Moschee",
+    "address": "Neusser Straße 356, 50733 Köln",
+    "latitude": 50.9683586,
+    "longitude": 6.9535191
+  },
+  {
+    "id": "osm-node-3522807894",
+    "cityId": "koeln",
+    "name": "Hamza Moschee",
+    "latitude": 50.9630489,
+    "longitude": 7.0072521
+  },
+  {
+    "id": "osm-way-154326940",
+    "cityId": "koeln",
+    "name": "Hoca Ahmet Yesevi Moschee",
+    "address": "Kartäuserwall 59, 50678 Köln",
+    "latitude": 50.9233391,
+    "longitude": 6.9551163
+  },
+  {
+    "id": "osm-way-258783491",
+    "cityId": "koeln",
+    "name": "IGMG Regionalverband Köln e.V.",
+    "address": "Merheimer Straße 229, 50733 Köln",
+    "latitude": 50.967718,
+    "longitude": 6.946115
+  },
+  {
+    "id": "osm-node-438129010",
+    "cityId": "koeln",
+    "name": "Islamische Akademie Villa Hahnenburg",
+    "address": "Ackerstraße 146, 51065 Köln",
+    "latitude": 50.9635876,
+    "longitude": 7.0191974
+  },
+  {
+    "id": "osm-node-1681928821",
+    "cityId": "koeln",
+    "name": "Islamisches Kulturzentrum Köln - Schiitische Gemeinde",
+    "address": "Olpener Straße 33-35, 51103 Köln",
+    "latitude": 50.9405507,
+    "longitude": 7.0197261
+  },
+  {
+    "id": "osm-node-1668912697",
+    "cityId": "koeln",
+    "name": "Kuba-Moschee",
+    "latitude": 50.9397789,
+    "longitude": 6.999895
+  },
+  {
+    "id": "osm-way-252217155",
+    "cityId": "koeln",
+    "name": "Kurdistan Islam Zentrum e.V.",
+    "address": "Vogelsanger Straße 348d, 50827 Köln",
+    "latitude": 50.9549129,
+    "longitude": 6.8953325
+  },
+  {
+    "id": "osm-node-1668937430",
+    "cityId": "koeln",
+    "name": "Mevlana-Moschee",
+    "latitude": 50.9404644,
+    "longitude": 7.023202
+  },
+  {
+    "id": "osm-way-154166145",
+    "cityId": "koeln",
+    "name": "Mevlana-Moschee",
+    "address": "Bahnhofstraße 67a, 51143 Köln",
+    "latitude": 50.8827489,
+    "longitude": 7.063622
+  },
+  {
+    "id": "osm-node-2883188103",
+    "cityId": "koeln",
+    "name": "Moschee Deutz",
+    "latitude": 50.9343482,
+    "longitude": 6.9728275
+  },
+  {
+    "id": "osm-way-260043628",
+    "cityId": "koeln",
+    "name": "Moschee Kalk",
+    "address": "Eythstraße 72, 51103 Köln",
+    "latitude": 50.9442951,
+    "longitude": 7.0100473
+  },
+  {
+    "id": "osm-way-154256071",
+    "cityId": "koeln",
+    "name": "Moschee Ömer-ül Faruk",
+    "address": "Keupstraße 123, 51063 Köln",
+    "latitude": 50.9634986,
+    "longitude": 7.0132942
+  },
+  {
+    "id": "osm-way-230235112",
+    "cityId": "koeln",
+    "name": "Moschee Porz",
+    "address": "Hansestraße 19, 51149 Köln",
+    "latitude": 50.9057182,
+    "longitude": 7.0757993
+  },
+  {
+    "id": "osm-way-298038255",
+    "cityId": "koeln",
+    "name": "Neue Chorweiler Moschee",
+    "address": "Elbeallee 27, 50765 Köln",
+    "latitude": 51.0274346,
+    "longitude": 6.887522
+  },
+  {
+    "id": "osm-relation-4249080",
+    "cityId": "koeln",
+    "name": "Neue Nippeser Moschee",
+    "address": "Neusser Straße 225-227, Köln",
+    "latitude": 50.9623545,
+    "longitude": 6.9533478
+  },
+  {
+    "id": "osm-way-35815745",
+    "cityId": "koeln",
+    "name": "Sufi-Zentrum Divan e.V. (Tekke)",
+    "address": "Blériotstraße 13, 50827 Köln",
+    "latitude": 50.9735714,
+    "longitude": 6.8950492
+  },
+  {
+    "id": "osm-way-357870623",
+    "cityId": "koeln",
+    "name": "Sultan Ahmet Moschee",
+    "address": "Montanusstraße 76, 51065 Köln",
+    "latitude": 50.9627753,
+    "longitude": 7.0135052
+  },
+  {
+    "id": "osm-node-1669519654",
+    "cityId": "koeln",
+    "name": "Taqiyyu'd-Din al-Hilali Moschee",
+    "latitude": 50.9322407,
+    "longitude": 6.9962985
+  },
+  {
+    "id": "osm-node-1668947979",
+    "cityId": "koeln",
+    "name": "Tauhid Moschee",
+    "latitude": 50.9386265,
+    "longitude": 7.0002344
+  },
+  {
+    "id": "osm-node-1431996526",
+    "cityId": "koeln",
+    "name": "Veysel-Karani-Moschee",
+    "latitude": 50.9186913,
+    "longitude": 6.9628626
+  },
+  {
+    "id": "osm-way-154051178",
+    "cityId": "koeln",
+    "name": "VIKZ-Zentralmoschee",
+    "address": "Vogelsanger Straße 290, 50825 Köln",
+    "latitude": 50.9523092,
+    "longitude": 6.9018178
+  },
+  {
+    "id": "osm-way-154417146",
+    "cityId": "koeln",
+    "name": "Vingster Moschee",
+    "address": "Ostheimer Straße 51, 51103 Köln",
+    "latitude": 50.933479,
+    "longitude": 7.0200169
+  },
+  {
+    "id": "osm-node-1669530874",
+    "cityId": "koeln",
+    "name": "Weidenpesch Mescidi (Moschee)",
+    "address": "Etzelstraße 222, 50739 Köln",
+    "latitude": 50.9780929,
+    "longitude": 6.9333427
+  },
+  {
+    "id": "osm-way-154165204",
+    "cityId": "koeln",
+    "name": "Yunus Emre Moschee",
+    "latitude": 50.968436,
+    "longitude": 7.0061491
+  },
+  {
+    "id": "osm-node-6588247524",
+    "cityId": "krefeld",
+    "name": "Ditib Krefeld Fatih Camii",
+    "latitude": 51.3237349,
+    "longitude": 6.5658583
+  },
+  {
+    "id": "osm-way-168473969",
+    "cityId": "krefeld",
+    "name": "Islamische Vereinigung Krefeld",
+    "address": "Am Verschubbahnhof 81, 47809 Krefeld",
+    "latitude": 51.3295389,
+    "longitude": 6.592876
+  },
+  {
+    "id": "osm-node-648549168",
+    "cityId": "krefeld",
+    "name": "Merkez Camii",
+    "latitude": 51.3228419,
+    "longitude": 6.5606417
+  },
+  {
+    "id": "osm-node-8980242684",
+    "cityId": "krefeld",
+    "name": "Yesil Camii",
+    "address": "Niederstraße 131, 47829 Krefeld",
+    "latitude": 51.3592724,
+    "longitude": 6.6485334
+  },
+  {
+    "id": "osm-way-167159450",
+    "cityId": "krefeld",
+    "name": "Yunus-Emre-Moschee",
+    "address": "Obergath 166, 47805 Krefeld",
+    "latitude": 51.312872,
+    "longitude": 6.562673
+  },
+  {
+    "id": "osm-way-161498958",
+    "cityId": "leverkusen",
+    "name": "Mesxhidi Aksa Moschee",
+    "address": "Mühlenweg 211, 51373 Leverkusen",
+    "latitude": 51.0531424,
+    "longitude": 6.998131
+  },
+  {
+    "id": "osm-way-96681069",
+    "cityId": "leverkusen",
+    "name": "Mimar Sinan Moschee",
+    "address": "Kiesweg 7, 51373 Leverkusen",
+    "latitude": 51.0500228,
+    "longitude": 7.0024496
+  },
+  {
+    "id": "osm-way-108033319",
+    "cityId": "leverkusen",
+    "name": "Moschee Al-Muhsinin",
+    "latitude": 51.0588858,
+    "longitude": 6.9506904
+  },
+  {
+    "id": "osm-way-226616690",
+    "cityId": "luenen",
+    "name": "Selimiye Moschee",
+    "address": "Roonstraße 37, 44536 Lünen",
+    "latitude": 51.6087189,
+    "longitude": 7.5138698
+  },
+  {
+    "id": "osm-way-182400780",
+    "cityId": "luenen",
+    "name": "Ulu Cami - Ulu Moschee",
+    "latitude": 51.6006423,
+    "longitude": 7.4373443
+  },
+  {
+    "id": "osm-way-544385521",
+    "cityId": "luenen",
+    "name": "Ulu Camii - Ulu Moschee",
+    "latitude": 51.6007381,
+    "longitude": 7.4373715
+  },
+  {
+    "id": "osm-node-6177433499",
+    "cityId": "luenen",
+    "name": "VIKZ Gahmen Camii",
+    "latitude": 51.587065,
+    "longitude": 7.5111576
+  },
+  {
+    "id": "osm-way-336507003",
+    "cityId": "marl",
+    "name": "Alevi-Bektasi Gemeinde Marl e. V.",
+    "address": "Bachackerweg 90, 45772 Marl",
+    "latitude": 51.6863238,
+    "longitude": 7.1228077
+  },
+  {
+    "id": "osm-way-250110022",
+    "cityId": "marl",
+    "name": "DITB",
+    "address": "Haardstraße 2, 45768 Marl",
+    "latitude": 51.6636294,
+    "longitude": 7.091496
+  },
+  {
+    "id": "osm-way-300417075",
+    "cityId": "marl",
+    "name": "Fatih-Moschee",
+    "address": "Bachackerweg 197, 45772 Marl",
+    "latitude": 51.6791621,
+    "longitude": 7.1245474
+  },
+  {
+    "id": "osm-way-303382998",
+    "cityId": "marl",
+    "name": "Süleymaniye Cami",
+    "latitude": 51.6652275,
+    "longitude": 7.1327105
+  },
+  {
+    "id": "osm-node-5064525161",
+    "cityId": "minden",
+    "name": "Ar-Rahman Moschee",
+    "latitude": 52.2948389,
+    "longitude": 8.9131065
+  },
+  {
+    "id": "osm-node-1171104890",
+    "cityId": "minden",
+    "name": "Barboros Merkez Camii",
+    "address": "Kaiserstraße 9, 32423 Minden",
+    "latitude": 52.2895818,
+    "longitude": 8.9270594
+  },
+  {
+    "id": "osm-node-5064533039",
+    "cityId": "minden",
+    "name": "Deutsch-muslimische Gemeinde e. V.",
+    "latitude": 52.2900157,
+    "longitude": 8.9324775
+  },
+  {
+    "id": "osm-way-294974827",
+    "cityId": "moenchengladbach",
+    "name": "Ahmadiyya Muslim Jamaat Mönchengladbach KdöR",
+    "address": "Oberheydener Straße 20, 41236 Mönchengladbach",
+    "latitude": 51.1569276,
+    "longitude": 6.4467465
+  },
+  {
+    "id": "osm-way-42251616",
+    "cityId": "moenchengladbach",
+    "name": "Diyanet Merkez Camii",
+    "address": "Duvenstraße 338, 41238 Mönchengladbach",
+    "latitude": 51.1520542,
+    "longitude": 6.4501653
+  },
+  {
+    "id": "osm-way-287696477",
+    "cityId": "moenchengladbach",
+    "name": "Masjid Arrahman",
+    "address": "Mittelstraße 40, 41236 Mönchengladbach",
+    "latitude": 51.1612954,
+    "longitude": 6.4375525
+  },
+  {
+    "id": "osm-way-102510086",
+    "cityId": "muelheim",
+    "name": "Fatih-Moschee",
+    "address": "Sandstraße 126c, 45473 Mülheim an der Ruhr",
+    "latitude": 51.4377176,
+    "longitude": 6.8780191
+  },
+  {
+    "id": "osm-node-12670296016",
+    "cityId": "muelheim",
+    "name": "Islamische Gemeinde Hamza Moschee",
+    "address": "Friedrichstraße 50",
+    "latitude": 51.4223603,
+    "longitude": 6.8795728
+  },
+  {
+    "id": "osm-way-300300101",
+    "cityId": "muelheim",
+    "name": "Maryam Moschee",
+    "address": "Alstadener Straße 45, 45476 Mülheim an der Ruhr",
+    "latitude": 51.4532625,
+    "longitude": 6.8484969
+  },
+  {
+    "id": "osm-way-263125733",
+    "cityId": "muenster",
+    "name": "Al-Mo'min Moschee",
+    "address": "Hansestraße 61, 48165 Münster",
+    "latitude": 51.8938079,
+    "longitude": 7.6301879
+  },
+  {
+    "id": "osm-node-11278395912",
+    "cityId": "muenster",
+    "name": "Ar-Rahmah Moschee - Bosnjakisch-Albanische Kultur Münsterland e.V.",
+    "address": "Königsberger Straße",
+    "latitude": 51.9937676,
+    "longitude": 7.6636273
+  },
+  {
+    "id": "osm-way-122076986",
+    "cityId": "muenster",
+    "name": "Ar-Rahman Moschee",
+    "address": "Meßkamp 15, 48147 Münster",
+    "latitude": 51.9811869,
+    "longitude": 7.6148093
+  },
+  {
+    "id": "osm-way-196510271",
+    "cityId": "muenster",
+    "name": "Assalam Moschee",
+    "address": "Hammer Straße 354, 48153 Münster",
+    "latitude": 51.9261746,
+    "longitude": 7.628562
+  },
+  {
+    "id": "osm-node-13343250568",
+    "cityId": "muenster",
+    "name": "At-Tawba-Moschee",
+    "address": "Lütkenbecker Weg 10",
+    "latitude": 51.9485904,
+    "longitude": 7.6478714
+  },
+  {
+    "id": "osm-way-141610052",
+    "cityId": "muenster",
+    "name": "Ditib Merkez Camii",
+    "address": "Bremer Platz 42-46, 48155 Münster",
+    "latitude": 51.9576886,
+    "longitude": 7.6371923
+  },
+  {
+    "id": "osm-node-1349705396",
+    "cityId": "muenster",
+    "name": "Sultan Ahmet Camii",
+    "latitude": 51.9525164,
+    "longitude": 7.6376067
+  },
+  {
+    "id": "osm-node-4225415445",
+    "cityId": "neuss",
+    "name": "Alevitisches Gemeindezentrum Neuss",
+    "address": "Kaarster Straße 4, 41462 Neuss",
+    "latitude": 51.2178118,
+    "longitude": 6.6620192
+  },
+  {
+    "id": "osm-way-94872719",
+    "cityId": "neuss",
+    "name": "Anadolu Moschee",
+    "address": "Schellbergstraße 25, 41469 Neuss",
+    "latitude": 51.1683109,
+    "longitude": 6.7351482
+  },
+  {
+    "id": "osm-node-11935486373",
+    "cityId": "neuss",
+    "name": "DITIB Merkez Camii",
+    "latitude": 51.2022244,
+    "longitude": 6.6827866
+  },
+  {
+    "id": "osm-node-13719241519",
+    "cityId": "neuss",
+    "name": "Yunus Emre Camii",
+    "latitude": 51.2064156,
+    "longitude": 6.67774
+  },
+  {
+    "id": "osm-node-5069148281",
+    "cityId": "oberhausen",
+    "name": "Atib Osmanli Camii Kultur- und Bildungszentrum e. V.",
+    "latitude": 51.479365,
+    "longitude": 6.8774159
+  },
+  {
+    "id": "osm-way-219815668",
+    "cityId": "oberhausen",
+    "name": "Bosnische Moschee Oberhausen",
+    "address": "Fahnhorststraße 32, 46117 Oberhausen",
+    "latitude": 51.5017489,
+    "longitude": 6.8700506
+  },
+  {
+    "id": "osm-way-186926162",
+    "cityId": "oberhausen",
+    "name": "Fatih Moschee",
+    "address": "Vestische Straße 74a, 46117 Oberhausen",
+    "latitude": 51.5053611,
+    "longitude": 6.8743345
+  },
+  {
+    "id": "osm-node-8273984319",
+    "cityId": "oberhausen",
+    "name": "Islamische Gemeinschaft",
+    "latitude": 51.5032765,
+    "longitude": 6.8713088
+  },
+  {
+    "id": "osm-way-87598029",
+    "cityId": "oberhausen",
+    "name": "Mevlana Moschee",
+    "address": "Wasgenwaldstraße 66, 46119 Oberhausen",
+    "latitude": 51.5296441,
+    "longitude": 6.8750244
+  },
+  {
+    "id": "osm-node-941295401",
+    "cityId": "paderborn",
+    "name": "Begegnungsstätte Arrahma",
+    "address": "Salierstraße 14, 33102 Paderborn",
+    "latitude": 51.7278338,
+    "longitude": 8.7600969
+  },
+  {
+    "id": "osm-node-964775999",
+    "cityId": "paderborn",
+    "name": "Diyanet Türkisch-Islamischer Kulturverein e.V.",
+    "address": "Abtsbrede 24, 33098 Paderborn",
+    "latitude": 51.7094837,
+    "longitude": 8.7434825
+  },
+  {
+    "id": "osm-node-13026098939",
+    "cityId": "paderborn",
+    "name": "Hicret Cami-i",
+    "address": "Breslauer Straße 27, 33098 Paderborn",
+    "latitude": 51.7043932,
+    "longitude": 8.735586
+  },
+  {
+    "id": "osm-node-2396471936",
+    "cityId": "paderborn",
+    "name": "Islamisches Zentrum Paderborn",
+    "address": "Benediktinerstraße 61, 33098 Paderborn",
+    "latitude": 51.7042655,
+    "longitude": 8.7378925
+  },
+  {
+    "id": "osm-node-6536659775",
+    "cityId": "recklinghausen",
+    "name": "Ditib Kuba Moschee",
+    "latitude": 51.602954,
+    "longitude": 7.2774467
+  },
+  {
+    "id": "osm-way-188593888",
+    "cityId": "recklinghausen",
+    "name": "Fatih Camii",
+    "address": "Bochumer Straße 51, 45663 Recklinghausen",
+    "latitude": 51.5784833,
+    "longitude": 7.2136952
+  },
+  {
+    "id": "osm-node-4077677268",
+    "cityId": "recklinghausen",
+    "name": "Fatih Sultan Mehmed Moschee",
+    "latitude": 51.6449201,
+    "longitude": 7.2765852
+  },
+  {
+    "id": "osm-way-188875757",
+    "cityId": "recklinghausen",
+    "name": "Islamische Kulturunion",
+    "address": "Bochumer Straße 98a, 45661 Recklinghausen",
+    "latitude": 51.5752252,
+    "longitude": 7.2117241
+  },
+  {
+    "id": "osm-way-188587671",
+    "cityId": "recklinghausen",
+    "name": "Merkez Camii",
+    "address": "König-Ludwig-Straße 7, 45663 Recklinghausen",
+    "latitude": 51.5786178,
+    "longitude": 7.2148447
+  },
+  {
+    "id": "osm-node-6050537697",
+    "cityId": "remscheid",
+    "name": "Ayasofya Moschee",
+    "latitude": 51.1718207,
+    "longitude": 7.1831124
+  },
+  {
+    "id": "osm-way-431992012",
+    "cityId": "remscheid",
+    "name": "DITIB Merkez Moschee Remscheid",
+    "latitude": 51.1768795,
+    "longitude": 7.191857
+  },
+  {
+    "id": "osm-node-3151384025",
+    "cityId": "remscheid",
+    "name": "Fatih Camii",
+    "latitude": 51.1760027,
+    "longitude": 7.2121028
+  },
+  {
+    "id": "osm-node-3541489497",
+    "cityId": "siegen",
+    "name": "Islamisches Gemeindezentrum Siegen e.V.",
+    "address": "Königstraße 1a, 57078 Siegen",
+    "latitude": 50.9116899,
+    "longitude": 8.0121953
+  },
+  {
+    "id": "osm-way-45510027",
+    "cityId": "siegen",
+    "name": "Selimiye Camii",
+    "address": "Zum Wildgehege 3a, 57078 Siegen",
+    "latitude": 50.9066775,
+    "longitude": 8.0126152
+  },
+  {
+    "id": "osm-way-138592463",
+    "cityId": "siegen",
+    "name": "Türkisch-Islamischer-Kulturverein",
+    "latitude": 50.8715726,
+    "longitude": 8.0242207
+  },
+  {
+    "id": "osm-way-88736520",
+    "cityId": "solingen",
+    "name": "Bildung und Begegnungsstätte Egitim Kültür Evi",
+    "address": "Kasernenstraße 31, 42651 Solingen",
+    "latitude": 51.1707186,
+    "longitude": 7.0788509
+  },
+  {
+    "id": "osm-way-88740596",
+    "cityId": "solingen",
+    "name": "DITIB Moschee Solingen",
+    "address": "Kasernenstraße 31a, 42651 Solingen",
+    "latitude": 51.1705504,
+    "longitude": 7.0787233
+  },
+  {
+    "id": "osm-way-172161948",
+    "cityId": "solingen",
+    "name": "Islamische Gemeinde Milli Görüs",
+    "address": "Van-Meenen-Straße 19a, 42651 Solingen",
+    "latitude": 51.1793764,
+    "longitude": 7.0837125
+  },
+  {
+    "id": "osm-way-308908888",
+    "cityId": "solingen",
+    "name": "Mesjid Nur",
+    "address": "Florastraße 14b, 42651 Solingen",
+    "latitude": 51.172448,
+    "longitude": 7.0882145
+  },
+  {
+    "id": "osm-way-1269004601",
+    "cityId": "solingen",
+    "name": "Moschee Erkekler Camii Girisi",
+    "latitude": 51.184683,
+    "longitude": 7.0421876
+  },
+  {
+    "id": "osm-way-133739455",
+    "cityId": "solingen",
+    "name": "Ohligs Süleymaniye Moschee",
+    "address": "Querstraße 7, 42699 Solingen",
+    "latitude": 51.1588921,
+    "longitude": 7.0091148
+  },
+  {
+    "id": "osm-node-12106802116",
+    "cityId": "solingen",
+    "name": "Selimiye Camii",
+    "latitude": 51.1670595,
+    "longitude": 7.0836145
+  },
+  {
+    "id": "osm-way-308762976",
+    "cityId": "solingen",
+    "name": "Solingen Cami Integrations- und Bildungsverein e.V.",
+    "address": "Konrad-Adenauer-Straße 22, 42651 Solingen",
+    "latitude": 51.1760821,
+    "longitude": 7.0847404
+  },
+  {
+    "id": "osm-node-3820352385",
+    "cityId": "velbert",
+    "name": "Ashab'i Suffa Camii",
+    "latitude": 51.3350764,
+    "longitude": 7.05411
+  },
+  {
+    "id": "osm-node-3820352386",
+    "cityId": "velbert",
+    "name": "Bosniakische Moschee",
+    "latitude": 51.3487146,
+    "longitude": 7.1124267
+  },
+  {
+    "id": "osm-node-3820352387",
+    "cityId": "velbert",
+    "name": "Ibrahim Xelilullah Moschee",
+    "latitude": 51.3361546,
+    "longitude": 7.0523452
+  },
+  {
+    "id": "osm-node-3820352388",
+    "cityId": "velbert",
+    "name": "Masjed Assalam",
+    "latitude": 51.3335221,
+    "longitude": 7.0533547
+  },
+  {
+    "id": "osm-node-3820352390",
+    "cityId": "velbert",
+    "name": "Yeni Cami",
+    "latitude": 51.3364088,
+    "longitude": 7.0471685
+  },
+  {
+    "id": "osm-way-249178398",
+    "cityId": "wesel",
+    "name": "Selimiye Camii",
+    "address": "Breiter Weg 34, 46483 Wesel",
+    "latitude": 51.6646787,
+    "longitude": 6.6202068
+  },
+  {
+    "id": "osm-way-77685258",
+    "cityId": "witten",
+    "name": "Ayasofya Cami",
+    "address": "Annenstraße 108a, 58453 Witten",
+    "latitude": 51.4446451,
+    "longitude": 7.3677467
+  },
+  {
+    "id": "osm-way-74270181",
+    "cityId": "witten",
+    "name": "Bosniakisches Kulturzentrum Witten",
+    "address": "Breite Straße 3a, 58452 Witten",
+    "latitude": 51.4380709,
+    "longitude": 7.3281705
+  },
+  {
+    "id": "osm-way-75421476",
+    "cityId": "witten",
+    "name": "Fatih Camii",
+    "address": "Ruhrtal 5a,5b, 58456 Witten",
+    "latitude": 51.4255392,
+    "longitude": 7.2867436
+  },
+  {
+    "id": "osm-node-837983329",
+    "cityId": "witten",
+    "name": "Islamisches Kulturzentrum Witten",
+    "nameAr": "المركز الثقافي الإسلامي في فيتن",
+    "latitude": 51.4375041,
+    "longitude": 7.3262603
+  },
+  {
+    "id": "osm-way-338466951",
+    "cityId": "witten",
+    "name": "Sultan Ahmet Camii",
+    "address": "Wideystraße 59, 58452 Witten",
+    "latitude": 51.4432412,
+    "longitude": 7.3306624
+  },
+  {
+    "id": "osm-node-480464133",
+    "cityId": "wuppertal",
+    "name": "Annur Moschee",
+    "nameAr": "مسجد النور",
+    "address": "Vohwinkeler Straße 44-46, 42329 Wuppertal",
+    "latitude": 51.2292006,
+    "longitude": 7.0638671
+  },
+  {
+    "id": "osm-way-306611035",
+    "cityId": "wuppertal",
+    "name": "IGMG - Islamische Gemeinschaft Wuppertal-Oberbarmen e.V.",
+    "nameAr": "الجماعة الإسلامية فوبرتال أوبربارمن",
+    "address": "Schwarzbach 168a, 42277 Wuppertal",
+    "latitude": 51.2846109,
+    "longitude": 7.2296954
+  },
+  {
+    "id": "osm-way-271048134",
+    "cityId": "wuppertal",
+    "name": "Islamische Gemeinde Wuppertal e.V.",
+    "nameAr": "المركز الإسلامي فوبرتال",
+    "address": "Wittensteinstraße 190, 42285 Wuppertal",
+    "latitude": 51.2636447,
+    "longitude": 7.1830658
+  },
+  {
+    "id": "osm-node-5583331453",
+    "cityId": "wuppertal",
+    "name": "Kurdischer Kulturverein e.V.",
+    "nameAr": "جمعية الثقافية الكردية",
+    "address": "Werléstraße 20, 42289 Wuppertal",
+    "latitude": 51.2720041,
+    "longitude": 7.2224412
+  },
+  {
+    "id": "osm-node-5583317821",
+    "cityId": "wuppertal",
+    "name": "Libanesischer Mutter und Kind Verein e.V.",
+    "nameAr": "نادي الأم والطفل اللبناني",
+    "address": "Konrad-Adenauer-Straße 9, 42111 Wuppertal",
+    "latitude": 51.284007,
+    "longitude": 7.1705306
+  },
+  {
+    "id": "osm-node-5583354440",
+    "cityId": "wuppertal",
+    "name": "Masjid al-Rahma",
+    "nameAr": "مسجد الرحمة",
+    "address": "Opphofer Straße 19, 42107 Wuppertal",
+    "latitude": 51.2664462,
+    "longitude": 7.1524059
+  },
+  {
+    "id": "osm-node-1877678784",
+    "cityId": "wuppertal",
+    "name": "Merkez Camii Moschee",
+    "address": "Gathe, Wuppertal",
+    "latitude": 51.2634585,
+    "longitude": 7.1479842
+  },
+  {
+    "id": "osm-node-480444141",
+    "cityId": "wuppertal",
+    "name": "Mimar Sinan Moschee",
+    "nameAr": "مسجد معمار سنان",
+    "address": "Spitzwegstraße 1b, 42329 Wuppertal",
+    "latitude": 51.2296342,
+    "longitude": 7.0668144
+  },
+  {
+    "id": "osm-way-48954216",
+    "cityId": "wuppertal",
+    "name": "Moschee Al-Baraka",
+    "nameAr": "مسجد البركة",
+    "address": "Bahnstraße 26, 42327 Wuppertal",
+    "latitude": 51.2355561,
+    "longitude": 7.0683496
+  },
+  {
+    "id": "osm-node-7137783072",
+    "cityId": "wuppertal",
+    "name": "Moschee asch-Schami",
+    "nameAr": "مسجد الشامي",
+    "address": "Friedrichstraße 11, 42105 Wuppertal",
+    "latitude": 51.2620264,
+    "longitude": 7.14618
+  },
+  {
+    "id": "osm-way-236565891",
+    "cityId": "wuppertal",
+    "name": "Moschee Assalam",
+    "nameAr": "مسجد السلام",
+    "address": "Am Diek 40, 42277 Wuppertal",
+    "latitude": 51.2851706,
+    "longitude": 7.2236201
+  },
+  {
+    "id": "osm-node-5597531366",
+    "cityId": "wuppertal",
+    "name": "Osmanische Moschee",
+    "nameAr": "المسجد العثماني",
+    "address": "Wichlinghauser Straße 51, 42277 Wuppertal",
+    "latitude": 51.2793224,
+    "longitude": 7.2187088
+  },
+  {
+    "id": "osm-node-4708830542",
+    "cityId": "wuppertal",
+    "name": "Wuppertaler Integrations-und Bildungsverein e.V.",
+    "nameAr": "اتحاد فوبرتال للتكامل والتعليم",
+    "address": "Friedrich-Ebert-Straße 175, 42117 Wuppertal",
+    "latitude": 51.2485177,
+    "longitude": 7.1231473
+  }
+]

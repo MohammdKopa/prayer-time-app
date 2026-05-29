@@ -16,8 +16,11 @@ import { useAzanPlayer } from "@/lib/azan";
 import { useBackgroundPush } from "@/lib/push-client";
 import { CitySwitcher } from "./CitySwitcher";
 import { InstallBanner } from "./InstallBanner";
+import { MosqueSheet } from "./MosqueSheet";
 import { PrayerRow } from "./PrayerRow";
 import { QiblaCompass } from "./QiblaCompass";
+import { mosquesForCity } from "@/data/mosques";
+import { track } from "@/lib/analytics";
 
 const STORAGE_KEY = "prayer-times.city";
 
@@ -40,6 +43,7 @@ export function ClockClient() {
   const [city, setCity] = useState<City>(DEFAULT_CITY);
   const [flash, setFlash] = useState(false);
   const [qiblaOpen, setQiblaOpen] = useState(false);
+  const [mosqueOpen, setMosqueOpen] = useState(false);
   const flashTimer = useRef<number | null>(null);
   const lastTickRef = useRef<Date | null>(null);
   const azan = useAzanPlayer();
@@ -65,6 +69,7 @@ export function ClockClient() {
           setFlash(true);
           if (flashTimer.current) window.clearTimeout(flashTimer.current);
           flashTimer.current = window.setTimeout(() => setFlash(false), 1500);
+          track("change-city", { city: c.id });
         }
         return c;
       });
@@ -85,6 +90,7 @@ export function ClockClient() {
   const handleBellClick = useCallback(async () => {
     if (azan.muted) {
       await azan.toggleMute(); // unlocks + unmutes
+      track("enable-azan");
       if (push.state !== "unsupported" && push.state !== "denied") {
         await push.enable(city);
       }
@@ -131,6 +137,8 @@ export function ClockClient() {
   );
 
   const consensus = useMemo(() => computeConsensus(day), [day]);
+
+  const mosqueCount = useMemo(() => mosquesForCity(city.id).length, [city.id]);
 
   // Tomorrow — computed once per day for the "next prayer is tomorrow's Fajr" case
   const dayTomorrow = useMemo(() => {
@@ -388,6 +396,38 @@ export function ClockClient() {
           />
         ))}
       </section>
+
+      {/* ── Mosques-in-this-city card ─────────────────────── */}
+      {mosqueCount > 0 && (
+        <button
+          type="button"
+          onClick={() => {
+            track("open-mosques", { city: city.id });
+            setMosqueOpen(true);
+          }}
+          className="glass glass-interactive mt-3 flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-bone hover:bg-white/[0.07] transition"
+          aria-label={`مساجد ${city.name}`}
+        >
+          <span className="ar flex items-center gap-2 text-sm font-medium">
+            <span aria-hidden="true">🕌</span>
+            مساجد {city.name}
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="ar text-[11px] text-bone-dim tnum">
+              {toArabicDigits(mosqueCount)}
+            </span>
+            <svg viewBox="0 0 12 12" aria-hidden="true" className="h-2.5 w-2.5 opacity-60 rotate-90">
+              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </button>
+      )}
+
+      <MosqueSheet
+        open={mosqueOpen}
+        onClose={() => setMosqueOpen(false)}
+        city={city}
+      />
 
       {/* ── Install-to-home-screen banner ─────────────────── */}
       {hydrated && <InstallBanner />}
