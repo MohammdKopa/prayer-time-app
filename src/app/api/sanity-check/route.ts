@@ -34,7 +34,9 @@ export async function GET(request: NextRequest) {
   }
 
   const dateStr = fmtDateForAladhan(new Date());
-  const aladhanUrl = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lng}&method=3&school=0&latitudeAdjustmentMethod=3`;
+  // latitudeAdjustmentMethod=2 = one-seventh of the night, matching the local
+  // engine's HighLatitudeRule.SeventhOfTheNight (the imam's "easier" ruling).
+  const aladhanUrl = `https://api.aladhan.com/v1/timings/${dateStr}?latitude=${lat}&longitude=${lng}&method=3&school=0&latitudeAdjustmentMethod=2`;
 
   try {
     const res = await fetch(aladhanUrl, {
@@ -51,7 +53,7 @@ export async function GET(request: NextRequest) {
     return Response.json({
       timings: json.data.timings,
       dateUsed: json.data.date.gregorian.date,
-      source: "aladhan-mwl-angle-based",
+      source: "aladhan-mwl-seventh-of-night",
     });
   } catch (err) {
     return Response.json(

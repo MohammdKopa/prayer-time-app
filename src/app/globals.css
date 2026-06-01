@@ -153,3 +153,246 @@ body::before {
 
 /* No scrollbar artefacts on the body background drift */
 html { overflow-x: hidden; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   PLASMA DISPLAY (/display) — scoped under .display-root only.
+   The mosque wall is mains-powered, so we go richer here than the PWA:
+   drifting light, gold dust, ornament, calligraphic type, slow motion.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.font-kufi {
+  font-family: var(--font-kufi), var(--font-arabic), serif;
+}
+.font-amiri {
+  font-family: var(--font-amiri), var(--font-arabic), serif;
+}
+
+.display-root {
+  --leaf: #e8c878;
+  --leaf-bright: #f6e4ac;
+  position: relative;
+  overflow: hidden;
+  cursor: none; /* kiosk — no mouse arrow on the wall */
+  user-select: none;
+}
+
+/* Slow-drifting emerald nebula — the "breathing" atmosphere of the wall. */
+.display-root::before {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 40% at 22% 26%, rgba(70, 210, 150, 0.30) 0%, transparent 60%),
+    radial-gradient(42% 44% at 80% 22%, rgba(28, 150, 120, 0.30) 0%, transparent 62%),
+    radial-gradient(40% 42% at 30% 84%, rgba(90, 220, 160, 0.22) 0%, transparent 64%),
+    radial-gradient(46% 46% at 86% 88%, rgba(18, 110, 86, 0.30) 0%, transparent 66%),
+    radial-gradient(30% 30% at 56% 50%, rgba(232, 200, 120, 0.10) 0%, transparent 70%);
+  animation: nebula-drift 48s ease-in-out infinite alternate;
+}
+
+@keyframes nebula-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(2.5%, -2%, 0) scale(1.08); }
+  100% { transform: translate3d(-2%, 2.5%, 0) scale(1.04); }
+}
+
+/* Vignette to seat the composition and add depth on a big panel. */
+.display-root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(120% 120% at 50% 42%, transparent 58%, rgba(2, 10, 7, 0.55) 100%);
+}
+
+/* Everything real sits above the atmosphere layers. Also carries the slow
+   burn-in pixel-drift so static text/numerals never ghost the panel. */
+.display-content {
+  position: relative;
+  z-index: 2;
+  animation: burn-shift 137s ease-in-out infinite;
+}
+
+/* Imperceptible whole-layout drift (~±9px) to spread static pixels over time. */
+@keyframes burn-shift {
+  0%   { transform: translate3d(0, 0, 0); }
+  20%  { transform: translate3d(7px, 5px, 0); }
+  40%  { transform: translate3d(-5px, 8px, 0); }
+  60%  { transform: translate3d(-8px, -4px, 0); }
+  80%  { transform: translate3d(6px, -7px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* Faint geometric star field behind content. */
+.display-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── Illuminated frame ──────────────────────────────────────────── */
+.display-frame {
+  position: absolute;
+  inset: 1.6vh 1.4vw;
+  z-index: 1;
+  pointer-events: none;
+  border: 1px solid rgba(232, 200, 120, 0.32);
+  border-radius: 1.4vh;
+  box-shadow:
+    inset 0 0 0 1px rgba(232, 200, 120, 0.10),
+    inset 0 0 6vh rgba(232, 200, 120, 0.05),
+    0 0 8vh rgba(0, 0, 0, 0.45);
+  /* drift in lockstep with the content so the gold rule doesn't burn in */
+  animation: burn-shift 137s ease-in-out infinite;
+}
+.display-frame::before {
+  /* inner hairline — the double-rule of a mushaf border */
+  content: "";
+  position: absolute;
+  inset: 0.7vh;
+  border: 1px solid rgba(232, 200, 120, 0.16);
+  border-radius: 1vh;
+}
+
+/* Arabesque corner pieces (4 rotated copies positioned by the component). */
+.display-corner {
+  position: absolute;
+  width: 5.2vh;
+  height: 5.2vh;
+  z-index: 2;
+  color: var(--leaf);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ── Gold dust ──────────────────────────────────────────────────── */
+.dust {
+  position: absolute;
+  z-index: 1;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(246, 228, 172, 0.95) 0%, rgba(232, 200, 120, 0.4) 45%, transparent 70%);
+  animation: dust-float linear infinite, dust-twinkle ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes dust-float {
+  0%   { transform: translateY(8vh); }
+  100% { transform: translateY(-92vh); }
+}
+@keyframes dust-twinkle {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.85; }
+}
+
+/* ── Entrance: staggered rise-in on load ────────────────────────── */
+@keyframes rise-in {
+  0%   { opacity: 0; transform: translateY(2.4vh); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Opacity-only entrance — for elements that carry their own transform
+   (e.g. rotated corners), so the animation never clobbers rotate(). */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-in {
+  opacity: 0;
+  animation: fade-in 1.2s ease forwards;
+}
+
+/* ── Next-prayer breathing glow ─────────────────────────────────── */
+@keyframes breathe-gold {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,230,170,0.28), 0 0 2.5vh rgba(232,200,120,0.18); }
+  50%      { box-shadow: inset 0 1px 0 rgba(255,230,170,0.40), 0 0 5vh rgba(232,200,120,0.40); }
+}
+.breathe-gold { animation: breathe-gold 4.5s ease-in-out infinite; }
+
+/* Gold gradient text for the mosque name. */
+.leaf-text {
+  background: linear-gradient(180deg, #f9eec2 0%, #e8c878 52%, #c79a45 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0.3vh 2vh rgba(232, 200, 120, 0.18);
+}
+
+/* Āyah cross-fade. */
+@keyframes ayah-fade {
+  0%   { opacity: 0; transform: translateY(0.8vh); }
+  12%  { opacity: 1; transform: translateY(0); }
+  88%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-0.8vh); }
+}
+.ayah-fade { animation: ayah-fade 12s ease-in-out infinite; }
+
+/* A thin gold sweep that occasionally crosses the next-prayer band. */
+@keyframes sheen-sweep {
+  0%   { transform: translateX(-130%) skewX(-18deg); }
+  100% { transform: translateX(230%) skewX(-18deg); }
+}
+.sheen::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(246, 228, 172, 0.16), transparent);
+  animation: sheen-sweep 7s ease-in-out infinite;
+  animation-delay: 2s;
+  pointer-events: none;
+}
+
+/* ── "It's prayer time now" takeover ────────────────────────────── */
+.prayer-now {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 45%, rgba(6, 22, 16, 0.86), rgba(2, 10, 7, 0.94));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: prayer-now-in 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes prayer-now-in {
+  from { opacity: 0; transform: scale(1.04); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes prayer-now-glow {
+  0%, 100% { text-shadow: 0 0 3vh rgba(232, 200, 120, 0.25); }
+  50%      { text-shadow: 0 0 7vh rgba(232, 200, 120, 0.6); }
+}
+.prayer-now-name { animation: prayer-now-glow 3.4s ease-in-out infinite; }
+
+/* Night-dim wash (opacity driven from JS by local hour). */
+.night-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #04100c;
+  pointer-events: none;
+  transition: opacity 3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .display-root::before,
+  .dust,
+  .breathe-gold,
+  .ayah-fade,
+  .prayer-now-name,
+  .sheen::after { animation: none; }
+  .reveal,
+  .fade-in { opacity: 1; animation: none; }
+  /* burn-shift stays — it protects the panel and is imperceptible */
+}

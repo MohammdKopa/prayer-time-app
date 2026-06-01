@@ -52,9 +52,12 @@ const computeOne = (
   const params = def.params();
   // High-latitude correction — without this, Fajr/Isha at >48°N can wrap
   // into the wrong day in summer (sun never dips far enough below horizon).
-  // TwilightAngle matches Aladhan's default (latitudeAdjustmentMethod=3),
-  // which is what most Marl/EU mosque apps display today.
-  params.highLatitudeRule = HighLatitudeRule.TwilightAngle;
+  // SeventhOfTheNight = the eased ruling (taqdīr bi-sub' al-layl): Isha capped
+  // at sunset + 1/7 night, Fajr at sunrise − 1/7 night. Chosen on the imam's
+  // ruling "use whatever is easier for Muslims" (2026-06) — gives the earliest
+  // Isha / latest Fajr of the available rules. Aladhan equivalent is
+  // latitudeAdjustmentMethod=2 (kept in sync in the sanity-check route).
+  params.highLatitudeRule = HighLatitudeRule.SeventhOfTheNight;
   const pt = new PrayerTimes(coords, date, params);
   return {
     methodId: def.id,

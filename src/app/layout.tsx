@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Noto_Naskh_Arabic } from "next/font/google";
+import {
+  Amiri,
+  Geist,
+  Geist_Mono,
+  Noto_Naskh_Arabic,
+  Reem_Kufi,
+} from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -22,6 +28,21 @@ const notoArabic = Noto_Naskh_Arabic({
   variable: "--font-arabic",
   subsets: ["arabic"],
   weight: ["400", "500", "700"],
+});
+
+// Display-only faces for the mosque plasma (/display). Reem Kufi = geometric
+// kufic for headings/times (legible across a room); Amiri = calligraphic naskh
+// for Qurʾanic text. Loaded globally but only referenced on the display route.
+const reemKufi = Reem_Kufi({
+  variable: "--font-kufi",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const amiri = Amiri({
+  variable: "--font-amiri",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -53,7 +74,7 @@ export default function RootLayout({
     <html
       lang="ar"
       dir="rtl"
-      className={`${geistSans.variable} ${geistMono.variable} ${notoArabic.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoArabic.variable} ${reemKufi.variable} ${amiri.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         {children}

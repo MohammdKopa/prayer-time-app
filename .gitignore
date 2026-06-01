@@ -50,3 +50,7 @@ Thumbs.db
 
 # Worker has its own node_modules — installed fresh in Dockerfile
 /scripts/node_modules
+
+# local preview screenshots
+/shot*.png
+/preview-*.png
