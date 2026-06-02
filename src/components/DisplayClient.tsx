@@ -25,21 +25,17 @@ const GRID_ORDER: PrayerName[] = [
 const STATUS_ORDER: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 
 // Deterministic gold-dust field (no Math.random → no hydration mismatch).
+// Kept lean (8 motes) — each is its own animated compositor layer, and weak
+// TV GPUs feel the count. Spread across the width so it still reads as a field.
 const DUST = [
   { left: 6, size: 5, dur: 26, tw: 4.0, delay: -3 },
-  { left: 14, size: 3, dur: 34, tw: 5.5, delay: -12 },
   { left: 22, size: 6, dur: 22, tw: 3.4, delay: -8 },
-  { left: 31, size: 3, dur: 38, tw: 6.0, delay: -20 },
   { left: 39, size: 4, dur: 29, tw: 4.6, delay: -2 },
   { left: 47, size: 7, dur: 20, tw: 3.0, delay: -15 },
-  { left: 54, size: 3, dur: 36, tw: 5.2, delay: -6 },
   { left: 62, size: 5, dur: 24, tw: 4.2, delay: -18 },
-  { left: 70, size: 4, dur: 31, tw: 5.8, delay: -10 },
   { left: 78, size: 6, dur: 21, tw: 3.6, delay: -4 },
   { left: 85, size: 3, dur: 39, tw: 6.4, delay: -22 },
-  { left: 92, size: 5, dur: 27, tw: 4.4, delay: -14 },
   { left: 96, size: 3, dur: 33, tw: 5.0, delay: -7 },
-  { left: 2, size: 4, dur: 30, tw: 4.8, delay: -17 },
 ];
 
 // A rotating "saying": Qurʾan (﴿ ﴾), authentic ḥadīth (« » + ﷺ·source), or a
