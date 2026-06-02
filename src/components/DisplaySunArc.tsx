@@ -1,7 +1,7 @@
 "use client";
 
 import type { PrayerName } from "@/lib/prayer-engine";
-import { PRAYER_LABEL_AR, toArabicDigits } from "@/lib/format";
+import { PRAYER_LABEL_AR } from "@/lib/format";
 
 // Prayers that sit on the daytime arc.
 const ARC_PRAYERS: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
@@ -63,15 +63,14 @@ function arcPoint(f: number): { x: number; y: number } {
   };
 }
 
+// Arabic (Hindu-Arabic 0-9) numerals on the wall display — imam's request.
 const hm = (d: Date, tz: string) =>
-  toArabicDigits(
-    d.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: tz,
-    }),
-  );
+  d.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: tz,
+  });
 
 /**
  * Wall-display sun path: a luminous gold arc tracing the day, with the five

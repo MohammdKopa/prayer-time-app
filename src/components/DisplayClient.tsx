@@ -9,6 +9,7 @@ import {
   formatHM,
   formatHMS,
   PRAYER_LABEL_AR,
+  PRAYER_LABEL_DE,
 } from "@/lib/format";
 import { type City, NRW_TZ } from "@/lib/cities";
 import { DisplaySunArc } from "./DisplaySunArc";
@@ -300,7 +301,7 @@ export function DisplayClient({
     if (!hydrated) return "—";
     const d = new Date(now);
     if (hijriOffset) d.setDate(d.getDate() + hijriOffset);
-    return formatHijriDateAr(d, NRW_TZ);
+    return formatHijriDateAr(d, NRW_TZ, true);
   }, [now, hydrated, hijriOffset]);
 
   const sayings = isFriday ? SAYINGS_FRIDAY : SAYINGS_NORMAL;
@@ -315,6 +316,10 @@ export function DisplayClient({
 
   const labelFor = (p: PrayerName) =>
     isFriday && p === "dhuhr" ? "الجمعة" : PRAYER_LABEL_AR[p];
+
+  // German subtitle for the non-Arabic congregation. Jumuʿa relabels Dhuhr.
+  const labelDeFor = (p: PrayerName) =>
+    isFriday && p === "dhuhr" ? "Freitagsgebet" : PRAYER_LABEL_DE[p];
 
   return (
     <main dir="rtl" className="display-root w-full">
@@ -405,7 +410,7 @@ export function DisplayClient({
             className="font-kufi mt-[1.4vh] flex items-center gap-[1.2vw] text-bone-dim"
             style={{ fontSize: "min(2.7vh, 2vw)" }}
           >
-            <span>{hydrated ? formatDateAr(now, NRW_TZ) : "—"}</span>
+            <span>{hydrated ? formatDateAr(now, NRW_TZ, true) : "—"}</span>
             <span className="text-gold/40">◆</span>
             <span className="tnum text-gold/85">{hijriDisplay}</span>
             <span className="text-gold/40">◆</span>
@@ -436,7 +441,7 @@ export function DisplayClient({
                 textShadow: "0 0.4vh 3vh rgba(0,0,0,0.5)",
               }}
             >
-              {hydrated ? formatHMS(now, NRW_TZ) : "٠٠:٠٠:٠٠"}
+              {hydrated ? formatHMS(now, NRW_TZ, true) : "00:00:00"}
             </span>
             <span
               className="font-kufi text-gold/80"
@@ -466,17 +471,28 @@ export function DisplayClient({
             </span>
             <span
               dir="ltr"
-              className="tnum leaf-text font-bold"
-              style={{ fontSize: "min(5.6vh, 4.3vw)", lineHeight: 1 }}
+              className="text-bone-faint"
+              style={{
+                fontSize: "min(2.4vh, 1.8vw)",
+                letterSpacing: "0.04em",
+                marginTop: "0.2vh",
+              }}
             >
-              {hydrated ? formatHM(next.at, NRW_TZ) : "—"}
+              {labelDeFor(next.name)}
+            </span>
+            <span
+              dir="ltr"
+              className="tnum leaf-text font-bold"
+              style={{ fontSize: "min(5.6vh, 4.3vw)", lineHeight: 1, marginTop: "0.4vh" }}
+            >
+              {hydrated ? formatHM(next.at, NRW_TZ, true) : "—"}
             </span>
             <span
               className="font-kufi tnum text-bone-dim"
               style={{ fontSize: "min(3vh, 2.2vw)", marginTop: "0.8vh" }}
             >
               {hydrated
-                ? formatCountdownAr(next.at.getTime() - now.getTime())
+                ? formatCountdownAr(next.at.getTime() - now.getTime(), true)
                 : "—"}
             </span>
           </div>
@@ -530,22 +546,33 @@ export function DisplayClient({
                 </span>
                 <span
                   dir="ltr"
+                  className={hot ? "text-gold/65" : "text-bone-faint"}
+                  style={{
+                    fontSize: "min(1.7vh, 1.25vw)",
+                    letterSpacing: "0.02em",
+                    marginTop: "0.1vh",
+                  }}
+                >
+                  {labelDeFor(p)}
+                </span>
+                <span
+                  dir="ltr"
                   className="font-kufi tnum text-bone"
                   style={{
                     fontSize: "min(5.6vh, 3.9vw)",
                     fontWeight: 600,
-                    marginTop: "0.6vh",
+                    marginTop: "0.5vh",
                     lineHeight: 1,
                   }}
                 >
-                  {hydrated ? formatHM(t, NRW_TZ) : "—"}
+                  {hydrated ? formatHM(t, NRW_TZ, true) : "—"}
                 </span>
                 {isJumua && (
                   <span
                     className="font-kufi tnum text-gold/60"
                     style={{ fontSize: "min(1.9vh, 1.4vw)", marginTop: "0.5vh" }}
                   >
-                    يبدأ الوقت {formatHM(day.primary.times.dhuhr, NRW_TZ)}
+                    يبدأ الوقت {formatHM(day.primary.times.dhuhr, NRW_TZ, true)}
                   </span>
                 )}
               </div>
@@ -628,6 +655,17 @@ export function DisplayClient({
               }}
             >
               صلاةِ {labelFor(prayerNow)}
+            </span>
+            <span
+              dir="ltr"
+              className="font-kufi text-gold/70"
+              style={{
+                fontSize: "min(3.2vh, 2.4vw)",
+                letterSpacing: "0.05em",
+                marginBottom: "1.5vh",
+              }}
+            >
+              Zeit für das {labelDeFor(prayerNow)}
             </span>
             <span
               className="font-amiri text-bone-dim"
