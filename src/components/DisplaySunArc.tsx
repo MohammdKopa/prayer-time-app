@@ -143,13 +143,6 @@ export function DisplaySunArc({
           <stop offset="55%" stopColor="rgba(150,170,220,0.35)" />
           <stop offset="100%" stopColor="rgba(150,170,220,0)" />
         </radialGradient>
-        <filter id="dGlow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="6" result="b" />
-          <feMerge>
-            <feMergeNode in="b" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
 
       {/* Sky fill under the arc for depth */}
@@ -244,12 +237,14 @@ export function DisplaySunArc({
               strokeWidth={1.2}
               strokeDasharray={isNext ? "0" : "3 5"}
             />
+            {/* Static soft halo (cheap radial fill) replaces a GPU-heavy
+                blur filter — the pulse lives on the solid dot instead. */}
+            {isNext && <circle cx={x} cy={y} r={22} fill="url(#dSun)" />}
             <circle
               cx={x}
               cy={y}
               r={isNext ? 11 : 6}
               fill={isNext ? "rgba(255,244,214,1)" : "rgba(232,200,120,0.9)"}
-              filter={isNext ? "url(#dGlow)" : undefined}
             >
               {isNext && (
                 <animate
@@ -289,13 +284,7 @@ export function DisplaySunArc({
       {isDay ? (
         <>
           <circle cx={sun.x} cy={sun.y} r={46} fill="url(#dSun)" />
-          <circle
-            cx={sun.x}
-            cy={sun.y}
-            r={14}
-            fill="rgba(255,248,224,1)"
-            filter="url(#dGlow)"
-          />
+          <circle cx={sun.x} cy={sun.y} r={14} fill="rgba(255,248,224,1)" />
         </>
       ) : (
         (() => {
@@ -319,7 +308,6 @@ export function DisplaySunArc({
                 r={r}
                 fill="rgba(240,243,255,1)"
                 mask="url(#hilal)"
-                filter="url(#dGlow)"
               />
             </>
           );

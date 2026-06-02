@@ -170,10 +170,37 @@ html { overflow-x: hidden; }
 .display-root {
   --leaf: #e8c878;
   --leaf-bright: #f6e4ac;
+  /* Explicit viewport height with a vh fallback FIRST: old TV browsers
+     (Fire TV Silk, etc.) don't understand dvh and would drop the rule,
+     collapsing the flex-1 sun-arc to zero height. vh is universal. */
+  height: 100vh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
   cursor: none; /* kiosk — no mouse arrow on the wall */
   user-select: none;
+}
+
+/* ── Low-power kiosk path (Fire TV / weak panel GPUs) ──────────────────
+   The wall display drives many large glass panels while animated layers
+   drift behind them. Real backdrop-blur would force the GPU to recompute
+   every panel's blur each frame → jank on TV chips. From across a room a
+   frosted *solid* is indistinguishable, so on /display we drop the blur
+   and the per-panel compositor layers. The phone PWA keeps true glass. */
+.display-root .glass {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(12, 32, 24, 0.52);
+  /* No blur to isolate → no need to promote each panel to its own layer. */
+  transform: none;
+  will-change: auto;
+}
+.display-root .glass-tint-gold {
+  background: linear-gradient(
+    180deg,
+    rgba(232, 200, 120, 0.18) 0%,
+    rgba(40, 60, 40, 0.45) 100%
+  );
 }
 
 /* Slow-drifting emerald nebula — the "breathing" atmosphere of the wall. */

@@ -321,7 +321,7 @@ export function DisplayClient({
     isFriday && p === "dhuhr" ? "الجمعة" : PRAYER_LABEL_AR[p];
 
   return (
-    <main dir="rtl" className="display-root h-[100dvh] w-full">
+    <main dir="rtl" className="display-root w-full">
       {/* ── Atmosphere & ornament ──────────────────────────── */}
       <div className="display-pattern" aria-hidden="true">
         <svg width="100%" height="100%">
