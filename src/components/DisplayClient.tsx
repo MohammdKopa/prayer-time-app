@@ -420,10 +420,10 @@ export function DisplayClient({
         {/* Hero: clock + next prayer */}
         <section
           className="reveal grid flex-none grid-cols-[1.05fr_0.95fr] items-stretch gap-[2.2vw]"
-          style={{ animationDelay: "0.15s", marginTop: "2vh" }}
+          style={{ animationDelay: "0.15s", marginTop: "1.2vh" }}
         >
           {/* Live clock */}
-          <div className="glass flex flex-col items-center justify-center rounded-[2vh] px-[2vw] py-[1.6vh]">
+          <div className="glass flex flex-col items-center justify-center rounded-[2vh] px-[2vw] py-[1.1vh]">
             <span
               className="font-kufi text-bone-faint"
               style={{ fontSize: "min(2.6vh, 1.9vw)", letterSpacing: "0.5em" }}
@@ -434,7 +434,7 @@ export function DisplayClient({
               dir="ltr"
               className="font-kufi tnum text-bone"
               style={{
-                fontSize: "min(13vh, 9.2vw)",
+                fontSize: "min(10.5vh, 8vw)",
                 fontWeight: 600,
                 lineHeight: 1,
                 textShadow: "0 0.4vh 3vh rgba(0,0,0,0.5)",
@@ -451,7 +451,7 @@ export function DisplayClient({
           </div>
 
           {/* Next prayer */}
-          <div className="glass glass-tint-gold breathe-gold sheen relative flex flex-col items-center justify-center overflow-hidden rounded-[2vh] px-[2vw] py-[1.6vh]">
+          <div className="glass glass-tint-gold breathe-gold sheen relative flex flex-col items-center justify-center overflow-hidden rounded-[2vh] px-[2vw] py-[1.1vh]">
             <span
               className="font-kufi text-gold/85"
               style={{ fontSize: "min(2.8vh, 2.1vw)", letterSpacing: "0.18em" }}
@@ -461,9 +461,9 @@ export function DisplayClient({
             <span
               className="font-kufi font-bold text-bone"
               style={{
-                fontSize: "min(8.5vh, 6vw)",
+                fontSize: "min(6.8vh, 5.2vw)",
                 lineHeight: 1.05,
-                marginTop: "0.6vh",
+                marginTop: "0.4vh",
               }}
             >
               {labelFor(next.name)}
@@ -471,7 +471,7 @@ export function DisplayClient({
             <span
               dir="ltr"
               className="tnum leaf-text font-bold"
-              style={{ fontSize: "min(7vh, 5vw)", lineHeight: 1 }}
+              style={{ fontSize: "min(5.6vh, 4.3vw)", lineHeight: 1 }}
             >
               {hydrated ? formatHM(next.at, NRW_TZ) : "—"}
             </span>
@@ -488,8 +488,8 @@ export function DisplayClient({
 
         {/* Sun arc */}
         <section
-          className="reveal min-h-0 flex-1"
-          style={{ animationDelay: "0.3s", marginTop: "1.5vh" }}
+          className="reveal flex-1"
+          style={{ animationDelay: "0.3s", marginTop: "1vh", minHeight: "24vh" }}
         >
           <DisplaySunArc
             now={hydrated ? now : day.primary.times.dhuhr}
@@ -502,7 +502,7 @@ export function DisplayClient({
         {/* Prayer cards */}
         <section
           className="reveal grid flex-none grid-cols-6"
-          style={{ animationDelay: "0.45s", gap: "1vw", height: "17vh" }}
+          style={{ animationDelay: "0.45s", gap: "1vw", height: "15vh" }}
         >
           {GRID_ORDER.map((p) => {
             const t = times[p];
@@ -560,7 +560,7 @@ export function DisplayClient({
         {/* Qurʾan / ḥadīth ticker */}
         <footer
           className="reveal flex flex-none items-center justify-center"
-          style={{ animationDelay: "0.6s", height: "10vh" }}
+          style={{ animationDelay: "0.6s", height: "8.5vh" }}
         >
           <div
             key={`${isFriday ? "f" : "n"}-${sayingIndex}`}
