@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NRW_CITIES, type City } from "@/lib/cities";
-import { toArabicDigits } from "@/lib/format";
 
 export function CitySwitcher({
   current,
@@ -166,7 +165,7 @@ export function CitySwitcher({
                         {city.name}
                       </span>
                       <span className="ar text-[11px] text-bone-dim tnum">
-                        {toArabicDigits(Math.round(city.population / 1000))} ألف
+                        {Math.round(city.population / 1000)} ألف
                       </span>
                     </button>
                   </li>

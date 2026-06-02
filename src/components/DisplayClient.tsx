@@ -301,7 +301,7 @@ export function DisplayClient({
     if (!hydrated) return "—";
     const d = new Date(now);
     if (hijriOffset) d.setDate(d.getDate() + hijriOffset);
-    return formatHijriDateAr(d, NRW_TZ, true);
+    return formatHijriDateAr(d, NRW_TZ);
   }, [now, hydrated, hijriOffset]);
 
   const sayings = isFriday ? SAYINGS_FRIDAY : SAYINGS_NORMAL;
@@ -410,7 +410,7 @@ export function DisplayClient({
             className="font-kufi mt-[1.4vh] flex items-center gap-[1.2vw] text-bone-dim"
             style={{ fontSize: "min(2.7vh, 2vw)" }}
           >
-            <span>{hydrated ? formatDateAr(now, NRW_TZ, true) : "—"}</span>
+            <span>{hydrated ? formatDateAr(now, NRW_TZ) : "—"}</span>
             <span className="text-gold/40">◆</span>
             <span className="tnum text-gold/85">{hijriDisplay}</span>
             <span className="text-gold/40">◆</span>
@@ -441,7 +441,7 @@ export function DisplayClient({
                 textShadow: "0 0.4vh 3vh rgba(0,0,0,0.5)",
               }}
             >
-              {hydrated ? formatHMS(now, NRW_TZ, true) : "00:00:00"}
+              {hydrated ? formatHMS(now, NRW_TZ) : "00:00:00"}
             </span>
             <span
               className="font-kufi text-gold/80"
@@ -485,14 +485,14 @@ export function DisplayClient({
               className="tnum leaf-text font-bold"
               style={{ fontSize: "min(5.6vh, 4.3vw)", lineHeight: 1, marginTop: "0.4vh" }}
             >
-              {hydrated ? formatHM(next.at, NRW_TZ, true) : "—"}
+              {hydrated ? formatHM(next.at, NRW_TZ) : "—"}
             </span>
             <span
               className="font-kufi tnum text-bone-dim"
               style={{ fontSize: "min(3vh, 2.2vw)", marginTop: "0.8vh" }}
             >
               {hydrated
-                ? formatCountdownAr(next.at.getTime() - now.getTime(), true)
+                ? formatCountdownAr(next.at.getTime() - now.getTime())
                 : "—"}
             </span>
           </div>
@@ -565,14 +565,14 @@ export function DisplayClient({
                     lineHeight: 1,
                   }}
                 >
-                  {hydrated ? formatHM(t, NRW_TZ, true) : "—"}
+                  {hydrated ? formatHM(t, NRW_TZ) : "—"}
                 </span>
                 {isJumua && (
                   <span
                     className="font-kufi tnum text-gold/60"
                     style={{ fontSize: "min(1.9vh, 1.4vw)", marginTop: "0.5vh" }}
                   >
-                    يبدأ الوقت {formatHM(day.primary.times.dhuhr, NRW_TZ, true)}
+                    يبدأ الوقت {formatHM(day.primary.times.dhuhr, NRW_TZ)}
                   </span>
                 )}
               </div>

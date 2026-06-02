@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import type { City } from "@/lib/cities";
 import { bearingLabelAr, qiblaBearing } from "@/lib/qibla";
-import { toArabicDigits } from "@/lib/format";
 
 // iOS-specific permission API for DeviceOrientationEvent
 type DeviceOrientationEventConstructorIOS = typeof DeviceOrientationEvent & {
@@ -275,7 +274,7 @@ export function QiblaCompass({
             {bearingLabelAr(qibla)}
           </div>
           <div className="text-sm text-bone-dim mt-1 tnum" dir="ltr">
-            {toArabicDigits(qibla.toFixed(1))}° من الشمال
+            {qibla.toFixed(1)}° من الشمال
           </div>
         </div>
 

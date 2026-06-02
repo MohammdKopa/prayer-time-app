@@ -30,67 +30,49 @@ export const PRAYER_LABEL_DE: Record<PrayerName, string> = {
   isha: "Nachtgebet",
 };
 
-// Arabic-Indic numerals — the default for the Arabic-first phone app.
-const AR_DIGITS = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+// Numerals across the whole product are the standard Arabic (Hindu-Arabic) 0-9
+// — what the imam asked for. The Eastern Arabic-Indic ٠-٩ set is no longer
+// used; Arabic month/weekday names are kept via the `-u-nu-latn` numbering
+// extension, which renders the digits as 0-9 while leaving the text Arabic.
 
-export function toArabicDigits(s: string | number): string {
-  return String(s).replace(/[0-9]/g, (d) => AR_DIGITS[Number(d)]);
+export function formatHM(d: Date, tz?: string): string {
+  return d.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: tz,
+  });
 }
 
-// The mosque imam asked for the standard Arabic (Hindu-Arabic) numerals 0-9 on
-// the wall display, rather than the Eastern Arabic-Indic ٠-٩ set. (`latin` here
-// is just the Unicode numbering-system name "latn".) Callers on the display
-// pass `latin: true`; everything else keeps the Eastern Arabic-Indic set.
-function digits(s: string | number, latin: boolean): string {
-  return latin ? String(s) : toArabicDigits(s);
+export function formatHMS(d: Date, tz?: string): string {
+  return d.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+    timeZone: tz,
+  });
 }
 
-export function formatHM(d: Date, tz?: string, latin = false): string {
-  return digits(
-    d.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-      timeZone: tz,
-    }),
-    latin,
-  );
-}
-
-export function formatHMS(d: Date, tz?: string, latin = false): string {
-  return digits(
-    d.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-      timeZone: tz,
-    }),
-    latin,
-  );
-}
-
-/** Arabic countdown like "بعد ٧س ٠٢د" or "خلال ٣٢د" or "خلال ٤٥ث". */
-export function formatCountdownAr(ms: number, latin = false): string {
+/** Arabic countdown like "بعد 7س 02د" or "بعد 32د 05ث" or "بعد 45ث". */
+export function formatCountdownAr(ms: number): string {
   if (ms <= 0) return "الآن";
   const totalSec = Math.floor(ms / 1000);
   const h = Math.floor(totalSec / 3600);
   const m = Math.floor((totalSec % 3600) / 60);
   const s = totalSec % 60;
   if (h > 0) {
-    return `بعد ${digits(h, latin)}س ${digits(String(m).padStart(2, "0"), latin)}د`;
+    return `بعد ${h}س ${String(m).padStart(2, "0")}د`;
   }
   if (m > 0) {
-    return `بعد ${digits(m, latin)}د ${digits(String(s).padStart(2, "0"), latin)}ث`;
+    return `بعد ${m}د ${String(s).padStart(2, "0")}ث`;
   }
-  return `بعد ${digits(s, latin)}ث`;
+  return `بعد ${s}ث`;
 }
 
-/** Arabic short date like "ا‎لأربعاء ٢٧ مايو". */
-export function formatDateAr(d: Date, tz?: string, latin = false): string {
-  // The `-u-nu-latn` extension keeps the Arabic month/weekday names but renders
-  // the day number in Western digits.
-  return new Intl.DateTimeFormat(latin ? "ar-EG-u-nu-latn" : "ar-EG", {
+/** Arabic short date like "الأربعاء 27 مايو". */
+export function formatDateAr(d: Date, tz?: string): string {
+  return new Intl.DateTimeFormat("ar-EG-u-nu-latn", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -98,19 +80,14 @@ export function formatDateAr(d: Date, tz?: string, latin = false): string {
   }).format(d);
 }
 
-/** Arabic Hijri date like "١٢ ذو القعدة ١٤٤٧ هـ" (Umm al-Qura calendar). */
-export function formatHijriDateAr(d: Date, tz?: string, latin = false): string {
-  const parts = new Intl.DateTimeFormat(
-    latin
-      ? "ar-SA-u-ca-islamic-umalqura-nu-latn"
-      : "ar-SA-u-ca-islamic-umalqura",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      timeZone: tz,
-    },
-  ).formatToParts(d);
+/** Arabic Hijri date like "12 ذو القعدة 1447 هـ" (Umm al-Qura calendar). */
+export function formatHijriDateAr(d: Date, tz?: string): string {
+  const parts = new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura-nu-latn", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: tz,
+  }).formatToParts(d);
   // The year part already includes "هـ" suffix in ar-SA, but normalize to be sure.
   const day = parts.find((p) => p.type === "day")?.value ?? "";
   const month = parts.find((p) => p.type === "month")?.value ?? "";

@@ -1,6 +1,6 @@
 import type { PrayerName } from "@/lib/prayer-engine";
 import type { PrayerConsensus } from "@/lib/consensus";
-import { PRAYER_LABEL_AR, formatHM } from "@/lib/format";
+import { PRAYER_LABEL_AR, PRAYER_LABEL_DE, formatHM } from "@/lib/format";
 
 export function PrayerRow({
   prayer,
@@ -34,6 +34,9 @@ export function PrayerRow({
           dir="rtl"
         >
           {PRAYER_LABEL_AR[prayer]}
+        </div>
+        <div className="mt-1 text-[11px] tracking-wide text-bone-faint" dir="ltr">
+          {PRAYER_LABEL_DE[prayer]}
         </div>
         {alt && (
           <div

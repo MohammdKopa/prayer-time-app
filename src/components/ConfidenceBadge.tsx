@@ -1,5 +1,4 @@
 import type { Confidence } from "@/lib/consensus";
-import { toArabicDigits } from "@/lib/format";
 
 const DOT_COLOR: Record<Confidence, string> = {
   high: "bg-good shadow-[0_0_10px_0] shadow-good/70",
@@ -8,14 +7,12 @@ const DOT_COLOR: Record<Confidence, string> = {
 };
 
 function shortSpread(seconds: number): string {
-  if (seconds < 60) return `${toArabicDigits(seconds)}ث`;
+  if (seconds < 60) return `${seconds}ث`;
   const m = Math.round(seconds / 60);
-  if (m < 60) return `${toArabicDigits(m)}د`;
+  if (m < 60) return `${m}د`;
   const h = Math.floor(m / 60);
   const rm = m % 60;
-  return rm === 0
-    ? `${toArabicDigits(h)}س`
-    : `${toArabicDigits(h)}س${toArabicDigits(rm)}`;
+  return rm === 0 ? `${h}س` : `${h}س${rm}`;
 }
 
 export function ConfidenceBadge({

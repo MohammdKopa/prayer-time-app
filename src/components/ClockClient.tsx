@@ -7,9 +7,10 @@ import {
   formatCountdownAr,
   formatDateAr,
   formatHijriDateAr,
+  formatHM,
   formatHMS,
   PRAYER_LABEL_AR,
-  toArabicDigits,
+  PRAYER_LABEL_DE,
 } from "@/lib/format";
 import { type City, DEFAULT_CITY, findCity, NRW_TZ } from "@/lib/cities";
 import { useAzanPlayer } from "@/lib/azan";
@@ -343,7 +344,7 @@ export function ClockClient() {
               className="text-2xl font-light tnum tabular-nums text-bone hero-tick"
               dir="ltr"
             >
-              {hydrated ? formatHMS(now, NRW_TZ) : "٠٠:٠٠:٠٠"}
+              {hydrated ? formatHMS(now, NRW_TZ) : "00:00:00"}
             </span>
           </div>
 
@@ -362,18 +363,18 @@ export function ClockClient() {
           </div>
 
           <div
+            className="mt-1.5 text-xs tracking-wide text-bone-faint"
+            dir="ltr"
+          >
+            {PRAYER_LABEL_DE[next.name]}
+          </div>
+
+          <div
             className="mt-3 text-[clamp(2.5rem,11vw,3.75rem)] font-extralight leading-none tnum text-gold-soft flash-target tracking-tight"
             dir="ltr"
             style={{ textShadow: "0 2px 18px rgba(0,0,0,0.4)" }}
           >
-            {toArabicDigits(
-              next.at.toLocaleTimeString("en-GB", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-                timeZone: NRW_TZ,
-              }),
-            )}
+            {formatHM(next.at, NRW_TZ)}
           </div>
 
           <div className="ar mt-3 text-base text-bone-dim">
@@ -414,7 +415,7 @@ export function ClockClient() {
           </span>
           <span className="flex items-center gap-2">
             <span className="ar text-[11px] text-bone-dim tnum">
-              {toArabicDigits(mosqueCount)}
+              {mosqueCount}
             </span>
             <svg viewBox="0 0 12 12" aria-hidden="true" className="h-2.5 w-2.5 opacity-60 rotate-90">
               <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -436,7 +437,7 @@ export function ClockClient() {
       <footer className="mt-6 flex flex-col items-center gap-1.5 text-center">
         <div className="ar text-[11px] text-bone-dim tracking-wide">
           {day.primary.shortLabel} · مُتحقَّق عبر{" "}
-          {toArabicDigits(day.alternates.length)} طرق
+          {day.alternates.length} طرق
         </div>
         <div className="ar text-[11px] text-bone-faint">
           بلا إعلانات · بلا أوقات خاطئة · يُحسب على هذا الجهاز
