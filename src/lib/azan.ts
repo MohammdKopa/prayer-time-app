@@ -5,8 +5,9 @@ import type { PrayerName } from "./prayer-engine";
 
 const MUTE_KEY = "prayer-times.azan-muted";
 
+// One azan for every prayer, including Fajr (both keys point at the same file).
 const AUDIO_PATHS = {
-  fajr: "/audio/azan-fajr.mp3",
+  fajr: "/audio/azan.mp3",
   default: "/audio/azan.mp3",
 } as const;
 

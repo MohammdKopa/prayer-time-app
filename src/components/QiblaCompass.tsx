@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { City } from "@/lib/cities";
 import { bearingLabelAr, qiblaBearing } from "@/lib/qibla";
 
@@ -8,6 +8,21 @@ import { bearingLabelAr, qiblaBearing } from "@/lib/qibla";
 type DeviceOrientationEventConstructorIOS = typeof DeviceOrientationEvent & {
   requestPermission?: () => Promise<"granted" | "denied">;
 };
+
+// Compass heading — degrees clockwise from north that the TOP of the device
+// points — derived from an orientation event's alpha and corrected for the
+// screen's own rotation. Returns null when alpha isn't usable.
+function headingFromAlpha(e: DeviceOrientationEvent): number | null {
+  if (typeof e.alpha !== "number" || Number.isNaN(e.alpha)) return null;
+  const screenAngle =
+    typeof screen !== "undefined" &&
+    screen.orientation &&
+    typeof screen.orientation.angle === "number"
+      ? screen.orientation.angle
+      : 0;
+  const heading = 360 - e.alpha + screenAngle;
+  return ((heading % 360) + 360) % 360;
+}
 
 export function QiblaCompass({
   open,
@@ -19,13 +34,77 @@ export function QiblaCompass({
   city: City;
 }) {
   const [heading, setHeading] = useState<number | null>(null);
+  const [isTrueNorth, setIsTrueNorth] = useState(false);
+  const [accuracy, setAccuracy] = useState<number | null>(null);
   const [permissionState, setPermissionState] =
     useState<"unknown" | "granted" | "denied" | "unsupported">("unknown");
 
   const qibla = qiblaBearing(city.latitude, city.longitude);
 
+  // Attach the compass. We trust two sources that are referenced to TRUE north:
+  // iOS's `webkitCompassHeading`, and Android Chrome's `deviceorientationabsolute`.
+  // A plain `deviceorientation` `alpha` on Android is relative to wherever the
+  // page loaded and drifts freely — that was the "inaccurate" compass. We keep
+  // it only as a last resort and flag it as not true-north so the UI doesn't
+  // rotate the arrow by it.
+  const detachRef = useRef<(() => void) | null>(null);
+
+  const attach = useCallback(() => {
+    detachRef.current?.();
+    let gotAbsolute = false;
+
+    const onAbsolute = (e: DeviceOrientationEvent) => {
+      const h = headingFromAlpha(e);
+      if (h === null) return;
+      gotAbsolute = true;
+      setHeading(h);
+      setIsTrueNorth(true);
+    };
+
+    const onRelative = (e: DeviceOrientationEvent) => {
+      const ios = e as DeviceOrientationEvent & {
+        webkitCompassHeading?: number;
+        webkitCompassAccuracy?: number;
+      };
+      if (
+        typeof ios.webkitCompassHeading === "number" &&
+        !Number.isNaN(ios.webkitCompassHeading)
+      ) {
+        // iOS — already degrees clockwise from true north.
+        setHeading(ios.webkitCompassHeading);
+        setIsTrueNorth(true);
+        if (typeof ios.webkitCompassAccuracy === "number") {
+          setAccuracy(ios.webkitCompassAccuracy);
+        }
+        return;
+      }
+      if (gotAbsolute) return; // the absolute listener has the better reading
+      const h = headingFromAlpha(e);
+      if (h !== null) {
+        setHeading(h);
+        setIsTrueNorth(e.absolute === true);
+      }
+    };
+
+    // `deviceorientationabsolute` isn't in the DOM lib's typed event map.
+    const absListener = onAbsolute as EventListener;
+    window.addEventListener("deviceorientationabsolute", absListener, true);
+    window.addEventListener("deviceorientation", onRelative, true);
+    detachRef.current = () => {
+      window.removeEventListener("deviceorientationabsolute", absListener, true);
+      window.removeEventListener("deviceorientation", onRelative, true);
+      detachRef.current = null;
+    };
+  }, []);
+
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      detachRef.current?.();
+      setHeading(null);
+      setIsTrueNorth(false);
+      setAccuracy(null);
+      return;
+    }
 
     const supported =
       typeof window !== "undefined" && "DeviceOrientationEvent" in window;
@@ -36,53 +115,44 @@ export function QiblaCompass({
 
     const Ctor = DeviceOrientationEvent as DeviceOrientationEventConstructorIOS;
     const needsRequest = typeof Ctor.requestPermission === "function";
-
-    const attach = () => {
-      const onOrient = (e: DeviceOrientationEvent) => {
-        // webkitCompassHeading exists on iOS Safari (already true-north relative)
-        const ios = (e as DeviceOrientationEvent & {
-          webkitCompassHeading?: number;
-        }).webkitCompassHeading;
-        if (typeof ios === "number") {
-          setHeading(ios);
-        } else if (typeof e.alpha === "number") {
-          // Other browsers — alpha is degrees from device orientation (not true north).
-          // It's relative to the orientation when the listener was attached.
-          // Good enough for "approximate" direction.
-          setHeading(360 - e.alpha);
-        }
-      };
-      window.addEventListener("deviceorientation", onOrient);
-      return () => window.removeEventListener("deviceorientation", onOrient);
-    };
-
-    if (!needsRequest) {
-      setPermissionState("granted");
-      return attach();
+    if (needsRequest) {
+      // iOS: defer attaching until the user grants permission via the button.
+      return;
     }
 
-    // iOS: defer attaching until user explicitly grants permission via the button
-  }, [open]);
+    setPermissionState("granted");
+    attach();
+    return () => detachRef.current?.();
+  }, [open, attach]);
 
   const requestIosPermission = async () => {
     const Ctor = DeviceOrientationEvent as DeviceOrientationEventConstructorIOS;
     if (typeof Ctor.requestPermission !== "function") return;
     try {
       const result = await Ctor.requestPermission();
-      setPermissionState(result === "granted" ? "granted" : "denied");
+      if (result === "granted") {
+        setPermissionState("granted");
+        attach();
+      } else {
+        setPermissionState("denied");
+      }
     } catch {
       setPermissionState("denied");
     }
   };
 
-  // Compute the arrow's rotation: the angle the Mecca arrow should point at,
-  // relative to "up" on screen.
-  //   - When we know compass heading, arrow rotates so it points to true Mecca direction.
-  //   - When we don't, arrow rotates to the bearing as if "up" = north.
-  const arrowRotation = heading !== null ? qibla - heading : qibla;
+  // Only let the dial + arrow track the device when the heading is true-north.
+  // Otherwise we keep the dial fixed (N up) and point the arrow at the exact
+  // bearing — an honest "hold the top of the phone North" map, never a drifting
+  // one. The numeric bearing below is always exact regardless.
+  const liveCompass = heading !== null && isTrueNorth;
+  const arrowRotation = liveCompass ? qibla - heading : qibla;
+  const dialRotation = liveCompass ? -heading : 0;
 
-  // Whether the dial labels should rotate with compass (so North label stays at true North)
-  const dialRotation = heading !== null ? -heading : 0;
+  // iOS reports compass accuracy in degrees (negative = uncalibrated); prompt
+  // the figure-8 calibration when it's poor.
+  const needsCalibration =
+    liveCompass && accuracy !== null && (accuracy < 0 || accuracy > 20);
 
   if (!open) return null;
 
@@ -278,16 +348,18 @@ export function QiblaCompass({
           </div>
         </div>
 
-        {/* Permission prompt for iOS */}
+        {/* Status — honest about what the compass can and can't promise */}
         <div className="px-6 mt-5 pb-5">
           {permissionState === "unsupported" && (
-            <p className="ar text-[11px] text-bone-dim text-center">
-              متصفحك لا يدعم البوصلة. السهم يشير إلى القبلة كأن الأعلى = الشمال.
+            <p className="ar text-[11px] text-bone-dim text-center leading-relaxed">
+              البوصلة غير متاحة على هذا الجهاز. وجِّه أعلى الهاتف نحو الشمال،
+              فيُشير السهم إلى القبلة بالزاوية أعلاه.
             </p>
           )}
           {permissionState === "denied" && (
-            <p className="ar text-[11px] text-bone-dim text-center">
-              لم يُسمح بالوصول للبوصلة. السهم يشير إلى القبلة كأن الأعلى = الشمال.
+            <p className="ar text-[11px] text-bone-dim text-center leading-relaxed">
+              لم يُسمح بالوصول إلى البوصلة. وجِّه أعلى الهاتف نحو الشمال،
+              فيُشير السهم إلى القبلة بالزاوية أعلاه.
             </p>
           )}
           {permissionState === "unknown" && (
@@ -301,12 +373,26 @@ export function QiblaCompass({
           )}
           {permissionState === "granted" && heading === null && (
             <p className="ar text-[11px] text-bone-dim text-center">
-              حرّك الجهاز لتفعيل البوصلة…
+              حرّك الهاتف قليلاً لتفعيل البوصلة…
             </p>
           )}
-          {permissionState === "granted" && heading !== null && (
-            <p className="ar text-[11px] text-bone-dim text-center">
-              ✦ البوصلة مفعّلة. وجّه أعلى الجهاز نحو السهم.
+          {permissionState === "granted" &&
+            heading !== null &&
+            !isTrueNorth && (
+              <p className="ar text-[11px] text-bone-dim text-center leading-relaxed">
+                بوصلة هذا المتصفح غير دقيقة. وجِّه أعلى الهاتف نحو الشمال،
+                فيُشير السهم إلى القبلة بالزاوية أعلاه.
+              </p>
+            )}
+          {liveCompass && needsCalibration && (
+            <p className="ar text-[11px] text-gold-soft text-center leading-relaxed">
+              ✦ لمعايرة البوصلة، حرّك الهاتف في الهواء على شكل الرقم ٨.
+            </p>
+          )}
+          {liveCompass && !needsCalibration && (
+            <p className="ar text-[11px] text-bone-dim text-center leading-relaxed">
+              ✦ البوصلة مفعّلة. أدِر هاتفك حتى يتّجه السهم إلى الأعلى — عندئذٍ
+              يكون أعلى الهاتف نحو القبلة.
             </p>
           )}
         </div>

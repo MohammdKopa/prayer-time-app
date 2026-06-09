@@ -13,6 +13,8 @@ import {
 } from "@/lib/format";
 import { type City, NRW_TZ } from "@/lib/cities";
 import { DisplaySunArc } from "./DisplaySunArc";
+import { DisplayPhotoOverlay } from "./DisplayPhotoOverlay";
+import { DisplayFullscreen } from "./DisplayFullscreen";
 
 const GRID_ORDER: PrayerName[] = [
   "fajr",
@@ -633,6 +635,14 @@ export function DisplayClient({
         </footer>
       </div>
 
+      {/* Rotating full-screen photo of al-Quds / al-Shām with a duʿāʾ. Yields
+          to the prayer-now takeover; dims with the room (sits below night-dim). */}
+      <DisplayPhotoOverlay
+        now={now}
+        hydrated={hydrated}
+        suppressed={prayerNow !== null}
+      />
+
       {/* Night-dim wash */}
       <div className="night-dim" style={{ opacity: nightDim }} aria-hidden="true" />
 
@@ -676,6 +686,10 @@ export function DisplayClient({
           </div>
         </div>
       )}
+
+      {/* One-tap "go full-screen" — clears the browser/system bars on the
+          HDMI stick. Renders nothing once full-screen or installed as a PWA. */}
+      <DisplayFullscreen />
     </main>
   );
 }
