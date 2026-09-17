@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
+import { computeDay, PRAYER_ORDER, type PrayerName, NO_GAP_RULE } from "@shared/prayer-engine";
 import { computeConsensus } from "@shared/consensus";
 import {
   formatCountdownAr,
@@ -201,9 +201,23 @@ export function ClockClient() {
           maghrib: "Maghrib",
           isha: "Isha",
         };
+        // Compare the RAW astronomy, not the times on screen. The mosque's
+        // rule places Fajr and Isha at a fixed distance from sunrise and
+        // Maghrib, so the displayed times differ from Aladhan's by design on
+        // nearly every day. Diffing those would make this watchdog cry wolf
+        // daily, and a watchdog that always barks gets ignored — which is
+        // exactly how the engine drift in June went unnoticed.
+        const astronomical = computeDay(
+          city.latitude,
+          city.longitude,
+          day.date,
+          NO_GAP_RULE,
+          NO_GAP_RULE,
+        ).primary.times;
+
         const issues: string[] = [];
         for (const p of PRAYER_ORDER) {
-          const localT = day.primary.times[p];
+          const localT = astronomical[p];
           const aladhanStr = data.timings[aladhanKey[p]];
           if (!aladhanStr) continue;
           const [h, m] = aladhanStr.split(":").map(Number);
