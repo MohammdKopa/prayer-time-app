@@ -2,11 +2,11 @@
   "name": "prayer-time-app-worker",
   "private": true,
   "version": "0.1.0",
-  "description": "Push notification worker — runs alongside the Next.js container.",
+  "description": "Push notification worker \u2014 runs alongside the Next.js container.",
   "type": "module",
   "main": "push-worker.mjs",
   "dependencies": {
-    "adhan": "^4.4.3",
+    "adhan": "4.4.6",
     "web-push": "^3.6.7"
   }
 }

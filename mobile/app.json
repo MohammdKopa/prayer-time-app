@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Prayer Times",
+    "slug": "prayer-times",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "prayer",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#07090F",
+    "ios": {
+      "bundleIdentifier": "app.kametrix.prayer",
+      "supportsTablet": false,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": [
+          "ar",
+          "de",
+          "tr",
+          "en"
+        ],
+        "CFBundleDevelopmentRegion": "ar",
+        "ExpoLocalization_supportsRTL": true,
+        "ExpoLocalization_forcesRTL": false
+      }
+    },
+    "android": {
+      "package": "app.kametrix.prayer",
+      "adaptiveIcon": {
+        "backgroundColor": "#07090F",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#07090F",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 76
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

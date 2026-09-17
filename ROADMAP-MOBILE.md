@@ -171,8 +171,8 @@ the calendar doesn't punish the polish.
 
 ### P0 — Foundation
 - [x] Extract `shared/`, repoint the Next app's imports, verify `npm run build` green
-- [ ] Scaffold `mobile/` (Expo, `app.kametrix.prayer`, New Arch)
-- [ ] Wire `shared/` into Metro; engine computing times in RN
+- [x] Scaffold `mobile/` (Expo SDK 57.0.23 / RN 0.86.3, `app.kametrix.prayer`)
+- [x] Wire `shared/` into Metro; engine bundles into the Android build
 - [ ] Keystore generated **and in the password manager before first upload**
 
 ### P1 — The clock (closed-test minimum)
@@ -223,6 +223,23 @@ the calendar doesn't punish the polish.
 - [ ] Closed track live → 12 testers → 14 days
 
 ---
+
+### Notes from the scaffold (2026-09-17)
+
+- **`newArchEnabled` and `android.edgeToEdgeEnabled` no longer exist** in SDK
+  57 — `expo-doctor` rejects them. New Architecture is the default now.
+- **adhan is pinned to an exact version** (4.4.6) in all three package.json
+  files. It arrived as `^4.4.6` in mobile against `^4.4.3` on web; the two
+  compute identically today (10,980 comparisons, zero differences) but a caret
+  range on the library that decides prayer times would let a silent patch bump
+  fork the engine through its own dependency.
+- **Metro needs `disableHierarchicalLookup`**, or a module reached through
+  `../shared` can resolve a second copy of React from the repo root and fail
+  with an invalid-hook-call that names nothing useful.
+- The template's demo tree (components, constants, hooks, global.css) was
+  deleted rather than left to rot. `src/` is three files.
+- Verified by exporting a real Android bundle: 2.7MB of Hermes bytecode with
+  the engine in it. Arabic strings sit in Hermes' UTF-16 string table.
 
 ## Open items
 
