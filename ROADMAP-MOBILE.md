@@ -83,9 +83,19 @@ imam's ruling (2026-06). It kept `TwilightAngle`. Measured drift at Marl:
 | Fajr, midsummer | 04:11 | **03:01** | **70 min early** |
 | Isha, midsummer | 22:56 | 23:58 | **62 min late** |
 
-Every night in June, anyone with notifications on was woken 70 minutes before
-Fajr. It had also silently relied on adhan's default madhab instead of setting
-Shafi explicitly, and its comment claimed "Hanafi-friendly defaults" — wrong.
+**Correction to the first version of this entry.** Production was not affected
+the whole time. The drift began when the engine changed on 2026-06-02 and was
+hand-fixed directly on the VPS at 02:27 on 2026-06-10 — roughly eight days, in
+the worst week of the year for it. The running worker has been correct since.
+
+The live danger was subtler and arguably worse: **that hotfix existed only as an
+uncommitted edit on the server.** It was never in git. A clean redeploy, a new
+VPS, or the `git pull && docker compose up -d --build` documented in DEPLOY.md
+would have silently reverted it. Attempting exactly that on 2026-09-17 is how it
+was found — git refused the pull because of the local modification.
+
+The worker had also relied on adhan's default madhab instead of setting Shafi
+explicitly, with a comment claiming "Hanafi-friendly defaults" — wrong.
 
 Fixed, and made unrepeatable: `scripts/engine-parity.mts` (`npm run parity`)
 imports the worker's own `computeTimesFor` and diffs it against the real engine
@@ -93,8 +103,11 @@ across 5 German cities × 366 days × 5 prayers = 9,150 comparisons, and fails i
 any differ by even one second. Currently green. The worker's entry point is now
 guarded so importing it is side-effect free.
 
-**NOT DEPLOYED.** The fix is committed to the working tree only — deploying
-prayer.kametrix.com is Mohamed's call.
+**DEPLOYED 2026-09-17.** Commits 6bf9d04 / 5af37ed / eefd5e3 pushed to master,
+pulled on the VPS, containers rebuilt. The server's June hand-edit was backed up
+to `/root/push-worker.hotfix-2026-06-10.mjs.bak` before being replaced by the
+committed version. Verified inside the running container: midsummer Marl fajr
+04:11 / isha 22:56, matching the app exactly.
 
 ---
 
