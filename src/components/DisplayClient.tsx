@@ -1,7 +1,7 @@
 "use client";
 
 import { type CSSProperties, useEffect, useMemo, useState } from "react";
-import { computeDay, type PrayerName } from "@/lib/prayer-engine";
+import { computeDay, type PrayerName } from "@shared/prayer-engine";
 import {
   formatCountdownAr,
   formatDateAr,
@@ -10,8 +10,8 @@ import {
   formatHMS,
   PRAYER_LABEL_AR,
   PRAYER_LABEL_DE,
-} from "@/lib/format";
-import { type City, NRW_TZ } from "@/lib/cities";
+} from "@shared/format";
+import { type City, NRW_TZ } from "@shared/cities";
 import { DisplaySunArc } from "./DisplaySunArc";
 import { DisplayPhotoOverlay } from "./DisplayPhotoOverlay";
 import { DisplayFullscreen } from "./DisplayFullscreen";

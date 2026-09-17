@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { type City, NRW_TZ } from "./cities";
+import { type City, NRW_TZ } from "@shared/cities";
 
 const SW_PATH = "/sw.js";
 

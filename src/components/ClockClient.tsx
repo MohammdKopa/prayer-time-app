@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { computeDay, PRAYER_ORDER, type PrayerName } from "@/lib/prayer-engine";
-import { computeConsensus } from "@/lib/consensus";
+import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
+import { computeConsensus } from "@shared/consensus";
 import {
   formatCountdownAr,
   formatDateAr,
@@ -11,8 +11,8 @@ import {
   formatHMS,
   PRAYER_LABEL_AR,
   PRAYER_LABEL_DE,
-} from "@/lib/format";
-import { type City, DEFAULT_CITY, findCity, NRW_TZ } from "@/lib/cities";
+} from "@shared/format";
+import { type City, DEFAULT_CITY, findCity, NRW_TZ } from "@shared/cities";
 import { useAzanPlayer } from "@/lib/azan";
 import { useBackgroundPush } from "@/lib/push-client";
 import { CitySwitcher } from "./CitySwitcher";
@@ -20,7 +20,7 @@ import { InstallBanner } from "./InstallBanner";
 import { MosqueSheet } from "./MosqueSheet";
 import { PrayerRow } from "./PrayerRow";
 import { QiblaCompass } from "./QiblaCompass";
-import { mosquesForCity } from "@/data/mosques";
+import { mosquesForCity } from "@shared/mosques";
 import { track } from "@/lib/analytics";
 
 const STORAGE_KEY = "prayer-times.city";

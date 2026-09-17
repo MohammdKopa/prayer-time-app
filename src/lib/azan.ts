@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PrayerName } from "./prayer-engine";
+import type { PrayerName } from "@shared/prayer-engine";
 
 const MUTE_KEY = "prayer-times.azan-muted";
 

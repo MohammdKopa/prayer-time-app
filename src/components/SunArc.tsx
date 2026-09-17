@@ -1,7 +1,7 @@
 "use client";
 
-import type { PrayerName } from "@/lib/prayer-engine";
-import { PRAYER_LABEL_EN } from "@/lib/format";
+import type { PrayerName } from "@shared/prayer-engine";
+import { PRAYER_LABEL_EN } from "@shared/format";
 
 const PRAYER_DOTS: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 

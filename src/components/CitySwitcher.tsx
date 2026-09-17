@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { NRW_CITIES, type City } from "@/lib/cities";
+import { NRW_CITIES, type City } from "@shared/cities";
 
 export function CitySwitcher({
   current,

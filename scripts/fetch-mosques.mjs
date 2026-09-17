@@ -4,10 +4,10 @@
 //
 // Queries the free OpenStreetMap Overpass API for every Muslim place of worship
 // in North Rhine-Westphalia, maps each to one of the cities the app serves
-// (src/lib/cities.ts), and writes src/data/mosques.osm.json.
+// (shared/cities.ts), and writes shared/mosques.osm.json.
 //
 // No API key, no billing. Re-run anytime to refresh. The curated overrides in
-// src/data/mosques.ts (better names, Arabic names, hidden entries, jamāʿa
+// shared/mosques.ts (better names, Arabic names, hidden entries, jamāʿa
 // times) are applied on top at runtime — this file never touches them.
 
 import { readFileSync, writeFileSync } from "node:fs";
@@ -16,10 +16,10 @@ import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const OUT = join(ROOT, "src", "data", "mosques.osm.json");
+const OUT = join(ROOT, "shared", "mosques.osm.json");
 
 // ── 1. Read the served cities straight out of cities.ts ────────────────
-const citiesSrc = readFileSync(join(ROOT, "src", "lib", "cities.ts"), "utf8");
+const citiesSrc = readFileSync(join(ROOT, "shared", "cities.ts"), "utf8");
 const CITY_RE =
   /id:\s*"([^"]+)",\s*name:\s*"([^"]+)",\s*population:\s*\d+,\s*latitude:\s*([\d.]+),\s*longitude:\s*([\d.]+)/g;
 const CITIES = [...citiesSrc.matchAll(CITY_RE)].map((m) => ({

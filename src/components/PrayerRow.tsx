@@ -1,6 +1,6 @@
-import type { PrayerName } from "@/lib/prayer-engine";
-import type { PrayerConsensus } from "@/lib/consensus";
-import { PRAYER_LABEL_AR, PRAYER_LABEL_DE, formatHM } from "@/lib/format";
+import type { PrayerName } from "@shared/prayer-engine";
+import type { PrayerConsensus } from "@shared/consensus";
+import { PRAYER_LABEL_AR, PRAYER_LABEL_DE, formatHM } from "@shared/format";
 
 export function PrayerRow({
   prayer,

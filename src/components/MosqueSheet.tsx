@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { type City } from "@/lib/cities";
-import { mapsUrl, mosquesForCity, type Mosque } from "@/data/mosques";
+import { type City } from "@shared/cities";
+import { mapsUrl, mosquesForCity, type Mosque } from "@shared/mosques";
 import { track } from "@/lib/analytics";
 
 export function MosqueSheet({

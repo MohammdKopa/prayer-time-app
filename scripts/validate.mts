@@ -3,7 +3,7 @@
 // Fails loudly if any prayer differs by >120 seconds from Aladhan's MWL.
 
 // @ts-expect-error -- tsx allows .ts imports; tsc strict-mode does not. This file is run via tsx only, never compiled.
-import { computeDay, PRAYER_ORDER, type PrayerName } from "../src/lib/prayer-engine.ts";
+import { computeDay, PRAYER_ORDER, type PrayerName } from "../shared/prayer-engine.ts";
 
 const MARL_LAT = 51.6564;
 const MARL_LNG = 7.0907;

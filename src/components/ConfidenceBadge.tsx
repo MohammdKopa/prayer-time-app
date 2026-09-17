@@ -1,4 +1,4 @@
-import type { Confidence } from "@/lib/consensus";
+import type { Confidence } from "@shared/consensus";
 
 const DOT_COLOR: Record<Confidence, string> = {
   high: "bg-good shadow-[0_0_10px_0] shadow-good/70",

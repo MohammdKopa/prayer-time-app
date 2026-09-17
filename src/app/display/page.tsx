@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { DisplayClient } from "@/components/DisplayClient";
-import { DEFAULT_CITY, findCity } from "@/lib/cities";
+import { DEFAULT_CITY, findCity } from "@shared/cities";
 
 export const metadata: Metadata = {
   title: "شاشة المسجد — أوقات الصلاة",

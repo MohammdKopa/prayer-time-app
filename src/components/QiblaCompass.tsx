@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { City } from "@/lib/cities";
-import { bearingLabelAr, qiblaBearing } from "@/lib/qibla";
+import type { City } from "@shared/cities";
+import { bearingLabelAr, qiblaBearing } from "@shared/qibla";
 
 // iOS-specific permission API for DeviceOrientationEvent
 type DeviceOrientationEventConstructorIOS = typeof DeviceOrientationEvent & {

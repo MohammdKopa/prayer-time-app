@@ -1,7 +1,7 @@
 "use client";
 
-import type { PrayerName } from "@/lib/prayer-engine";
-import { PRAYER_LABEL_AR } from "@/lib/format";
+import type { PrayerName } from "@shared/prayer-engine";
+import { PRAYER_LABEL_AR } from "@shared/format";
 
 // Prayers that sit on the daytime arc.
 const ARC_PRAYERS: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
