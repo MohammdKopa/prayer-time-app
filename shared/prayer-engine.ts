@@ -21,6 +21,28 @@ import {
  */
 export const ISHA_MIN_GAP_AFTER_MAGHRIB_MIN = 90;
 
+/**
+ * Minimum gap between Fajr and sunrise, in minutes.
+ *
+ * The second half of the same ruling (Sheikh Ayman, Marl, 2026-06-03): "we make
+ * the Fajr adhan an hour and a half before sunrise as well". Like the Isha rule
+ * it is applied as a floor — Fajr is never moved later, only earlier, so the
+ * window before sunrise is never shorter than this.
+ *
+ * Both rules address the same thing: the high-latitude summer squeeze. In June
+ * at 51°N the seventh-of-the-night rule leaves barely an hour either side of
+ * the night, and the sheikh wants ninety minutes.
+ *
+ * They are floors rather than fixed offsets deliberately. Applied literally as
+ * "always 90" they would REVERSE his stated reason for 217 days of the year:
+ * in December the Maghrib→Isha gap is already 118 minutes, and forcing it to
+ * 90 would call Isha up to 29 minutes before the calculated time, while the
+ * red twilight he is waiting on takes longer in winter, not less. A fixed
+ * Fajr would likewise fall before dawn on 144 summer days. As floors, both
+ * widen the squeezed summer windows and leave winter untouched.
+ */
+export const FAJR_MIN_GAP_BEFORE_SUNRISE_MIN = 90;
+
 export const PRAYER_ORDER = [
   "fajr",
   "sunrise",
@@ -39,6 +61,8 @@ export interface MethodResult {
   times: Record<PrayerName, Date>;
   /** True when the Maghrib→Isha floor held Isha back from its computed time. */
   ishaFloored: boolean;
+  /** True when the Fajr→sunrise floor moved Fajr earlier than computed. */
+  fajrFloored: boolean;
 }
 
 export interface DayComputation {
@@ -51,8 +75,12 @@ export interface DayComputation {
   alternates: MethodResult[];
   /** True when the displayed Isha was held back by the Maghrib→Isha floor. */
   ishaFloored: boolean;
-  /** The floor in force for this computation, in minutes. */
+  /** True when the displayed Fajr was moved earlier by the Fajr→sunrise floor. */
+  fajrFloored: boolean;
+  /** The Maghrib→Isha floor in force for this computation, in minutes. */
   ishaMinGapMinutes: number;
+  /** The Fajr→sunrise floor in force for this computation, in minutes. */
+  fajrMinGapMinutes: number;
 }
 
 /**
@@ -62,20 +90,32 @@ export interface DayComputation {
  */
 const toTimes = (
   pt: PrayerTimes,
-  minGapMinutes: number,
-): { times: Record<PrayerName, Date>; ishaFloored: boolean } => {
-  const floor = new Date(pt.maghrib.getTime() + minGapMinutes * 60_000);
-  const ishaFloored = pt.isha.getTime() < floor.getTime();
+  ishaMinGapMinutes: number,
+  fajrMinGapMinutes: number,
+): {
+  times: Record<PrayerName, Date>;
+  ishaFloored: boolean;
+  fajrFloored: boolean;
+} => {
+  // Isha: never closer to Maghrib than the minimum. Only ever moved later.
+  const ishaFloor = new Date(pt.maghrib.getTime() + ishaMinGapMinutes * 60_000);
+  const ishaFloored = pt.isha.getTime() < ishaFloor.getTime();
+
+  // Fajr: never closer to sunrise than the minimum. Only ever moved earlier.
+  const fajrFloor = new Date(pt.sunrise.getTime() - fajrMinGapMinutes * 60_000);
+  const fajrFloored = pt.fajr.getTime() > fajrFloor.getTime();
+
   return {
     times: {
-      fajr: pt.fajr,
+      fajr: fajrFloored ? fajrFloor : pt.fajr,
       sunrise: pt.sunrise,
       dhuhr: pt.dhuhr,
       asr: pt.asr,
       maghrib: pt.maghrib,
-      isha: ishaFloored ? floor : pt.isha,
+      isha: ishaFloored ? ishaFloor : pt.isha,
     },
     ishaFloored,
+    fajrFloored,
   };
 };
 
@@ -83,7 +123,8 @@ const computeOne = (
   coords: Coordinates,
   date: Date,
   methodId: MethodId,
-  minGapMinutes: number,
+  ishaMinGapMinutes: number,
+  fajrMinGapMinutes: number,
 ): MethodResult => {
   const def = METHODS[methodId];
   const params = def.params();
@@ -99,13 +140,18 @@ const computeOne = (
   // The floor is applied to every method, not just the displayed one, so the
   // consensus badge compares the times we actually show rather than a mix of
   // adjusted and raw values.
-  const { times, ishaFloored } = toTimes(pt, minGapMinutes);
+  const { times, ishaFloored, fajrFloored } = toTimes(
+    pt,
+    ishaMinGapMinutes,
+    fajrMinGapMinutes,
+  );
   return {
     methodId: def.id,
     label: def.label,
     shortLabel: def.shortLabel,
     times,
     ishaFloored,
+    fajrFloored,
   };
 };
 
@@ -113,19 +159,30 @@ export function computeDay(
   latitude: number,
   longitude: number,
   date: Date = new Date(),
-  minGapMinutes: number = ISHA_MIN_GAP_AFTER_MAGHRIB_MIN,
+  ishaMinGapMinutes: number = ISHA_MIN_GAP_AFTER_MAGHRIB_MIN,
+  fajrMinGapMinutes: number = FAJR_MIN_GAP_BEFORE_SUNRISE_MIN,
 ): DayComputation {
   const coords = new Coordinates(latitude, longitude);
-  const primary = computeOne(coords, date, PRIMARY_METHOD, minGapMinutes);
+  const primary = computeOne(
+    coords,
+    date,
+    PRIMARY_METHOD,
+    ishaMinGapMinutes,
+    fajrMinGapMinutes,
+  );
   const alternates = CONSENSUS_METHOD_IDS.filter(
     (id) => id !== PRIMARY_METHOD,
-  ).map((id) => computeOne(coords, date, id, minGapMinutes));
+  ).map((id) =>
+    computeOne(coords, date, id, ishaMinGapMinutes, fajrMinGapMinutes),
+  );
   return {
     coords: { latitude, longitude },
     date,
     primary,
     alternates,
     ishaFloored: primary.ishaFloored,
-    ishaMinGapMinutes: minGapMinutes,
+    fajrFloored: primary.fajrFloored,
+    ishaMinGapMinutes,
+    fajrMinGapMinutes,
   };
 }

@@ -80,6 +80,12 @@ async function writeAll(subs) {
 // ISHA_MIN_GAP_AFTER_MAGHRIB_MIN in shared/prayer-engine.ts.
 const ISHA_MIN_GAP_MIN = 90;
 
+// FAJR_MIN_GAP: the other half of the same ruling — the Fajr adhan is at least
+// 90 minutes before sunrise. Also a floor: Fajr is never moved later, only
+// earlier. Must equal FAJR_MIN_GAP_BEFORE_SUNRISE_MIN in
+// shared/prayer-engine.ts.
+const FAJR_MIN_GAP_MIN = 90;
+
 function computeTimesFor(lat, lng, date) {
   const coords = new Coordinates(lat, lng);
   const params = CalculationMethod.MuslimWorldLeague();
@@ -88,8 +94,10 @@ function computeTimesFor(lat, lng, date) {
   const pt = new PrayerTimes(coords, date, params);
   const ishaFloor = new Date(pt.maghrib.getTime() + ISHA_MIN_GAP_MIN * 60_000);
   const isha = pt.isha.getTime() < ishaFloor.getTime() ? ishaFloor : pt.isha;
+  const fajrFloor = new Date(pt.sunrise.getTime() - FAJR_MIN_GAP_MIN * 60_000);
+  const fajr = pt.fajr.getTime() > fajrFloor.getTime() ? fajrFloor : pt.fajr;
   return {
-    fajr: pt.fajr,
+    fajr,
     dhuhr: pt.dhuhr,
     asr: pt.asr,
     maghrib: pt.maghrib,

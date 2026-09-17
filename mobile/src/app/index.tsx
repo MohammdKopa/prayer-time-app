@@ -114,11 +114,19 @@ export default function ClockScreen() {
         </View>
 
         {/*
-          Principle #4, "no bad times", also means no unexplained ones. From
-          April to September the Isha shown here is held back from its
-          calculated time by the imam's 90-minute minimum, and the app says so
-          rather than quietly showing a different number.
+          Principle #4, "no bad times", also means no unexplained ones. In the
+          summer months the sheikh's 90-minute minimums move both ends of the
+          night away from their calculated values — Fajr earlier, Isha later —
+          and the app says so rather than quietly showing a different number.
         */}
+        {day.fajrFloored && (
+          <Text style={styles.note}>
+            الفجر مقدَّم ليكون قبل الشروق بـ
+            {" "}
+            {toArabicIndic(String(day.fajrMinGapMinutes))} دقيقة على الأقل
+          </Text>
+        )}
+
         {day.ishaFloored && (
           <Text style={styles.note}>
             العشاء مؤخَّر ليكون بعد المغرب بـ
