@@ -246,9 +246,11 @@ the calendar doesn't punish the polish.
 - [x] Surface the adjusted times in the phone app — done, shows "وفق توقيت
       المسجد" with each rule whenever a shown time differs from the calculated
       one.
-- [ ] **Surface them on the web app and the plasma display too.** Now urgent
-      rather than seasonal: with fixed offsets the shown Fajr and Isha differ
-      from the calculated ones nearly every day, not just in summer.
+- ~~Surface the adjusted times on the web app and plasma display.~~
+      **Declined by Mohamed, 2026-09-17.** Raised because with fixed offsets
+      the shown Fajr and Isha differ from the calculated ones nearly every
+      day; he decided the note is not needed there. The phone app keeps it.
+      Not an oversight — do not re-raise.
 
 - [ ] **Upload keystore into the password manager.** It becomes irreplaceable
       the moment the app is live on Play.
