@@ -47,6 +47,12 @@ const ar = {
   adhanTitle: "حان وقت {prayer}",
   adhanBody: "{city} · {time}",
 
+  qibla: "القبلة",
+  qiblaHint: "وجّه أعلى الهاتف نحو السهم",
+  qiblaNoCompass: "لا تتوفر بوصلة موثوقة على هذا الجهاز",
+  qiblaCalibrate: "حرّك الهاتف على شكل ٨ لمعايرة البوصلة",
+  degrees: "{value}°",
+
   back: "رجوع",
   close: "إغلاق",
 } as const;
@@ -93,6 +99,12 @@ const de: Strings = {
   adhanTitle: "Zeit für {prayer}",
   adhanBody: "{city} · {time}",
 
+  qibla: "Qibla",
+  qiblaHint: "Richte die Oberkante des Handys auf den Pfeil",
+  qiblaNoCompass: "Kein verlässlicher Kompass auf diesem Gerät",
+  qiblaCalibrate: "Bewege das Handy in einer Acht, um den Kompass zu kalibrieren",
+  degrees: "{value}°",
+
   back: "Zurück",
   close: "Schließen",
 };
@@ -133,6 +145,12 @@ const tr: Strings = {
   adhanTitle: "{prayer} vakti",
   adhanBody: "{city} · {time}",
 
+  qibla: "Kıble",
+  qiblaHint: "Telefonun üstünü oka doğru tut",
+  qiblaNoCompass: "Bu cihazda güvenilir pusula yok",
+  qiblaCalibrate: "Pusulayı kalibre etmek için telefonu sekiz çiz",
+  degrees: "{value}°",
+
   back: "Geri",
   close: "Kapat",
 };
@@ -172,6 +190,12 @@ const en: Strings = {
   enableNotifications: "Turn on notifications",
   adhanTitle: "Time for {prayer}",
   adhanBody: "{city} · {time}",
+
+  qibla: "Qibla",
+  qiblaHint: "Point the top of the phone at the arrow",
+  qiblaNoCompass: "No reliable compass on this device",
+  qiblaCalibrate: "Move the phone in a figure of eight to calibrate the compass",
+  degrees: "{value}°",
 
   back: "Back",
   close: "Close",

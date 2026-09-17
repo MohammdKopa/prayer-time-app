@@ -85,11 +85,18 @@ export default function ClockScreen() {
           <Text style={styles.city} numberOfLines={1}>
             {state === "locating" ? t("locating") : place.name}
           </Text>
-          <Link href="/settings" asChild>
-            <Pressable hitSlop={12} accessibilityLabel={t("settings")}>
-              <Text style={styles.gear}>&#9881;</Text>
-            </Pressable>
-          </Link>
+          <View style={styles.actions}>
+            <Link href="/qibla" asChild>
+              <Pressable hitSlop={12} accessibilityLabel={t("qibla")}>
+                <Text style={styles.gear}>&#9737;</Text>
+              </Pressable>
+            </Link>
+            <Link href="/settings" asChild>
+              <Pressable hitSlop={12} accessibilityLabel={t("settings")}>
+                <Text style={styles.gear}>&#9881;</Text>
+              </Pressable>
+            </Link>
+          </View>
         </View>
 
         <Text style={styles.clock}>{num(formatClockWithSeconds(now))}</Text>
@@ -175,6 +182,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   city: { color: COLORS.bone, opacity: 0.74, fontSize: 18, flexShrink: 1 },
+  actions: { flexDirection: "row", gap: 18, alignItems: "center" },
   gear: { color: COLORS.bone, opacity: 0.6, fontSize: 22 },
   clock: {
     color: COLORS.bone,
