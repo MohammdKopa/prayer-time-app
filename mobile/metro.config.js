@@ -29,11 +29,12 @@ config.resolver.nodeModulesPaths = [
   ...(config.resolver.nodeModulesPaths ?? []),
 ];
 
-// Keep resolution anchored to this app's node_modules. Without this, a module
-// reached through ../shared can resolve a second copy of React from the repo
-// root's node_modules (the Next.js app's), which fails at runtime with the
-// invalid-hook-call error rather than anything that names the real cause.
-config.resolver.disableHierarchicalLookup = true;
+// nodeModulesPaths above puts this app's node_modules FIRST, so ../shared
+// resolves adhan from here rather than from the repo root (the Next.js app's
+// copy). Hierarchical lookup is deliberately left on — expo-doctor flags
+// disabling it, and nothing in shared/ imports React, so there is no second
+// copy of React to guard against. adhan is pinned to one exact version across
+// all three package.json files, so either path would resolve the same code.
 
 config.resolver.extraNodeModules = {
   "@shared": sharedRoot,

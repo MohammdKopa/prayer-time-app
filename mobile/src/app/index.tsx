@@ -1,8 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
-import { I18nManager, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Link } from "expo-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
+import { useI18n, type Strings } from "@/lib/i18n";
+import { usePlaceContext } from "@/lib/place-context";
+import { reschedule } from "@/lib/notifications";
 import {
   countdownTo,
   formatClock,
@@ -10,26 +14,23 @@ import {
   formatCountdown,
   toArabicIndic,
 } from "@/lib/time";
+import { COLORS } from "@/theme";
 
-// Marl. Replaced by expo-location in the next step — GPS is the primary input
-// Germany-wide, with the city picker demoted to manual override.
-const FALLBACK = { name: "مارل", latitude: 51.6564, longitude: 7.0907 };
-
-// Arabic only for now. These move into the i18n layer (ar/de/tr/en) before
-// anything ships — no string literals in components is the standard.
-const NAMES: Record<PrayerName, string> = {
-  fajr: "الفجر",
-  sunrise: "الشروق",
-  dhuhr: "الظهر",
-  asr: "العصر",
-  maghrib: "المغرب",
-  isha: "العشاء",
+const NAME_KEY: Record<PrayerName, keyof Strings> = {
+  fajr: "fajr",
+  sunrise: "sunrise",
+  dhuhr: "dhuhr",
+  asr: "asr",
+  maghrib: "maghrib",
+  isha: "isha",
 };
 
-/** Prayers that are actual prayers. Sunrise is shown but never "next". */
+/** Sunrise is shown but is never "the next prayer". */
 const PRAYERS = PRAYER_ORDER.filter((p) => p !== "sunrise");
 
 export default function ClockScreen() {
+  const { t, locale, isRTL } = useI18n();
+  const { place, state } = usePlaceContext();
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -37,76 +38,99 @@ export default function ClockScreen() {
     return () => clearInterval(id);
   }, []);
 
-  // Recomputed only when the calendar day changes, not every tick.
+  // Recomputed when the day or the place changes, not every tick.
   const dayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
   const day = useMemo(
-    () => computeDay(FALLBACK.latitude, FALLBACK.longitude, new Date()),
+    () => computeDay(place.latitude, place.longitude, new Date()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dayKey],
+    [dayKey, place.latitude, place.longitude],
   );
-
   const times = day.primary.times;
+
+  // Tomorrow, so the screen still counts down to something after Isha.
+  const tomorrowFajr = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return computeDay(place.latitude, place.longitude, d).primary.times.fajr;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayKey, place.latitude, place.longitude]);
 
   const next = useMemo(() => {
     for (const p of PRAYERS) {
       if (times[p].getTime() > now.getTime()) return p;
     }
-    return null; // all of today's prayers have passed; Fajr tomorrow
+    return null;
   }, [times, now]);
 
-  const countdown = next ? countdownTo(times[next], now) : null;
+  const target = next ? times[next] : tomorrowFajr;
+  const countdown = countdownTo(target, now);
+
+  // Keep the scheduled adhans in step with the place and the language. Guarded
+  // so a ticking clock does not reschedule 35 notifications every second.
+  const scheduleKey = `${place.latitude},${place.longitude},${locale},${dayKey}`;
+  const lastScheduled = useRef<string | null>(null);
+  useEffect(() => {
+    if (lastScheduled.current === scheduleKey) return;
+    lastScheduled.current = scheduleKey;
+    void reschedule(place, t);
+  }, [scheduleKey, place, t]);
+
+  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
+  const align = isRTL ? ("right" as const) : ("left" as const);
 
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.city}>{FALLBACK.name}</Text>
-        <Text style={styles.clock}>
-          {toArabicIndic(formatClockWithSeconds(now))}
-        </Text>
+        <View style={styles.header}>
+          <Text style={styles.city} numberOfLines={1}>
+            {state === "locating" ? t("locating") : place.name}
+          </Text>
+          <Link href="/settings" asChild>
+            <Pressable hitSlop={12} accessibilityLabel={t("settings")}>
+              <Text style={styles.gear}>&#9881;</Text>
+            </Pressable>
+          </Link>
+        </View>
 
-        {next && countdown ? (
-          <View style={styles.nextCard}>
-            <Text style={styles.nextLabel}>الصلاة القادمة</Text>
-            <Text style={styles.nextName}>{NAMES[next]}</Text>
-            <Text style={styles.nextTime}>
-              {toArabicIndic(formatClock(times[next]))}
-            </Text>
-            <Text style={styles.nextCountdown}>
-              {toArabicIndic(formatCountdown(countdown))}
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.nextCard}>
-            <Text style={styles.nextLabel}>انتهت صلوات اليوم</Text>
-          </View>
-        )}
+        <Text style={styles.clock}>{num(formatClockWithSeconds(now))}</Text>
+
+        <View style={styles.nextCard}>
+          <Text style={styles.nextLabel}>
+            {next ? t("nextPrayer") : t("tomorrowFajr")}
+          </Text>
+          <Text style={styles.nextName}>
+            {next ? t(NAME_KEY[next]) : t("fajr")}
+          </Text>
+          <Text style={styles.nextTime}>{num(formatClock(target))}</Text>
+          <Text style={styles.nextCountdown}>
+            {num(formatCountdown(countdown))}
+          </Text>
+        </View>
 
         <View style={styles.list}>
           {PRAYER_ORDER.map((p) => {
             const isNext = p === next;
             const isSunrise = p === "sunrise";
             return (
-              <View
-                key={p}
-                style={[styles.row, isNext && styles.rowNext]}
-              >
+              <View key={p} style={[styles.row, isNext && styles.rowNext]}>
                 <Text
                   style={[
                     styles.rowName,
-                    isSunrise && styles.rowMuted,
-                    isNext && styles.rowNextText,
+                    { textAlign: align },
+                    isSunrise && styles.muted,
+                    isNext && styles.gold,
                   ]}
                 >
-                  {NAMES[p]}
+                  {t(NAME_KEY[p])}
                 </Text>
                 <Text
                   style={[
                     styles.rowTime,
-                    isSunrise && styles.rowMuted,
-                    isNext && styles.rowNextText,
+                    isSunrise && styles.muted,
+                    isNext && styles.gold,
                   ]}
                 >
-                  {toArabicIndic(formatClock(times[p]))}
+                  {num(formatClock(times[p]))}
                 </Text>
               </View>
             );
@@ -115,26 +139,24 @@ export default function ClockScreen() {
 
         {/*
           Principle #4, "no bad times", also means no unexplained ones. The
-          mosque's rule places Fajr and Isha at a fixed distance from sunrise
-          and Maghrib, so most days these differ from the calculated times —
-          earlier or later depending on the season. The app says so rather than
-          quietly showing a different number.
+          mosque places Fajr and Isha at a fixed distance from sunrise and
+          Maghrib, so these usually differ from the calculated times. Say so.
         */}
         {(day.fajrAdjusted || day.ishaAdjusted) && (
           <View style={styles.noteBlock}>
-            <Text style={styles.noteTitle}>وفق توقيت المسجد</Text>
+            <Text style={styles.noteTitle}>{t("mosqueTiming")}</Text>
             {day.fajrAdjusted && (
               <Text style={styles.note}>
-                أذان الفجر قبل الشروق بـ
-                {" "}
-                {toArabicIndic(String(day.fajrRule.minutes))} دقيقة
+                {t("fajrBeforeSunrise", {
+                  minutes: num(String(day.fajrRule.minutes)),
+                })}
               </Text>
             )}
             {day.ishaAdjusted && (
               <Text style={styles.note}>
-                أذان العشاء بعد المغرب بـ
-                {" "}
-                {toArabicIndic(String(day.ishaRule.minutes))} دقيقة
+                {t("ishaAfterMaghrib", {
+                  minutes: num(String(day.ishaRule.minutes)),
+                })}
               </Text>
             )}
           </View>
@@ -144,52 +166,41 @@ export default function ClockScreen() {
   );
 }
 
-const GOLD = "#D9B871";
-const BONE = "#E8E3D9";
-
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#07090F" },
-  content: {
-    padding: 24,
-    gap: 20,
-    alignItems: "stretch",
+  safe: { flex: 1, backgroundColor: COLORS.bg },
+  content: { padding: 24, gap: 18 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
-  city: {
-    color: BONE,
-    opacity: 0.74,
-    fontSize: 18,
-    textAlign: "center",
-    writingDirection: "rtl",
-  },
+  city: { color: COLORS.bone, opacity: 0.74, fontSize: 18, flexShrink: 1 },
+  gear: { color: COLORS.bone, opacity: 0.6, fontSize: 22 },
   clock: {
-    color: BONE,
+    color: COLORS.bone,
     fontSize: 52,
     textAlign: "center",
     fontVariant: ["tabular-nums"],
   },
   nextCard: {
     borderWidth: 1,
-    borderColor: GOLD,
+    borderColor: COLORS.gold,
     borderRadius: 16,
     padding: 20,
     gap: 6,
     alignItems: "center",
   },
-  nextLabel: { color: BONE, opacity: 0.5, fontSize: 14 },
-  nextName: { color: GOLD, fontSize: 30 },
-  nextTime: {
-    color: BONE,
-    fontSize: 24,
-    fontVariant: ["tabular-nums"],
-  },
+  nextLabel: { color: COLORS.bone, opacity: 0.5, fontSize: 14 },
+  nextName: { color: COLORS.gold, fontSize: 30, textAlign: "center" },
+  nextTime: { color: COLORS.bone, fontSize: 24, fontVariant: ["tabular-nums"] },
   nextCountdown: {
-    color: GOLD,
+    color: COLORS.gold,
     fontSize: 20,
     fontVariant: ["tabular-nums"],
   },
   list: { gap: 2 },
   row: {
-    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
@@ -197,31 +208,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   rowNext: { backgroundColor: "rgba(217,184,113,0.10)" },
-  rowName: { color: BONE, fontSize: 19 },
-  rowTime: {
-    color: BONE,
-    fontSize: 19,
-    fontVariant: ["tabular-nums"],
-  },
-  rowMuted: { opacity: 0.5 },
-  rowNextText: { color: GOLD },
-  noteBlock: {
-    gap: 4,
-    paddingTop: 4,
-    alignItems: "center",
-  },
-  noteTitle: {
-    color: GOLD,
-    opacity: 0.7,
-    fontSize: 13,
-    writingDirection: "rtl",
-  },
+  rowName: { color: COLORS.bone, fontSize: 19, flex: 1 },
+  rowTime: { color: COLORS.bone, fontSize: 19, fontVariant: ["tabular-nums"] },
+  muted: { opacity: 0.5 },
+  gold: { color: COLORS.gold },
+  noteBlock: { gap: 4, paddingTop: 4, alignItems: "center" },
+  noteTitle: { color: COLORS.gold, opacity: 0.7, fontSize: 13 },
   note: {
-    color: BONE,
+    color: COLORS.bone,
     opacity: 0.5,
     fontSize: 13,
     textAlign: "center",
-    writingDirection: "rtl",
     lineHeight: 20,
   },
 });
