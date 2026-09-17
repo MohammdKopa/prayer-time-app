@@ -73,18 +73,27 @@ async function writeAll(subs) {
 // 03:01 while the app showed 04:11 — 70 minutes early.
 //
 // Primary method = Muslim World League, Shafi madhab (shared/methods.ts: MWL).
+//
+// ISHA_MIN_GAP: the imam's ruling (2026-09) is that there must be at least 90
+// minutes between Maghrib and Isha. A floor, not a fixed offset — Isha is never
+// moved earlier, only held back. Must equal
+// ISHA_MIN_GAP_AFTER_MAGHRIB_MIN in shared/prayer-engine.ts.
+const ISHA_MIN_GAP_MIN = 90;
+
 function computeTimesFor(lat, lng, date) {
   const coords = new Coordinates(lat, lng);
   const params = CalculationMethod.MuslimWorldLeague();
   params.madhab = Madhab.Shafi;
   params.highLatitudeRule = HighLatitudeRule.SeventhOfTheNight;
   const pt = new PrayerTimes(coords, date, params);
+  const ishaFloor = new Date(pt.maghrib.getTime() + ISHA_MIN_GAP_MIN * 60_000);
+  const isha = pt.isha.getTime() < ishaFloor.getTime() ? ishaFloor : pt.isha;
   return {
     fajr: pt.fajr,
     dhuhr: pt.dhuhr,
     asr: pt.asr,
     maghrib: pt.maghrib,
-    isha: pt.isha,
+    isha,
   };
 }
 

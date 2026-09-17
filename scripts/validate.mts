@@ -39,7 +39,11 @@ const parseAladhanTimeOnDate = (hhmm: string, refDate: Date): Date => {
 
 async function main() {
   const now = new Date();
-  const day = computeDay(MARL_LAT, MARL_LNG, now);
+  // Floor OFF for the Aladhan comparison. Aladhan returns raw astronomical
+  // times; our Isha floor is a local fiqh ruling, not a calculation. Comparing
+  // floored times against raw ones would fail every summer for the wrong
+  // reason. The floor gets its own check below.
+  const day = computeDay(MARL_LAT, MARL_LNG, now, 0);
 
   console.log(`\n== Marl, today ${fmtDateForAladhan(now)} ==`);
   console.log(
@@ -71,8 +75,14 @@ async function main() {
     );
   }
 
-  // Fetch Aladhan MWL for comparison (method=3)
-  const url = `https://api.aladhan.com/v1/timings/${fmtDateForAladhan(now)}?latitude=${MARL_LAT}&longitude=${MARL_LNG}&method=3&school=0`;
+  // Fetch Aladhan MWL for comparison.
+  // method=3 = Muslim World League, school=0 = Shafi (matches PRIMARY_METHOD).
+  // latitudeAdjustmentMethod=2 = one-seventh of the night, matching the
+  // engine's HighLatitudeRule.SeventhOfTheNight. Without it this script
+  // compares our times against Aladhan's angle-based ones and fails every
+  // day by ~18 min on Fajr — which it silently did from 2026-06-02, when the
+  // engine changed and only src/app/api/sanity-check/route.ts was updated.
+  const url = `https://api.aladhan.com/v1/timings/${fmtDateForAladhan(now)}?latitude=${MARL_LAT}&longitude=${MARL_LNG}&method=3&school=0&latitudeAdjustmentMethod=2`;
   console.log(`\nFetching Aladhan: ${url}`);
 
   let aladhan: Record<string, string>;
@@ -132,6 +142,46 @@ async function main() {
     process.exit(2);
   }
   console.log(`\n✓ VALIDATION PASSED — local engine agrees with Aladhan MWL within ${TOLERANCE_SECONDS}s.`);
+
+  // ── the Isha floor, checked on its own terms ──────────────────────
+  // The imam's ruling (2026-09): at least 90 minutes between Maghrib and Isha.
+  // A floor, never moving Isha earlier. Checked against the unfloored run above.
+  const floored = computeDay(MARL_LAT, MARL_LNG, now);
+  const rawGap =
+    (day.primary.times.isha.getTime() - day.primary.times.maghrib.getTime()) / 60000;
+  const gap =
+    (floored.primary.times.isha.getTime() - floored.primary.times.maghrib.getTime()) / 60000;
+
+  console.log(
+    `
+Isha floor (${floored.ishaMinGapMinutes}m minimum after Maghrib):`,
+  );
+  console.log(`  raw gap      ${rawGap.toFixed(0)}m`);
+  console.log(`  after floor  ${gap.toFixed(0)}m`);
+  console.log(`  bound today  ${floored.ishaFloored ? "yes" : "no"}`);
+
+  const problems: string[] = [];
+  if (gap < floored.ishaMinGapMinutes - 0.01) {
+    problems.push(`gap ${gap.toFixed(1)}m is below the ${floored.ishaMinGapMinutes}m floor`);
+  }
+  if (floored.primary.times.isha.getTime() < day.primary.times.isha.getTime()) {
+    problems.push("floor moved Isha EARLIER, which it must never do");
+  }
+  if (floored.ishaFloored !== (rawGap < floored.ishaMinGapMinutes)) {
+    problems.push("ishaFloored flag disagrees with the computation");
+  }
+  for (const k of ["fajr", "sunrise", "dhuhr", "asr", "maghrib"] as const) {
+    if (floored.primary.times[k].getTime() !== day.primary.times[k].getTime()) {
+      problems.push(`floor altered ${k}, which it must not touch`);
+    }
+  }
+
+  if (problems.length > 0) {
+    console.error("\n✗ ISHA FLOOR FAILED:");
+    for (const pr of problems) console.error(`    - ${pr}`);
+    process.exit(3);
+  }
+  console.log("\n✓ ISHA FLOOR OK — Isha never earlier, other prayers untouched.");
 }
 
 main().catch((e) => {
