@@ -74,17 +74,14 @@ async function writeAll(subs) {
 //
 // Primary method = Muslim World League, Shafi madhab (shared/methods.ts: MWL).
 //
-// ISHA_MIN_GAP: the imam's ruling (2026-09) is that there must be at least 90
-// minutes between Maghrib and Isha. A floor, not a fixed offset — Isha is never
-// moved earlier, only held back. Must equal
-// ISHA_MIN_GAP_AFTER_MAGHRIB_MIN in shared/prayer-engine.ts.
-const ISHA_MIN_GAP_MIN = 90;
-
-// FAJR_MIN_GAP: the other half of the same ruling — the Fajr adhan is at least
-// 90 minutes before sunrise. Also a floor: Fajr is never moved later, only
-// earlier. Must equal FAJR_MIN_GAP_BEFORE_SUNRISE_MIN in
-// shared/prayer-engine.ts.
-const FAJR_MIN_GAP_MIN = 90;
+// Sheikh Ayman's ruling (Marl, 2026-06-03, confirmed literal 2026-09-17):
+// Isha is ALWAYS 90 minutes after Maghrib, Fajr is ALWAYS 90 minutes before
+// sunrise. Fixed offsets — the astronomical Isha and Fajr are not used for the
+// adhan at all. Must match ISHA_GAP_AFTER_MAGHRIB and FAJR_GAP_BEFORE_SUNRISE
+// in shared/prayer-engine.ts, including the mode. scripts/engine-parity.mts
+// fails the build if they drift apart.
+const ISHA_GAP_MIN = 90;
+const FAJR_GAP_MIN = 90;
 
 function computeTimesFor(lat, lng, date) {
   const coords = new Coordinates(lat, lng);
@@ -92,10 +89,8 @@ function computeTimesFor(lat, lng, date) {
   params.madhab = Madhab.Shafi;
   params.highLatitudeRule = HighLatitudeRule.SeventhOfTheNight;
   const pt = new PrayerTimes(coords, date, params);
-  const ishaFloor = new Date(pt.maghrib.getTime() + ISHA_MIN_GAP_MIN * 60_000);
-  const isha = pt.isha.getTime() < ishaFloor.getTime() ? ishaFloor : pt.isha;
-  const fajrFloor = new Date(pt.sunrise.getTime() - FAJR_MIN_GAP_MIN * 60_000);
-  const fajr = pt.fajr.getTime() > fajrFloor.getTime() ? fajrFloor : pt.fajr;
+  const isha = new Date(pt.maghrib.getTime() + ISHA_GAP_MIN * 60_000);
+  const fajr = new Date(pt.sunrise.getTime() - FAJR_GAP_MIN * 60_000);
   return {
     fajr,
     dhuhr: pt.dhuhr,

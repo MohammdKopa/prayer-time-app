@@ -7,41 +7,52 @@ import {
 } from "./methods";
 
 /**
- * Minimum gap between Maghrib and Isha, in minutes.
+ * How a gap rule is applied.
  *
- * The imam's ruling (2026-09): there must be **at least** 90 minutes between
- * the two. This is a floor, not a fixed offset — Isha is never moved earlier,
- * only held back when the computed time falls too close to Maghrib.
- *
- * It reads as the companion to the SeventhOfTheNight rule below, not a
- * contradiction of it: as early as is valid, but never less than 90 minutes
- * after Maghrib. At German latitudes the floor binds for roughly 140–150 days
- * a year (early April to early September) and moves Isha up to ~33 minutes
- * later at midsummer.
+ * - `"fixed"`   — the prayer is placed at exactly this distance, always.
+ * - `"minimum"` — the calculated time is used unless the gap would be smaller
+ *                 than this, in which case it is widened to it.
  */
-export const ISHA_MIN_GAP_AFTER_MAGHRIB_MIN = 90;
+export type GapMode = "fixed" | "minimum";
+
+export interface GapRule {
+  mode: GapMode;
+  minutes: number;
+}
 
 /**
- * Minimum gap between Fajr and sunrise, in minutes.
+ * Sheikh Ayman's ruling (Marl, 2026-06-03), confirmed 2026-09-17 as literal:
  *
- * The second half of the same ruling (Sheikh Ayman, Marl, 2026-06-03): "we make
- * the Fajr adhan an hour and a half before sunrise as well". Like the Isha rule
- * it is applied as a floor — Fajr is never moved later, only earlier, so the
- * window before sunrise is never shorter than this.
+ *   "بالنسبة لصلاة العشاء، نجعلها بعد صلاة المغرب بساعة و نصف دائماً"
+ *   "و كذلك بالنسبة لصلاة الفجر... قبل شروق الشمس بساعة و نصف كذلك"
  *
- * Both rules address the same thing: the high-latitude summer squeeze. In June
- * at 51°N the seventh-of-the-night rule leaves barely an hour either side of
- * the night, and the sheikh wants ninety minutes.
+ * Isha is always ninety minutes after Maghrib; Fajr is always ninety minutes
+ * before sunrise. دائماً — always — so these are FIXED offsets, and the
+ * astronomical Isha and Fajr are not used for the adhan at all.
  *
- * They are floors rather than fixed offsets deliberately. Applied literally as
- * "always 90" they would REVERSE his stated reason for 217 days of the year:
- * in December the Maghrib→Isha gap is already 118 minutes, and forcing it to
- * 90 would call Isha up to 29 minutes before the calculated time, while the
- * red twilight he is waiting on takes longer in winter, not less. A fixed
- * Fajr would likewise fall before dawn on 144 summer days. As floors, both
- * widen the squeezed summer windows and leave winter untouched.
+ * His stated reason is the red twilight (الشفق الأحمر): he observed a
+ * Maghrib→Isha gap of about an hour and five minutes and judged it too short
+ * for the shafaq to go.
+ *
+ * WHAT FIXED MEANS IN WINTER. This was raised before implementing and
+ * confirmed: on 21 December in Marl the calculated Isha is 18:22 and the fixed
+ * rule gives 17:54, twenty-eight minutes earlier. Across the year the fixed
+ * Isha lands before the calculated one on 217 of 365 days, and the fixed Fajr
+ * lands before the calculated dawn on 144 summer days. That is the ruling, and
+ * the mosque follows the mosque's ruling — but the trade is real, so the mode
+ * is a constant rather than a hardcoded branch. Changing `mode` to `"minimum"`
+ * restores the behaviour where the calculated time wins unless the window
+ * would be squeezed, which is what the summer complaint was actually about.
+ *
+ * Whichever mode is in force, the app says on screen when a shown time differs
+ * from the calculated one. Principle #4 forbids unexplained times, not just
+ * wrong ones.
  */
-export const FAJR_MIN_GAP_BEFORE_SUNRISE_MIN = 90;
+export const ISHA_GAP_AFTER_MAGHRIB: GapRule = { mode: "fixed", minutes: 90 };
+export const FAJR_GAP_BEFORE_SUNRISE: GapRule = { mode: "fixed", minutes: 90 };
+
+/** Disables a gap rule entirely — used to validate raw astronomy against Aladhan. */
+export const NO_GAP_RULE: GapRule = { mode: "minimum", minutes: 0 };
 
 export const PRAYER_ORDER = [
   "fajr",
@@ -59,10 +70,10 @@ export interface MethodResult {
   label: string;
   shortLabel: string;
   times: Record<PrayerName, Date>;
-  /** True when the Maghrib→Isha floor held Isha back from its computed time. */
-  ishaFloored: boolean;
-  /** True when the Fajr→sunrise floor moved Fajr earlier than computed. */
-  fajrFloored: boolean;
+  /** True when the shown Isha differs from the calculated one. */
+  ishaAdjusted: boolean;
+  /** True when the shown Fajr differs from the calculated one. */
+  fajrAdjusted: boolean;
 }
 
 export interface DayComputation {
@@ -73,14 +84,14 @@ export interface DayComputation {
   primary: MethodResult;
   /** All other methods (used only for the consensus badge). */
   alternates: MethodResult[];
-  /** True when the displayed Isha was held back by the Maghrib→Isha floor. */
-  ishaFloored: boolean;
-  /** True when the displayed Fajr was moved earlier by the Fajr→sunrise floor. */
-  fajrFloored: boolean;
-  /** The Maghrib→Isha floor in force for this computation, in minutes. */
-  ishaMinGapMinutes: number;
-  /** The Fajr→sunrise floor in force for this computation, in minutes. */
-  fajrMinGapMinutes: number;
+  /** True when the displayed Isha differs from the calculated one. */
+  ishaAdjusted: boolean;
+  /** True when the displayed Fajr differs from the calculated one. */
+  fajrAdjusted: boolean;
+  /** The Maghrib→Isha rule in force for this computation. */
+  ishaRule: GapRule;
+  /** The Fajr→sunrise rule in force for this computation. */
+  fajrRule: GapRule;
 }
 
 /**
@@ -88,34 +99,58 @@ export interface DayComputation {
  * the UI can say the time was held rather than silently showing an adjusted
  * number — "no bad times" means no unexplained ones either.
  */
+/** Apply a gap rule. `direction` is +1 when the prayer sits after the anchor
+ *  (Isha after Maghrib) and -1 when it sits before it (Fajr before sunrise). */
+const applyGap = (
+  calculated: Date,
+  anchor: Date,
+  rule: GapRule,
+  direction: 1 | -1,
+): { time: Date; adjusted: boolean } => {
+  if (rule.minutes <= 0) return { time: calculated, adjusted: false };
+
+  const target = new Date(anchor.getTime() + direction * rule.minutes * 60_000);
+
+  if (rule.mode === "fixed") {
+    return {
+      time: target,
+      adjusted: target.getTime() !== calculated.getTime(),
+    };
+  }
+
+  // "minimum": widen the window only if the calculated time sits inside it.
+  const tooClose =
+    direction === 1
+      ? calculated.getTime() < target.getTime()
+      : calculated.getTime() > target.getTime();
+  return tooClose
+    ? { time: target, adjusted: true }
+    : { time: calculated, adjusted: false };
+};
+
 const toTimes = (
   pt: PrayerTimes,
-  ishaMinGapMinutes: number,
-  fajrMinGapMinutes: number,
+  ishaRule: GapRule,
+  fajrRule: GapRule,
 ): {
   times: Record<PrayerName, Date>;
-  ishaFloored: boolean;
-  fajrFloored: boolean;
+  ishaAdjusted: boolean;
+  fajrAdjusted: boolean;
 } => {
-  // Isha: never closer to Maghrib than the minimum. Only ever moved later.
-  const ishaFloor = new Date(pt.maghrib.getTime() + ishaMinGapMinutes * 60_000);
-  const ishaFloored = pt.isha.getTime() < ishaFloor.getTime();
-
-  // Fajr: never closer to sunrise than the minimum. Only ever moved earlier.
-  const fajrFloor = new Date(pt.sunrise.getTime() - fajrMinGapMinutes * 60_000);
-  const fajrFloored = pt.fajr.getTime() > fajrFloor.getTime();
+  const isha = applyGap(pt.isha, pt.maghrib, ishaRule, 1);
+  const fajr = applyGap(pt.fajr, pt.sunrise, fajrRule, -1);
 
   return {
     times: {
-      fajr: fajrFloored ? fajrFloor : pt.fajr,
+      fajr: fajr.time,
       sunrise: pt.sunrise,
       dhuhr: pt.dhuhr,
       asr: pt.asr,
       maghrib: pt.maghrib,
-      isha: ishaFloored ? ishaFloor : pt.isha,
+      isha: isha.time,
     },
-    ishaFloored,
-    fajrFloored,
+    ishaAdjusted: isha.adjusted,
+    fajrAdjusted: fajr.adjusted,
   };
 };
 
@@ -123,8 +158,8 @@ const computeOne = (
   coords: Coordinates,
   date: Date,
   methodId: MethodId,
-  ishaMinGapMinutes: number,
-  fajrMinGapMinutes: number,
+  ishaRule: GapRule,
+  fajrRule: GapRule,
 ): MethodResult => {
   const def = METHODS[methodId];
   const params = def.params();
@@ -137,21 +172,17 @@ const computeOne = (
   // latitudeAdjustmentMethod=2 (kept in sync in the sanity-check route).
   params.highLatitudeRule = HighLatitudeRule.SeventhOfTheNight;
   const pt = new PrayerTimes(coords, date, params);
-  // The floor is applied to every method, not just the displayed one, so the
+  // The rules are applied to every method, not just the displayed one, so the
   // consensus badge compares the times we actually show rather than a mix of
   // adjusted and raw values.
-  const { times, ishaFloored, fajrFloored } = toTimes(
-    pt,
-    ishaMinGapMinutes,
-    fajrMinGapMinutes,
-  );
+  const { times, ishaAdjusted, fajrAdjusted } = toTimes(pt, ishaRule, fajrRule);
   return {
     methodId: def.id,
     label: def.label,
     shortLabel: def.shortLabel,
     times,
-    ishaFloored,
-    fajrFloored,
+    ishaAdjusted,
+    fajrAdjusted,
   };
 };
 
@@ -159,30 +190,22 @@ export function computeDay(
   latitude: number,
   longitude: number,
   date: Date = new Date(),
-  ishaMinGapMinutes: number = ISHA_MIN_GAP_AFTER_MAGHRIB_MIN,
-  fajrMinGapMinutes: number = FAJR_MIN_GAP_BEFORE_SUNRISE_MIN,
+  ishaRule: GapRule = ISHA_GAP_AFTER_MAGHRIB,
+  fajrRule: GapRule = FAJR_GAP_BEFORE_SUNRISE,
 ): DayComputation {
   const coords = new Coordinates(latitude, longitude);
-  const primary = computeOne(
-    coords,
-    date,
-    PRIMARY_METHOD,
-    ishaMinGapMinutes,
-    fajrMinGapMinutes,
-  );
+  const primary = computeOne(coords, date, PRIMARY_METHOD, ishaRule, fajrRule);
   const alternates = CONSENSUS_METHOD_IDS.filter(
     (id) => id !== PRIMARY_METHOD,
-  ).map((id) =>
-    computeOne(coords, date, id, ishaMinGapMinutes, fajrMinGapMinutes),
-  );
+  ).map((id) => computeOne(coords, date, id, ishaRule, fajrRule));
   return {
     coords: { latitude, longitude },
     date,
     primary,
     alternates,
-    ishaFloored: primary.ishaFloored,
-    fajrFloored: primary.fajrFloored,
-    ishaMinGapMinutes,
-    fajrMinGapMinutes,
+    ishaAdjusted: primary.ishaAdjusted,
+    fajrAdjusted: primary.fajrAdjusted,
+    ishaRule,
+    fajrRule,
   };
 }

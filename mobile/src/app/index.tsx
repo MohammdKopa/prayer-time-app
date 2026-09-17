@@ -114,25 +114,30 @@ export default function ClockScreen() {
         </View>
 
         {/*
-          Principle #4, "no bad times", also means no unexplained ones. In the
-          summer months the sheikh's 90-minute minimums move both ends of the
-          night away from their calculated values — Fajr earlier, Isha later —
-          and the app says so rather than quietly showing a different number.
+          Principle #4, "no bad times", also means no unexplained ones. The
+          mosque's rule places Fajr and Isha at a fixed distance from sunrise
+          and Maghrib, so most days these differ from the calculated times —
+          earlier or later depending on the season. The app says so rather than
+          quietly showing a different number.
         */}
-        {day.fajrFloored && (
-          <Text style={styles.note}>
-            الفجر مقدَّم ليكون قبل الشروق بـ
-            {" "}
-            {toArabicIndic(String(day.fajrMinGapMinutes))} دقيقة على الأقل
-          </Text>
-        )}
-
-        {day.ishaFloored && (
-          <Text style={styles.note}>
-            العشاء مؤخَّر ليكون بعد المغرب بـ
-            {" "}
-            {toArabicIndic(String(day.ishaMinGapMinutes))} دقيقة على الأقل
-          </Text>
+        {(day.fajrAdjusted || day.ishaAdjusted) && (
+          <View style={styles.noteBlock}>
+            <Text style={styles.noteTitle}>وفق توقيت المسجد</Text>
+            {day.fajrAdjusted && (
+              <Text style={styles.note}>
+                أذان الفجر قبل الشروق بـ
+                {" "}
+                {toArabicIndic(String(day.fajrRule.minutes))} دقيقة
+              </Text>
+            )}
+            {day.ishaAdjusted && (
+              <Text style={styles.note}>
+                أذان العشاء بعد المغرب بـ
+                {" "}
+                {toArabicIndic(String(day.ishaRule.minutes))} دقيقة
+              </Text>
+            )}
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -200,6 +205,17 @@ const styles = StyleSheet.create({
   },
   rowMuted: { opacity: 0.5 },
   rowNextText: { color: GOLD },
+  noteBlock: {
+    gap: 4,
+    paddingTop: 4,
+    alignItems: "center",
+  },
+  noteTitle: {
+    color: GOLD,
+    opacity: 0.7,
+    fontSize: 13,
+    writingDirection: "rtl",
+  },
   note: {
     color: BONE,
     opacity: 0.5,

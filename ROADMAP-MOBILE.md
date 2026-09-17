@@ -243,12 +243,12 @@ the calendar doesn't punish the polish.
 
 ## Open items
 
-- [ ] **Surface the Isha floor in the UI.** `DayComputation.ishaFloored` is
-      computed but nothing displays it. From April to September the shown Isha
-      is held back from its calculated time, and principle #4 says we do not
-      show adjusted numbers without saying so. Needed on the phone app, the
-      web app and the plasma display. Not urgent — the floor does not bind
-      again until ~2027-04-10.
+- [x] Surface the adjusted times in the phone app — done, shows "وفق توقيت
+      المسجد" with each rule whenever a shown time differs from the calculated
+      one.
+- [ ] **Surface them on the web app and the plasma display too.** Now urgent
+      rather than seasonal: with fixed offsets the shown Fajr and Isha differ
+      from the calculated ones nearly every day, not just in summer.
 
 - [ ] **Upload keystore into the password manager.** It becomes irreplaceable
       the moment the app is live on Play.

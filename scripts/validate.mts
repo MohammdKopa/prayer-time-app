@@ -3,7 +3,7 @@
 // Fails loudly if any prayer differs by >120 seconds from Aladhan's MWL.
 
 // @ts-expect-error -- tsx allows .ts imports; tsc strict-mode does not. This file is run via tsx only, never compiled.
-import { computeDay, PRAYER_ORDER, type PrayerName } from "../shared/prayer-engine.ts";
+import { computeDay, NO_GAP_RULE, PRAYER_ORDER, type PrayerName } from "../shared/prayer-engine.ts";
 
 const MARL_LAT = 51.6564;
 const MARL_LNG = 7.0907;
@@ -43,7 +43,7 @@ async function main() {
   // times; our Isha floor is a local fiqh ruling, not a calculation. Comparing
   // floored times against raw ones would fail every summer for the wrong
   // reason. The floor gets its own check below.
-  const day = computeDay(MARL_LAT, MARL_LNG, now, 0, 0);
+  const day = computeDay(MARL_LAT, MARL_LNG, now, NO_GAP_RULE, NO_GAP_RULE);
 
   console.log(`\n== Marl, today ${fmtDateForAladhan(now)} ==`);
   console.log(
@@ -143,75 +143,110 @@ async function main() {
   }
   console.log(`\n✓ VALIDATION PASSED — local engine agrees with Aladhan MWL within ${TOLERANCE_SECONDS}s.`);
 
-  // ── the Isha floor, checked on its own terms ──────────────────────
-  // The imam's ruling (2026-09): at least 90 minutes between Maghrib and Isha.
-  // A floor, never moving Isha earlier. Checked against the unfloored run above.
-  const floored = computeDay(MARL_LAT, MARL_LNG, now);
-  const rawGap =
-    (day.primary.times.isha.getTime() - day.primary.times.maghrib.getTime()) / 60000;
-  const gap =
-    (floored.primary.times.isha.getTime() - floored.primary.times.maghrib.getTime()) / 60000;
+  // ── the sheikh's gap rules, checked on their own terms ────────────
+  // Sheikh Ayman, Marl (2026-06-03, confirmed literal 2026-09-17): Isha always
+  // 90 minutes after Maghrib, Fajr always 90 minutes before sunrise.
+  const shown = computeDay(MARL_LAT, MARL_LNG, now);
+  const calc = day.primary.times; // the unadjusted run fetched above
 
-  console.log(
-    `
-Isha floor (${floored.ishaMinGapMinutes}m minimum after Maghrib):`,
-  );
-  console.log(`  raw gap      ${rawGap.toFixed(0)}m`);
-  console.log(`  after floor  ${gap.toFixed(0)}m`);
-  console.log(`  bound today  ${floored.ishaFloored ? "yes" : "no"}`);
+  const mins = (a: Date, b: Date) => (a.getTime() - b.getTime()) / 60000;
+  const ishaGap = mins(shown.primary.times.isha, shown.primary.times.maghrib);
+  const fajrGap = mins(shown.primary.times.sunrise, shown.primary.times.fajr);
 
-  const rawFajrGap =
-    (day.primary.times.sunrise.getTime() - day.primary.times.fajr.getTime()) / 60000;
-  const fajrGap =
-    (floored.primary.times.sunrise.getTime() - floored.primary.times.fajr.getTime()) / 60000;
+  const describe = (r: { mode: string; minutes: number }) =>
+    `${r.mode} ${r.minutes}m`;
 
-  console.log(
-    `Fajr floor (${floored.fajrMinGapMinutes}m minimum before sunrise):`,
-  );
-  console.log(`  raw gap      ${rawFajrGap.toFixed(0)}m`);
-  console.log(`  after floor  ${fajrGap.toFixed(0)}m`);
-  console.log(`  bound today  ${floored.fajrFloored ? "yes" : "no"}`);
+  console.log(`
+Isha rule (${describe(shown.ishaRule)} after Maghrib):`);
+  console.log(`  calculated gap ${mins(calc.isha, calc.maghrib).toFixed(0)}m`);
+  console.log(`  shown gap      ${ishaGap.toFixed(0)}m`);
+  console.log(`  adjusted today ${shown.ishaAdjusted ? "yes" : "no"}`);
+
+  console.log(`Fajr rule (${describe(shown.fajrRule)} before sunrise):`);
+  console.log(`  calculated gap ${mins(calc.sunrise, calc.fajr).toFixed(0)}m`);
+  console.log(`  shown gap      ${fajrGap.toFixed(0)}m`);
+  console.log(`  adjusted today ${shown.fajrAdjusted ? "yes" : "no"}`);
 
   const problems: string[] = [];
-  if (gap < floored.ishaMinGapMinutes - 0.01) {
-    problems.push(`Maghrib-Isha gap ${gap.toFixed(1)}m is below the ${floored.ishaMinGapMinutes}m floor`);
+  const EPS = 0.01;
+
+  const checkGap = (
+    label: string,
+    gap: number,
+    rule: { mode: string; minutes: number },
+  ) => {
+    if (rule.minutes <= 0) return;
+    if (rule.mode === "fixed") {
+      if (Math.abs(gap - rule.minutes) > EPS) {
+        problems.push(
+          `${label} gap is ${gap.toFixed(1)}m but the rule is fixed ${rule.minutes}m`,
+        );
+      }
+    } else if (gap < rule.minutes - EPS) {
+      problems.push(
+        `${label} gap ${gap.toFixed(1)}m is below the ${rule.minutes}m minimum`,
+      );
+    }
+  };
+
+  checkGap("Maghrib-Isha", ishaGap, shown.ishaRule);
+  checkGap("Fajr-sunrise", fajrGap, shown.fajrRule);
+
+  // A "minimum" rule must never move a prayer the wrong way. A "fixed" rule
+  // may move it either way by design, so direction is only asserted for
+  // minimums.
+  if (
+    shown.ishaRule.mode === "minimum" &&
+    shown.primary.times.isha.getTime() < calc.isha.getTime()
+  ) {
+    problems.push("a minimum rule moved Isha EARLIER, which it must never do");
   }
-  if (floored.primary.times.isha.getTime() < day.primary.times.isha.getTime()) {
-    problems.push("floor moved Isha EARLIER, which it must never do");
+  if (
+    shown.fajrRule.mode === "minimum" &&
+    shown.primary.times.fajr.getTime() > calc.fajr.getTime()
+  ) {
+    problems.push("a minimum rule moved Fajr LATER, which it must never do");
   }
-  if (floored.ishaFloored !== (rawGap < floored.ishaMinGapMinutes)) {
-    problems.push("ishaFloored flag disagrees with the computation");
+
+  // The adjusted flags must reflect reality, whatever the mode.
+  if (
+    shown.ishaAdjusted !==
+    (shown.primary.times.isha.getTime() !== calc.isha.getTime())
+  ) {
+    problems.push("ishaAdjusted disagrees with the computation");
   }
-  if (fajrGap < floored.fajrMinGapMinutes - 0.01) {
-    problems.push(`Fajr-sunrise gap ${fajrGap.toFixed(1)}m is below the ${floored.fajrMinGapMinutes}m floor`);
+  if (
+    shown.fajrAdjusted !==
+    (shown.primary.times.fajr.getTime() !== calc.fajr.getTime())
+  ) {
+    problems.push("fajrAdjusted disagrees with the computation");
   }
-  if (floored.primary.times.fajr.getTime() > day.primary.times.fajr.getTime()) {
-    problems.push("floor moved Fajr LATER, which it must never do");
-  }
-  if (floored.fajrFloored !== (rawFajrGap < floored.fajrMinGapMinutes)) {
-    problems.push("fajrFloored flag disagrees with the computation");
-  }
-  // Prayer order must survive both floors: Isha pushed later and Fajr pulled
-  // earlier squeeze the night from both ends at northern latitudes.
+
+  // Order must survive both rules. A fixed Isha moves earlier in winter and a
+  // fixed Fajr moves earlier in summer, so this is not a formality.
   for (let i = 1; i < PRAYER_ORDER.length; i++) {
-    const prev = floored.primary.times[PRAYER_ORDER[i - 1]];
-    const cur = floored.primary.times[PRAYER_ORDER[i]];
+    const prev = shown.primary.times[PRAYER_ORDER[i - 1]];
+    const cur = shown.primary.times[PRAYER_ORDER[i]];
     if (cur.getTime() <= prev.getTime()) {
-      problems.push(`order broken: ${PRAYER_ORDER[i - 1]} is not before ${PRAYER_ORDER[i]}`);
+      problems.push(
+        `order broken: ${PRAYER_ORDER[i - 1]} is not before ${PRAYER_ORDER[i]}`,
+      );
     }
   }
+
+  // The rules touch Isha and Fajr only.
   for (const k of ["sunrise", "dhuhr", "asr", "maghrib"] as const) {
-    if (floored.primary.times[k].getTime() !== day.primary.times[k].getTime()) {
-      problems.push(`floors altered ${k}, which they must not touch`);
+    if (shown.primary.times[k].getTime() !== calc[k].getTime()) {
+      problems.push(`the gap rules altered ${k}, which they must not touch`);
     }
   }
 
   if (problems.length > 0) {
-    console.error("\n✗ PRAYER FLOORS FAILED:");
+    console.error("\n✗ PRAYER GAP RULES FAILED:");
     for (const pr of problems) console.error(`    - ${pr}`);
     process.exit(3);
   }
-  console.log("\n✓ PRAYER FLOORS OK — Isha never earlier, Fajr never later, order intact.");
+  console.log("\n✓ PRAYER GAP RULES OK — gaps exact, flags honest, order intact.");
 }
 
 main().catch((e) => {
