@@ -14,3 +14,6 @@ DEPLOY.md
 .claude
 scripts/bundle.sh
 scripts/validate.mts
+scripts/engine-parity.mts
+ROADMAP-MOBILE.md
+HANDOVER-DISPLAY.md

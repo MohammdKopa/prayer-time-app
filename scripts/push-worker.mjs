@@ -17,7 +17,8 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { Coordinates, HighLatitudeRule, PrayerTimes, CalculationMethod } from "adhan";
+import { pathToFileURL } from "node:url";
+import { Coordinates, HighLatitudeRule, PrayerTimes, CalculationMethod, Madhab } from "adhan";
 import webpush from "web-push";
 
 // ── config ─────────────────────────────────────────────────────────
@@ -29,11 +30,16 @@ const TICK_MS = Number(process.env.PUSH_TICK_MS ?? 30_000);
 const WINDOW_MS = Number(process.env.PUSH_WINDOW_MS ?? 60_000);
 const MAX_FAILURES = 5;
 
-if (!VAPID_PUBLIC || !VAPID_PRIVATE) {
-  console.error("[push-worker] VAPID_PUBLIC and VAPID_PRIVATE are required");
-  process.exit(1);
+// Called from the entry point below, not at import time — importing this file
+// must stay side-effect free so scripts/engine-parity.mts can test against it.
+// Production behaviour is unchanged: still fails fast before the first tick.
+function configurePush() {
+  if (!VAPID_PUBLIC || !VAPID_PRIVATE) {
+    console.error("[push-worker] VAPID_PUBLIC and VAPID_PRIVATE are required");
+    process.exit(1);
+  }
+  webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
 }
-webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
 
 // ── store helpers (mirror src/lib/push-store.ts) ───────────────────
 async function readAll() {
@@ -54,12 +60,24 @@ async function writeAll(subs) {
   await fs.rename(tmp, STORE_PATH);
 }
 
-// ── prayer-time computation (mirrors src/lib/prayer-engine.ts) ─────
-// Primary method = Muslim World League with Hanafi-friendly defaults.
+// ── prayer-time computation ────────────────────────────────────────
+// MUST MIRROR shared/prayer-engine.ts + shared/methods.ts (PRIMARY_METHOD).
+// This worker runs in its own container with its own package.json, so it
+// cannot import the TypeScript engine — the duplication is deliberate, and
+// scripts/validate.mts has a guard that fails the build if these drift apart.
+//
+// Do not change these three lines without changing the engine, or the adhan
+// will fire at a different time than the app displays. That already happened
+// once: the engine moved to SeventhOfTheNight on the imam's ruling (2026-06)
+// and this file kept TwilightAngle, which fired the midsummer Fajr push at
+// 03:01 while the app showed 04:11 — 70 minutes early.
+//
+// Primary method = Muslim World League, Shafi madhab (shared/methods.ts: MWL).
 function computeTimesFor(lat, lng, date) {
   const coords = new Coordinates(lat, lng);
   const params = CalculationMethod.MuslimWorldLeague();
-  params.highLatitudeRule = HighLatitudeRule.TwilightAngle;
+  params.madhab = Madhab.Shafi;
+  params.highLatitudeRule = HighLatitudeRule.SeventhOfTheNight;
   const pt = new PrayerTimes(coords, date, params);
   return {
     fajr: pt.fajr,
@@ -176,10 +194,6 @@ async function sendPush(sub, payload) {
 }
 
 // ── main loop ──────────────────────────────────────────────────────
-console.info(
-  `[push-worker] started — tick=${TICK_MS}ms window=${WINDOW_MS}ms store=${STORE_PATH}`,
-);
-
 let stopping = false;
 async function loop() {
   while (!stopping) {
@@ -202,4 +216,17 @@ for (const sig of ["SIGINT", "SIGTERM"]) {
   });
 }
 
-loop();
+// Only run the loop when executed directly (`node scripts/push-worker.mjs`).
+// Importing this file must stay side-effect free so scripts/engine-parity.mts
+// can test computeTimesFor against the real engine.
+const isMain =
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isMain) {
+  configurePush();
+  console.info(
+    `[push-worker] started — tick=${TICK_MS}ms window=${WINDOW_MS}ms store=${STORE_PATH}`,
+  );
+  loop();
+}
+
+export { computeTimesFor };
