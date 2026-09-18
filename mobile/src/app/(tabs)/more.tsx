@@ -9,7 +9,7 @@ import { COLORS, FONTS, TEXT } from "@/theme";
 // of glyphs — the whole point of this screen is that you can read it.
 
 interface Row {
-  href: "/tasbih" | "/prayer-settings" | "/settings";
+  href: "/tasbih" | "/prayer-settings" | "/settings" | "/calendar" | "/mosques";
   glyph: string;
   key: keyof Strings;
 }
@@ -18,6 +18,8 @@ const ROWS: Row[] = [
   { href: "/tasbih", glyph: "◎", key: "tasbih" },
   { href: "/prayer-settings", glyph: "⏱", key: "prayerAdjustTitle" },
   { href: "/settings", glyph: "⚙", key: "settings" },
+  { href: "/calendar", glyph: "☾", key: "islamicCalendar" },
+  { href: "/mosques", glyph: "◈", key: "mosques" },
 ];
 
 export default function MoreScreen() {

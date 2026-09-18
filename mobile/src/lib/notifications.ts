@@ -1,9 +1,13 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
-import { computeDay, type PrayerName } from "@shared/prayer-engine";
+import type { PrayerName } from "@shared/prayer-engine";
 import { formatClock } from "@/lib/time";
 import { loadSetting, saveSetting } from "@/lib/storage";
+import { planAlerts } from "@/lib/prayer-prefs";
+import { adjustedDaysFor } from "@/lib/schedule";
+import { rescheduleSilence } from "@/lib/silence";
+import { pushWidgetSchedule, resolveWidgetLocale } from "@/lib/widget";
 import type { Place } from "@/lib/location";
 import type { Strings, Translate } from "@/lib/i18n";
 
@@ -28,7 +32,6 @@ const HORIZON_DAYS = 7;
 /** Sunrise is shown in the app but is not a prayer and gets no adhan. It is
  *  excluded at the type level, so adding it here is a compile error. */
 type NotifiedPrayer = Exclude<PrayerName, "sunrise">;
-const NOTIFIED: NotifiedPrayer[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 
 const NAME_KEY: Record<NotifiedPrayer, keyof Strings> = {
   fajr: "fajr",
@@ -126,47 +129,63 @@ export async function reschedule(
 ): Promise<number> {
   await cancelOwn();
 
+  // The same adjusted days feed everything below. Widget and silence are
+  // pushed BEFORE the notification-permission gate: a user who never wanted
+  // the adhan to ring still gets a correct widget, and silence has its own
+  // permission and its own toggle.
+  const { prefs, days } = await adjustedDaysFor(place, HORIZON_DAYS);
+
+  // Fire-and-forget: a widget or DND hiccup never blocks the adhan.
+  void resolveWidgetLocale().then((locale) =>
+    pushWidgetSchedule(days, t, locale),
+  );
+  void rescheduleSilence(days);
+
   if (!(await isEnabled())) return 0;
   const perm = await Notifications.getPermissionsAsync();
   if (perm.status !== "granted") return 0;
 
-  const now = Date.now();
+  const now = new Date();
   let scheduled = 0;
 
-  for (let dayOffset = 0; dayOffset < HORIZON_DAYS; dayOffset++) {
-    const date = new Date();
-    date.setDate(date.getDate() + dayOffset);
-    const times = computeDay(place.latitude, place.longitude, date).primary
-      .times;
-
-    for (const prayer of NOTIFIED) {
-      const at = times[prayer];
-      // Above ~66N the engine has no solution for Fajr/Maghrib/Isha during the
-      // midnight-sun weeks and returns an Invalid Date. Passing one to
-      // scheduleNotificationAsync throws and would take down the whole
-      // rescheduling pass, silencing the prayers that ARE computable.
-      if (!Number.isFinite(at.getTime())) continue;
-      if (at.getTime() <= now) continue; // already gone today
+  for (let dayOffset = 0; dayOffset < days.length; dayOffset++) {
+    // planAlerts applies the per-prayer style ("off" drops the prayer, its
+    // reminder included), the reminder minutes, and skips anything already
+    // past or uncomputable (above ~66N the engine returns an Invalid Date
+    // for Fajr/Maghrib/Isha in the midnight-sun weeks; scheduling one throws
+    // and would take the whole pass down with it).
+    for (const alert of planAlerts(days[dayOffset], prefs, now)) {
+      const prayerName = t(NAME_KEY[alert.prayer]);
+      const title =
+        alert.kind === "adhan"
+          ? t("adhanTitle", { prayer: prayerName })
+          : t("reminderTitle", {
+              prayer: prayerName,
+              minutes: alert.minutesBefore ?? 0,
+            });
 
       await Notifications.scheduleNotificationAsync({
-        identifier: `${ID_PREFIX}${prayer}-${dayOffset}`,
+        identifier: `${ID_PREFIX}${alert.prayer}-${alert.kind}-${dayOffset}`,
         content: {
-          title: t("adhanTitle", { prayer: t(NAME_KEY[prayer]) }),
+          title,
           body: t("adhanBody", {
             city: place.name,
-            time: formatClock(at),
+            time: formatClock(days[dayOffset][alert.prayer]),
           }),
-          sound: true,
+          // "silent" shows the banner and plays nothing. "beep" and "adhan"
+          // both use the channel sound until a real adhan asset ships.
+          sound: alert.style !== "silent",
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,
-          date: at,
+          date: alert.at,
           channelId: CHANNEL_ID,
         },
       });
       scheduled++;
     }
   }
+
   return scheduled;
 }
 

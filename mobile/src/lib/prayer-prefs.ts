@@ -416,6 +416,10 @@ export function planAlerts(
     if (style === "off") continue;
 
     const at = adjusted[prayer];
+    // An uncomputable prayer (polar midnight sun) produces nothing at all —
+    // not the adhan, and not the reminder either, which would otherwise be
+    // computed from NaN and slip past the "already past" check below.
+    if (!Number.isFinite(at.getTime())) continue;
     if (at.getTime() > from) {
       alerts.push({ prayer, kind: "adhan", at: new Date(at.getTime()), style });
     }

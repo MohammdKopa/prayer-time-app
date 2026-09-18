@@ -17,6 +17,7 @@ import { hijriMonthName } from "@/lib/hijri";
 import { useI18n } from "@/lib/i18n";
 import { gregorianMonthName } from "@/lib/month/calendar-names";
 import { buildMonth, shiftMonth } from "@/lib/month/model";
+import { usePrefs } from "@/lib/use-prefs";
 import { ShareCard } from "@/lib/month/share-card";
 import { shareView } from "@/lib/month/share";
 import {
@@ -88,9 +89,18 @@ export default function MonthScreen() {
     return () => clearTimeout(id);
   }, [today]);
 
+  const { prefs, key: prefsKey } = usePrefs(place);
   const table = useMemo(
-    () => buildMonth(cursor.year, cursor.month, place.latitude, place.longitude),
-    [cursor.year, cursor.month, place.latitude, place.longitude],
+    () =>
+      buildMonth(
+        cursor.year,
+        cursor.month,
+        place.latitude,
+        place.longitude,
+        prefs,
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [cursor.year, cursor.month, place.latitude, place.longitude, prefsKey],
   );
 
   // Warm the neighbours once the screen is idle, so stepping is instant. The
@@ -99,11 +109,18 @@ export default function MonthScreen() {
     const handle = InteractionManager.runAfterInteractions(() => {
       for (const step of [1, -1]) {
         const next = shiftMonth(cursor.year, cursor.month, step);
-        buildMonth(next.year, next.month, place.latitude, place.longitude);
+        buildMonth(
+          next.year,
+          next.month,
+          place.latitude,
+          place.longitude,
+          prefs,
+        );
       }
     });
     return () => handle.cancel();
-  }, [cursor.year, cursor.month, place.latitude, place.longitude]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cursor.year, cursor.month, place.latitude, place.longitude, prefsKey]);
 
   const todayKey =
     today.getFullYear() === cursor.year && today.getMonth() === cursor.month

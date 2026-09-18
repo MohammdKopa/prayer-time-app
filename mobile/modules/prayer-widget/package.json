@@ -1,0 +1,8 @@
+{
+  "name": "prayer-widget",
+  "version": "1.0.0",
+  "description": "Local Expo module: home-screen widget for the next prayer (name, time, countdown), refreshed without opening the app.",
+  "main": "index.ts",
+  "license": "UNLICENSED",
+  "private": true
+}

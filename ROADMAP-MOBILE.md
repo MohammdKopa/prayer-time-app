@@ -204,6 +204,52 @@ Store:
 - [x] Privacy policy in 4 languages, with the postal address
 - [x] Five contradicting permissions stripped from the manifest
 
+### Done 2026-09-18
+
+Roadmap items E and F, built in parallel by seven agents on disjoint files
+and integrated afterwards:
+
+- [x] **Ramadan mode** — auto-activates from the Hijri month. Day number,
+      imsak (= the shown Fajr, no extra minutes) and iftar (= Maghrib), and a
+      countdown to whichever is next, on the Times screen.
+- [x] **Islamic calendar** — eleven annual dates, next twelve months, with an
+      "observed by some" note on Mawlid, Nisf Sha'ban and 27 Ramadan. Forward
+      scan over `toHijri`, no inverse conversion. Eid al-Fitr 1448 → 9 Mar
+      2027, Eid al-Adha 1448 → 16 May 2027, both checked.
+- [x] **Mosque locator** — Germany-wide from Overpass (1,587 mosques; two
+      mirrors agree, that is OSM's real coverage today). Nearest 25, opens
+      in the maps app. `npm run mosques:germany` regenerates; reads no source.
+- [x] **Auto-silence during prayer** — Kotlin Expo module, off by default,
+      10/15/20/30 min, explanation card before asking for DND access, boot
+      receiver. Data Safety note added to the listing.
+- [x] **Home-screen widget** — Kotlin App Widget, next prayer + time +
+      countdown, per-minute alarm, boot re-arm, tap opens the app. JS hands
+      it a pre-translated schedule; Kotlin only substitutes digits.
+- [x] **Privacy policy hosted** at `/privacy` on the website, four languages,
+      built from `docs/privacy-policy.md` at build time. Item C — deploy it.
+- [x] **Launcher name per language** (short: مواقيت الصلاة / Gebetszeiten /
+      Namaz Vakitleri / Prayer Times) via `expo.locales` + `mobile/locales/`.
+      In SDK 57 that field writes Android `values-b+xx/strings.xml` too, so
+      the key must be `app_name` — an iOS key there fails Android lint. The
+      long "… Deutschland" titles stay in the store listing only.
+- [x] **Vitest suite** — 91 tests: engine goldens checked against Aladhan
+      (worst case exactly 120 s), Hijri anchors against a second source,
+      prefs, time, qibla (Marl → Kaaba is 127.6°, not the 130–135° guessed).
+      `npm run gates` now runs tests first. GitHub Actions workflow added.
+
+**Integration bug found and closed.** The per-prayer offsets, notification
+styles and reminders were saved by the settings screen and previewed there —
+and honoured nowhere else. The Times screen, the month table, the adhan
+notifications, the silence windows and the widget all read raw engine times.
+`lib/schedule.ts` is now the single path from a place to this phone's times,
+and every consumer goes through it. Reminders now actually fire, "silent"
+actually silences, "off" actually drops the prayer, and leaving the
+per-prayer settings screen reschedules once.
+
+Also closed, found by the new tests: `planAlerts` let a reminder for an
+uncomputable (Invalid Date) prayer through, which would have thrown inside
+`scheduleNotificationAsync` above 66°N.
+
 ### Still to do, in order
 
 **A — content review. BLOCKS RELEASE.**
@@ -214,20 +260,18 @@ deliberately left out rather than approximated and are listed for a reviewer to
 restore deliberately. **No religious text ships unreviewed.**
 
 **B — screenshots + store assets.** 4 at 1080×1920 minimum; below that Play
-quietly excludes the app from its recommendation surfaces.
+quietly excludes the app from its recommendation surfaces. Needs the phone.
 
-**C — privacy policy hosted.** A reachable URL is required for every app, even
-one that collects nothing. Submission fails on this alone.
+**C — deploy the website** so prayer.kametrix.com/privacy is reachable. The
+page exists; the URL does not until the VPS pulls.
 
 **D — production AAB via EAS → closed track.** The only item with a date
 attached. Starts the 14-day clock.
 
-**E — during the 14 days:** Ramadan mode, Islamic calendar, mosque locator
-(the Overpass script already exists), auto-silence during prayer.
-
-**F — home-screen widget. Last, and protected.** A native Kotlin App Widget
-with its own update lifecycle. It must not delay D — it can ship as an update
-while testers are already running.
+**On-device checks for the two Kotlin modules** (compiled clean, not yet
+exercised on a phone): place the widget and watch it tick; grant DND access
+and confirm the phone goes quiet at the next adhan and comes back after the
+chosen minutes; reboot and confirm both survive.
 
 ### Carried over, not forgotten
 

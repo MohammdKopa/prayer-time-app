@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
 import { useI18n, type Strings, type StringKey } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
+import { reschedule } from "@/lib/notifications";
 import {
   applyPrefsDetailed,
   defaultPrefs,
@@ -140,9 +141,21 @@ function CityPrefs() {
     [base, shown],
   );
 
+  // Saved on every tap, but the adhan is only rescheduled once, on the way
+  // out: reschedule() cancels and re-creates ~35 notifications, and a
+  // stepper tapped ten times should not do that ten times.
+  const dirty = useRef(false);
+  useEffect(() => {
+    return () => {
+      if (dirty.current) void reschedule(place, t);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function update(next: PrayerPrefs) {
     setPrefs(next);
     setConfirmReset(false);
+    dirty.current = true;
     void savePrefs(place, next);
   }
 
@@ -155,6 +168,7 @@ function CityPrefs() {
     setPrefs(next);
     setConfirmReset(false);
     setCustomText("");
+    dirty.current = true;
     void savePrefs(place, next);
   }
 

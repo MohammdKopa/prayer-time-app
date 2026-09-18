@@ -55,6 +55,11 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "locales": {
+      "ar": "./locales/ar.json",
+      "de": "./locales/de.json",
+      "tr": "./locales/tr.json"
+    },
     "plugins": [
       "expo-router",
       "expo-localization",

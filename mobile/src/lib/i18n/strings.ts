@@ -156,8 +156,54 @@ const ar = {
   navMonth: "الشهر",
   navDua: "الأذكار",
 
+  // Ramadan mode: fasting window shown on the Times screen when the
+  // Hijri month is Ramadan.
+  ramadanDayLabel: "رمضان — اليوم {day}",
+  imsak: "الإمساك",
+  iftar: "الإفطار",
+  untilIftar: "حتى الإفطار · {time}",
+  untilImsak: "حتى الإمساك · {time}",
+
+  // Adhan and widget wording (integration pass)
+  reminderTitle: "{prayer} بعد {minutes} دقيقة",
+  widgetNext: "الصلاة القادمة",
+  widgetIn: "بعد",
+  widgetEmpty: "افتح التطبيق لتحديث المواقيت",
   back: "رجوع",
-  close: "إغلاق",
+  close: "إغلاق",  // Islamic calendar screen
+  islamicCalendar: "التقويم الهجري",
+  eventIslamicNewYear: "رأس السنة الهجرية",
+  eventAshura: "عاشوراء",
+  eventMawlid: "المولد النبوي",
+  eventIsraMiraj: "الإسراء والمعراج",
+  eventNisfShaban: "ليلة النصف من شعبان",
+  eventRamadanStart: "بداية رمضان",
+  eventLaylatAlQadr: "ليلة القدر",
+  eventEidAlFitr: "عيد الفطر",
+  eventArafah: "يوم عرفة",
+  eventEidAlAdha: "عيد الأضحى",
+  eventTashreeqEnd: "نهاية أيام التشريق",
+  eventObservanceNote: "يراه بعض العلماء",
+  eventInDays: "بعد {days} يوم",
+  eventDateFormat: "{day} {month} {year}",
+
+  // Mosque locator: Germany-wide nearest-mosque list.
+  mosques: "المساجد",
+  mosqueUnnamed: "مسجد",
+  distanceMeters: "{value} م",
+  distanceKm: "{value} كم",
+
+  // Auto-silence during prayer (Do Not Disturb), off by default.
+  silenceSection: "الصمت أثناء الصلاة",
+  silenceOn: "مفعّل — يصمت الهاتف عند كل أذان",
+  silenceOff: "الصمت متوقف",
+  silenceDurationLabel: "مدة الصمت",
+  silenceMinutesOption: "{minutes} دقيقة",
+  silenceExplainTitle: "ما الذي يفعله هذا؟",
+  silenceExplainBody:
+    "يُفعّل وضع عدم الإزعاج في هاتفك لعدد الدقائق الذي تختاره بعد كل أذان، ثم يُعيده كما كان تمامًا. لا يغادر أي شيء جهازك.",
+  silenceGrantAccess: "فتح إعدادات عدم الإزعاج",
+
 } as const;
 
 /** Keys come from the Arabic table, values are plain strings. Adding a key to
@@ -312,8 +358,54 @@ const de: Strings = {
   navMonth: "Monat",
   navDua: "Adhkar",
 
+  // Ramadan mode: fasting window shown on the Times screen when the
+  // Hijri month is Ramadan.
+  ramadanDayLabel: "Ramadan — Tag {day}",
+  imsak: "Imsak",
+  iftar: "Iftar",
+  untilIftar: "Bis zum Iftar · {time}",
+  untilImsak: "Bis zum Imsak · {time}",
+
+  // Adhan and widget wording (integration pass)
+  reminderTitle: "{prayer} in {minutes} Minuten",
+  widgetNext: "Nächstes Gebet",
+  widgetIn: "in",
+  widgetEmpty: "App öffnen, um die Zeiten zu laden",
   back: "Zurück",
-  close: "Schließen",
+  close: "Schließen",  // Islamic calendar screen
+  islamicCalendar: "Islamischer Kalender",
+  eventIslamicNewYear: "Islamisches Neujahr",
+  eventAshura: "Aschura",
+  eventMawlid: "Mawlid",
+  eventIsraMiraj: "Isra und Mi'radsch",
+  eventNisfShaban: "Nisf Schaban",
+  eventRamadanStart: "Beginn des Ramadan",
+  eventLaylatAlQadr: "Laylat al-Qadr",
+  eventEidAlFitr: "Eid al-Fitr",
+  eventArafah: "Tag von Arafat",
+  eventEidAlAdha: "Eid al-Adha",
+  eventTashreeqEnd: "Ende der Tashreeq-Tage",
+  eventObservanceNote: "Von einigen Gelehrten so bestimmt",
+  eventInDays: "In {days} Tagen",
+  eventDateFormat: "{day} {month} {year}",
+
+  // Mosque locator: Germany-wide nearest-mosque list.
+  mosques: "Moscheen",
+  mosqueUnnamed: "Moschee",
+  distanceMeters: "{value} m",
+  distanceKm: "{value} km",
+
+  // Auto-silence during prayer (Do Not Disturb), off by default.
+  silenceSection: "Stille während des Gebets",
+  silenceOn: "An — das Telefon verstummt bei jedem Gebet",
+  silenceOff: "Aus",
+  silenceDurationLabel: "Dauer der Stille",
+  silenceMinutesOption: "{minutes} Min.",
+  silenceExplainTitle: "Was das bewirkt",
+  silenceExplainBody:
+    "Schaltet für die gewählte Anzahl an Minuten nach jedem Adhan die Bitte-nicht-stören-Funktion deines Telefons ein und stellt sie danach genau wieder her. Es verlässt nichts dein Gerät.",
+  silenceGrantAccess: "Bitte-nicht-stören-Einstellungen öffnen",
+
 };
 
 const tr: Strings = {
@@ -462,8 +554,54 @@ const tr: Strings = {
   navMonth: "Ay",
   navDua: "Zikirler",
 
+  // Ramadan mode: fasting window shown on the Times screen when the
+  // Hijri month is Ramadan.
+  ramadanDayLabel: "Ramazan — {day}. gün",
+  imsak: "İmsak",
+  iftar: "İftar",
+  untilIftar: "İftara kalan · {time}",
+  untilImsak: "İmsaka kalan · {time}",
+
+  // Adhan and widget wording (integration pass)
+  reminderTitle: "{minutes} dakika sonra {prayer}",
+  widgetNext: "Sıradaki namaz",
+  widgetIn: "kalan",
+  widgetEmpty: "Vakitleri yüklemek için uygulamayı aç",
   back: "Geri",
-  close: "Kapat",
+  close: "Kapat",  // Islamic calendar screen
+  islamicCalendar: "Hicri Takvim",
+  eventIslamicNewYear: "Hicri Yılbaşı",
+  eventAshura: "Aşure Günü",
+  eventMawlid: "Mevlid Kandili",
+  eventIsraMiraj: "Miraç Kandili",
+  eventNisfShaban: "Berat Kandili",
+  eventRamadanStart: "Ramazan'ın Başlangıcı",
+  eventLaylatAlQadr: "Kadir Gecesi",
+  eventEidAlFitr: "Ramazan Bayramı",
+  eventArafah: "Arefe Günü",
+  eventEidAlAdha: "Kurban Bayramı",
+  eventTashreeqEnd: "Teşrik Günlerinin Sonu",
+  eventObservanceNote: "Bazı alimlere göre",
+  eventInDays: "{days} gün sonra",
+  eventDateFormat: "{day} {month} {year}",
+
+  // Mosque locator: Germany-wide nearest-mosque list.
+  mosques: "Camiler",
+  mosqueUnnamed: "Cami",
+  distanceMeters: "{value} m",
+  distanceKm: "{value} km",
+
+  // Auto-silence during prayer (Do Not Disturb), off by default.
+  silenceSection: "Namaz sırasında sessize alma",
+  silenceOn: "Açık — telefon her namazda sessize alınır",
+  silenceOff: "Kapalı",
+  silenceDurationLabel: "Sessizlik süresi",
+  silenceMinutesOption: "{minutes} dk",
+  silenceExplainTitle: "Bu ne yapar",
+  silenceExplainBody:
+    "Her ezandan sonra seçtiğiniz süre boyunca telefonunuzun Rahatsız Etmeyin özelliğini açar, ardından tam olarak eski haline getirir. Hiçbir şey cihazınızdan dışarı çıkmaz.",
+  silenceGrantAccess: "Rahatsız Etmeyin ayarlarını aç",
+
 };
 
 const en: Strings = {
@@ -612,8 +750,54 @@ const en: Strings = {
   navMonth: "Month",
   navDua: "Adhkar",
 
+  // Ramadan mode: fasting window shown on the Times screen when the
+  // Hijri month is Ramadan.
+  ramadanDayLabel: "Ramadan — Day {day}",
+  imsak: "Imsak",
+  iftar: "Iftar",
+  untilIftar: "Until iftar · {time}",
+  untilImsak: "Until imsak · {time}",
+
+  // Adhan and widget wording (integration pass)
+  reminderTitle: "{prayer} in {minutes} minutes",
+  widgetNext: "Next prayer",
+  widgetIn: "in",
+  widgetEmpty: "Open the app to load prayer times",
   back: "Back",
-  close: "Close",
+  close: "Close",  // Islamic calendar screen
+  islamicCalendar: "Islamic Calendar",
+  eventIslamicNewYear: "Islamic New Year",
+  eventAshura: "Ashura",
+  eventMawlid: "Mawlid",
+  eventIsraMiraj: "Isra and Mi'raj",
+  eventNisfShaban: "Nisf Sha'ban",
+  eventRamadanStart: "Start of Ramadan",
+  eventLaylatAlQadr: "Laylat al-Qadr",
+  eventEidAlFitr: "Eid al-Fitr",
+  eventArafah: "Day of Arafah",
+  eventEidAlAdha: "Eid al-Adha",
+  eventTashreeqEnd: "End of Tashreeq",
+  eventObservanceNote: "Observed by some",
+  eventInDays: "In {days} days",
+  eventDateFormat: "{day} {month} {year}",
+
+  // Mosque locator: Germany-wide nearest-mosque list.
+  mosques: "Mosques",
+  mosqueUnnamed: "Mosque",
+  distanceMeters: "{value} m",
+  distanceKm: "{value} km",
+
+  // Auto-silence during prayer (Do Not Disturb), off by default.
+  silenceSection: "Silence during prayer",
+  silenceOn: "On — the phone quiets for each prayer",
+  silenceOff: "Off",
+  silenceDurationLabel: "Silence duration",
+  silenceMinutesOption: "{minutes} min",
+  silenceExplainTitle: "What this does",
+  silenceExplainBody:
+    "Turns on your phone's Do Not Disturb for the chosen minutes after each adhan, then puts it back exactly as it was. Nothing leaves your device.",
+  silenceGrantAccess: "Open Do Not Disturb settings",
+
 };
 
 export const TRANSLATIONS: Record<Locale, Strings> = { ar, de, tr, en };

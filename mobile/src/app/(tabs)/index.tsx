@@ -2,10 +2,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
+import { PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
 import { reschedule } from "@/lib/notifications";
+import { adjustedDay } from "@/lib/schedule";
+import { usePrefs } from "@/lib/use-prefs";
 import {
   countdownTo,
   formatClock,
@@ -16,6 +18,7 @@ import {
 } from "@/lib/time";
 import { SkyBackground } from "@/components/SkyBackground";
 import { hijriMonthName, toHijri } from "@/lib/hijri";
+import { fastingCountdown, fastingWindow, ramadanDay } from "@/lib/ramadan";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 const NAME_KEY: Record<PrayerName, keyof Strings> = {
@@ -41,19 +44,23 @@ export default function ClockScreen() {
   }, []);
 
   const dayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
-  const day = useMemo(
-    () => computeDay(place.latitude, place.longitude, new Date()),
+
+  // The user's per-prayer offsets for this masjid, applied on top of the
+  // engine through lib/schedule.ts — the same path the notifications, the
+  // widget and the month table take, so the four never disagree.
+  const { prefs, key: prefsKey } = usePrefs(place);
+  const times = useMemo(
+    () => adjustedDay(place.latitude, place.longitude, new Date(), prefs),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dayKey, place.latitude, place.longitude],
+    [dayKey, place.latitude, place.longitude, prefsKey],
   );
-  const times = day.primary.times;
 
   const tomorrowFajr = useMemo(() => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
-    return computeDay(place.latitude, place.longitude, d).primary.times.fajr;
+    return adjustedDay(place.latitude, place.longitude, d, prefs).fajr;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayKey, place.latitude, place.longitude]);
+  }, [dayKey, place.latitude, place.longitude, prefsKey]);
 
   const next = useMemo(() => {
     for (const p of PRAYERS) {
@@ -79,7 +86,7 @@ export default function ClockScreen() {
   const hasTarget = isValidTime(target);
   const countdown = countdownTo(target, now);
 
-  const scheduleKey = `${place.latitude},${place.longitude},${locale},${dayKey}`;
+  const scheduleKey = `${place.latitude},${place.longitude},${locale},${dayKey},${prefsKey}`;
   const lastScheduled = useRef<string | null>(null);
   useEffect(() => {
     if (lastScheduled.current === scheduleKey) return;
@@ -113,6 +120,19 @@ export default function ClockScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayKey, locale]);
 
+  // Auto-activated purely from the Hijri calendar — no setting to find or
+  // forget. Recomputed only when the day changes, same as `hijri` above.
+  const ramadanInfo = useMemo(() => {
+    const day = ramadanDay(new Date());
+    return day === null ? null : { day };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayKey]);
+
+  // Ticks with `now`, same as the hero countdown above — recomputed every
+  // render is cheap and keeps the two clocks on screen from drifting apart.
+  const fasting = ramadanInfo ? fastingCountdown(now, times) : null;
+  const fastingWin = ramadanInfo ? fastingWindow(times) : null;
+
   return (
     <SafeAreaView style={styles.safe}>
       <SkyBackground now={skyNow} times={times} />
@@ -143,6 +163,36 @@ export default function ClockScreen() {
           </Text>
           <Text style={styles.heroTime}>{num(formatClock(target))}</Text>
         </View>
+
+        {ramadanInfo && fastingWin && (
+          <View style={styles.ramadanCard}>
+            <Text style={styles.ramadanTitle}>
+              {t("ramadanDayLabel", { day: num(String(ramadanInfo.day)) })}
+            </Text>
+            <View style={styles.ramadanRow}>
+              <View style={styles.ramadanCol}>
+                <Text style={styles.ramadanLabel}>{t("imsak")}</Text>
+                <Text style={styles.ramadanTime}>
+                  {num(formatClock(fastingWin.imsak))}
+                </Text>
+              </View>
+              <View style={styles.ramadanDivider} />
+              <View style={styles.ramadanCol}>
+                <Text style={styles.ramadanLabel}>{t("iftar")}</Text>
+                <Text style={styles.ramadanTime}>
+                  {num(formatClock(fastingWin.iftar))}
+                </Text>
+              </View>
+            </View>
+            {fasting && (
+              <Text style={styles.ramadanCountdown}>
+                {t(fasting.target === "iftar" ? "untilIftar" : "untilImsak", {
+                  time: num(fasting.formatted),
+                })}
+              </Text>
+            )}
+          </View>
+        )}
 
         <View style={styles.list}>
           {PRAYER_ORDER.map((p) => {
@@ -277,6 +327,54 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: FONTS.displayRegular,
     fontVariant: ["tabular-nums"],
+  },
+
+  // Compact card for the fasting window, shown only in Ramadan. Same border
+  // treatment as `hero`, shallower padding to keep it secondary to the
+  // next-prayer countdown above it.
+  ramadanCard: {
+    backgroundColor: "rgba(12,16,24,0.55)",
+    borderWidth: 1,
+    borderColor: COLORS.goldEdge,
+    borderRadius: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    gap: 8,
+  },
+  ramadanTitle: {
+    color: COLORS.gold,
+    fontSize: 15,
+    fontFamily: FONTS.display,
+    textAlign: "center",
+  },
+  ramadanRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 20,
+  },
+  ramadanCol: { alignItems: "center", gap: 2 },
+  ramadanDivider: {
+    width: 1,
+    alignSelf: "stretch",
+    backgroundColor: COLORS.line,
+  },
+  ramadanLabel: {
+    color: TEXT.faint,
+    fontSize: 12,
+    fontFamily: FONTS.body,
+  },
+  ramadanTime: {
+    color: COLORS.bone,
+    fontSize: 20,
+    fontFamily: FONTS.displayRegular,
+    fontVariant: ["tabular-nums"],
+  },
+  ramadanCountdown: {
+    color: TEXT.strong,
+    fontSize: 13,
+    fontFamily: FONTS.body,
+    textAlign: "center",
   },
 
   list: { gap: 1 },

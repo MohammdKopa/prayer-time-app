@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "mosques:fetch": "node scripts/fetch-mosques.mjs",
+    "mosques:germany": "node scripts/fetch-mosques-germany.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "validate": "tsx scripts/validate.mts",
     "parity": "tsx scripts/engine-parity.mts",
-    "gates": "npm run parity && npm run validate"
+    "gates": "npm run test && npm run parity && npm run validate"
   },
   "dependencies": {
     "@types/web-push": "^3.6.4",
@@ -28,6 +31,7 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "tsx": "^4.23.13",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   }
 }

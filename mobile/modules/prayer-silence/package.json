@@ -1,0 +1,9 @@
+{
+  "name": "prayer-silence",
+  "version": "1.0.0",
+  "description": "Local Expo module: auto-silence the phone (Android Do Not Disturb) during prayer. Not published, Android only.",
+  "main": "index.ts",
+  "types": "index.ts",
+  "license": "UNLICENSED",
+  "private": true
+}

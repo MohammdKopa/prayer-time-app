@@ -21,6 +21,7 @@
 // happen once per month, not once per frame.
 
 import { computeDay, PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
+import { applyPrefs, defaultPrefs, type PrayerPrefs } from "@/lib/prayer-prefs";
 import { toHijri, type HijriDate } from "@/lib/hijri";
 import { formatClock } from "@/lib/time";
 
@@ -70,8 +71,10 @@ function cacheKey(
   month: number,
   latitude: number,
   longitude: number,
+  prefs: PrayerPrefs,
 ): string {
-  return `${year}-${month}-${latitude.toFixed(4)}-${longitude.toFixed(4)}`;
+  // Prefs are part of the key: a changed offset is a different table.
+  return `${year}-${month}-${latitude.toFixed(4)}-${longitude.toFixed(4)}-${JSON.stringify(prefs)}`;
 }
 
 // Small LRU. A `Map` iterates in insertion order, so the oldest key is the
@@ -91,8 +94,9 @@ export function buildMonth(
   month: number,
   latitude: number,
   longitude: number,
+  prefs: PrayerPrefs = defaultPrefs(),
 ): MonthTable {
-  const key = cacheKey(year, month, latitude, longitude);
+  const key = cacheKey(year, month, latitude, longitude, prefs);
   const hit = cache.get(key);
   if (hit) {
     // Touch: re-inserting moves it to the young end of the map.
@@ -107,7 +111,12 @@ export function buildMonth(
 
   for (let day = 1; day <= count; day++) {
     const date = new Date(year, month, day);
-    const computed = computeDay(latitude, longitude, date).primary.times;
+    // Per-prayer offsets applied here, so the printed month matches the
+    // clock and the adhan. Sharing this table with family is the point.
+    const computed = applyPrefs(
+      computeDay(latitude, longitude, date).primary.times,
+      prefs,
+    );
 
     // The Hijri date is ornament next to the times; out of range it throws,
     // and losing the ornament must not take the timetable down with it.

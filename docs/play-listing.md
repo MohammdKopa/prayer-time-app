@@ -373,6 +373,7 @@ That is exactly this app:
 - **Location** — read via `ACCESS_COARSE_LOCATION` / `ACCESS_FINE_LOCATION`, used only as an input to the on-device prayer-time and Qibla calculation. Never transmitted. Optional: a user who denies the permission picks a city manually and the app is fully functional.
 - **Settings and chosen city** — stored in local app storage on the device. Never transmitted, removed when the app is uninstalled.
 - **Notifications** — scheduled locally by the app. No push service, no device token, no server.
+- **Do Not Disturb access** (`ACCESS_NOTIFICATION_POLICY`) — requested only if the user turns on "Silence during prayer" in Settings, off by default. Used only to toggle the phone's own interruption filter on-device for the chosen minutes after each adhan and then restore it. Nothing about it is read, logged or transmitted anywhere.
 - **No analytics, no crash reporting, no advertising SDK, no attribution SDK, no accounts.** Nothing that would transmit diagnostics or a device identifier.
 
 **Before submitting, hold this against the real build.** The form is a legal declaration and it is checked against the APK. Confirm the release AAB ships no Firebase, no Google Analytics, no Crashlytics, no ad SDK and no attribution SDK, and that nothing in the app makes a network request. If any of those is ever added — including crash reporting — this form has to change in the same release.
