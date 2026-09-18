@@ -16,7 +16,7 @@ import { angleBetween, approachAngle, isAligned } from "@/lib/compass";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
 import { toArabicIndic } from "@/lib/time";
-import { COLORS } from "@/theme";
+import { COLORS, FONTS, TEXT } from "@/theme";
 
 // Qibla.
 //
@@ -125,9 +125,7 @@ export default function QiblaScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
-          <Text style={styles.back}>{t("back")}</Text>
-        </Pressable>
+        <View style={styles.spacer} />
         <Text style={styles.title}>{t("qibla")}</Text>
         <View style={styles.spacer} />
       </View>
@@ -208,7 +206,9 @@ export default function QiblaScreen() {
                 },
               ]}
             >
-              <View style={[styles.marker, aligned && styles.markerAligned]} />
+              <View
+                style={[styles.marker, aligned && styles.markerAligned]}
+              />
             </View>
           </Animated.View>
         </View>
@@ -249,8 +249,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 20,
   },
-  back: { color: COLORS.gold, fontSize: 16 },
-  title: { color: COLORS.bone, fontSize: 18 },
+  back: { color: COLORS.gold, fontSize: 16, fontFamily: FONTS.body },
+  title: { color: COLORS.bone, fontSize: 18, fontFamily: FONTS.display },
   spacer: { width: 44 },
   body: { flex: 1, alignItems: "center", justifyContent: "center", gap: 16 },
 
@@ -301,8 +301,8 @@ const styles = StyleSheet.create({
   tickMajor: { height: 13, width: 2, opacity: 0.55 },
 
   labelHolder: { position: "absolute", alignItems: "center" },
-  cardinal: { color: COLORS.bone, opacity: 0.55, fontSize: 15 },
-  cardinalNorth: { color: COLORS.bone, opacity: 0.9, fontWeight: "600" },
+  cardinal: { color: TEXT.soft, fontSize: 15, fontFamily: FONTS.display },
+  cardinalNorth: { color: TEXT.full, fontWeight: "600" },
 
   rayHolder: {
     position: "absolute",
@@ -320,28 +320,43 @@ const styles = StyleSheet.create({
   rayAligned: { opacity: 0.9 },
 
   markerHolder: { position: "absolute", alignItems: "center" },
+  // A triangle pointing outward, drawn with borders — an arrowhead at the rim
+  // reads as "this way" in a glance; a square just sits there.
   marker: {
-    width: 18,
-    height: 18,
-    borderRadius: 4,
-    backgroundColor: COLORS.gold,
-    opacity: 0.8,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 10,
+    borderRightWidth: 10,
+    borderBottomWidth: 18,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
+    borderBottomColor: COLORS.gold,
+    opacity: 0.85,
   },
-  markerAligned: { opacity: 1, width: 22, height: 22, borderRadius: 5 },
+  markerAligned: {
+    opacity: 1,
+    borderLeftWidth: 12,
+    borderRightWidth: 12,
+    borderBottomWidth: 22,
+  },
 
-  bearing: { color: COLORS.bone, fontSize: 30, fontVariant: ["tabular-nums"] },
-  hint: {
+  bearing: {
     color: COLORS.bone,
-    opacity: 0.5,
-    fontSize: 14,
+    fontSize: 30,
+    fontFamily: FONTS.displayRegular,
+    fontVariant: ["tabular-nums"],
+  },
+  hint: {
+    color: TEXT.soft,
+    fontFamily: FONTS.body,
+        fontSize: 14,
     textAlign: "center",
     paddingHorizontal: 40,
   },
-  alignedText: { color: COLORS.gold, opacity: 1 },
+  alignedText: { color: COLORS.gold },
   off: {
-    color: COLORS.bone,
-    opacity: 0.35,
-    fontSize: 14,
+    color: TEXT.faint,
+        fontSize: 14,
     fontVariant: ["tabular-nums"],
   },
   warn: {

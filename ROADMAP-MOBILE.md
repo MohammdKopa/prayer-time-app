@@ -167,6 +167,82 @@ the calendar doesn't punish the polish.
 
 ---
 
+## Sprint to v1.0 — updated 2026-09-17, 23:30
+
+Goal: an app worth putting in front of 12 testers. Ordered so that stopping
+after ANY phase still leaves something shippable — the closed-test clock
+(12 testers × 14 continuous days) starts the day we upload, so uploading early
+and polishing during those 14 days beats holding back for a perfect build.
+
+### Done 2026-09-17
+
+Engine and platform:
+- [x] Engine shared with the website (`shared/`), adhan pinned to one exact version
+- [x] Sheikh Ayman's ruling implemented as **fixed** offsets: Isha = Maghrib + 90,
+      Fajr = sunrise − 90. Deployed to prayer.kametrix.com.
+- [x] Three drifts caught by `npm run parity` before shipping; the Aladhan
+      watchdog and the browser-side watchdog both repaired
+- [x] Expo app on `app.kametrix.prayer`, running on Mohamed's phone
+
+The app:
+- [x] GPS location, Germany-wide, manual city override
+- [x] Four languages, AR/DE/TR/EN, Arabic as fallback
+- [x] Local adhan notifications, offline, 7-day horizon, own id prefix
+- [x] Qibla compass — true north, compass rose, smoothed, short-path rotation
+- [x] Hijri date (deterministic Umm al-Qura, 1300–1600 AH, no `Intl`)
+- [x] Tasbih counter
+- [x] Monthly timetable, shareable as an image
+- [x] Dua & adhkar library + five independent reminders, all off by default
+- [x] Per-prayer offsets, notification style, pre-prayer reminders
+- [x] Real tabs (not a Stack), labelled: Times · Month · Adhkar · Qibla · More
+- [x] App icon, splash, adaptive + monochrome
+- [x] Deep emerald palette, living sky that tracks the day's own prayer times
+- [x] Reem Kufi / Noto Naskh typography
+
+Store:
+- [x] Listing in 4 languages, within Play's character limits
+- [x] Privacy policy in 4 languages, with the postal address
+- [x] Five contradicting permissions stripped from the manifest
+
+### Still to do, in order
+
+**A — content review. BLOCKS RELEASE.**
+`docs/dua-content-review.md` needs a qualified human. 15 items, each with its
+source. Three have German translations the implementer wrote; the sleep dua has
+all three. The screen already says "not yet reviewed" for those. Four items were
+deliberately left out rather than approximated and are listed for a reviewer to
+restore deliberately. **No religious text ships unreviewed.**
+
+**B — screenshots + store assets.** 4 at 1080×1920 minimum; below that Play
+quietly excludes the app from its recommendation surfaces.
+
+**C — privacy policy hosted.** A reachable URL is required for every app, even
+one that collects nothing. Submission fails on this alone.
+
+**D — production AAB via EAS → closed track.** The only item with a date
+attached. Starts the 14-day clock.
+
+**E — during the 14 days:** Ramadan mode, Islamic calendar, mosque locator
+(the Overpass script already exists), auto-silence during prayer.
+
+**F — home-screen widget. Last, and protected.** A native Kotlin App Widget
+with its own update lifecycle. It must not delay D — it can ship as an update
+while testers are already running.
+
+### Carried over, not forgotten
+
+- Upload keystore: EAS holds it server-side, so unlike Tellro there is nothing
+  local to lose. The local APKs are debug-signed and can never go to Play.
+- `shared/format.ts` still returns Arabic prose and still uses `Intl` for
+  Hijri; the mobile app avoids it entirely. The **website** still uses it.
+- The web app and plasma display do not show the "mosque timing" note.
+  Declined 2026-09-17 — not an oversight.
+- `expo prebuild` overwrites the launcher icons. Sources in
+  `mobile/assets/images/` are correct, so a successful prebuild regenerates the
+  same thing. Prebuild deletes all of `android/` and fails with `EBUSY` if any
+  process holds a handle inside it — including a shell whose cwd is in there.
+
+
 ## Phases
 
 ### P0 — Foundation
@@ -240,6 +316,38 @@ the calendar doesn't punish the polish.
   deleted rather than left to rot. `src/` is three files.
 - Verified by exporting a real Android bundle: 2.7MB of Hermes bytecode with
   the engine in it. Arabic strings sit in Hermes' UTF-16 string table.
+
+## Known engine limitation — high latitude (found 2026-09-17)
+
+`shared/prayer-engine.ts` has no solution for Fajr, sunrise, Maghrib and Isha
+during the midnight-sun weeks, and returns an **Invalid Date**. Measured over a
+full year at longitude 10E:
+
+| | invalid-date days | out-of-order days |
+|---|---|---|
+| Marl 51.7N / Hamburg 53.6N / Flensburg 54.8N | 0 | 0 |
+| Oslo 60.0N | 0 | 0 |
+| Tromso 69.6N | 116 | 19 |
+| Longyearbyen 78.2N | 240 | 13 |
+
+**Germany is entirely unaffected** — zero occurrences anywhere up to 60N. Not a
+launch blocker for a Germany-targeted app. But the app follows GPS, so a
+traveller reaches it, and an Invalid Date passed to
+`scheduleNotificationAsync` throws, which would abort the whole rescheduling
+pass and silence the prayers that *are* computable.
+
+The mobile app is now guarded rather than fixed: `formatClock` renders `—`,
+the next/current scan skips uncomputable prayers, and the notification loop
+skips them. **The website has the same exposure and is not guarded.**
+
+Separately, above 60N the engine sometimes emits times that are *valid but out
+of order* (66N, 9 Dec 2026 puts Dhuhr and Asr both at 11:33). Straightening
+that is a fiqh question as much as a coding one and belongs in the engine,
+where the website would get it too. Deliberately not papered over in the app:
+showing a user a corrected order the engine never produced would make the
+phone disagree with the website.
+
+---
 
 ## Open items
 

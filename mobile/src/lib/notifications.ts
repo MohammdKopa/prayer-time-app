@@ -89,11 +89,42 @@ export async function requestPermission(): Promise<PermissionResult> {
  * a location change and on a language change, it must never leave yesterday's
  * schedule behind or stack duplicates.
  */
+/** Every adhan notification carries this prefix, so it can be cancelled
+ *  without touching anything else scheduled by the app. */
+const ID_PREFIX = "adhan-";
+
+/**
+ * Cancel ONLY the adhan notifications.
+ *
+ * This used to call cancelAllScheduledNotificationsAsync(), which also wiped
+ * the dua reminders every time a prayer reschedule ran — on app open, on a
+ * location change, on a language change. The reminders would silently vanish
+ * and only come back if the user happened to open the dua screen again.
+ *
+ * Ordering the two reschedules would have hidden it rather than fixed it:
+ * whoever ran last would win, and a future caller would trip over it again.
+ */
+async function cancelOwn(): Promise<void> {
+  try {
+    const all = await Notifications.getAllScheduledNotificationsAsync();
+    await Promise.all(
+      all
+        .filter((n) => n.identifier.startsWith(ID_PREFIX))
+        .map((n) =>
+          Notifications.cancelScheduledNotificationAsync(n.identifier),
+        ),
+    );
+  } catch {
+    // If the list cannot be read there is nothing safe to cancel. Better to
+    // risk a duplicate adhan than to wipe every notification in the app.
+  }
+}
+
 export async function reschedule(
   place: Place,
   t: Translate,
 ): Promise<number> {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+  await cancelOwn();
 
   if (!(await isEnabled())) return 0;
   const perm = await Notifications.getPermissionsAsync();
@@ -110,9 +141,15 @@ export async function reschedule(
 
     for (const prayer of NOTIFIED) {
       const at = times[prayer];
+      // Above ~66N the engine has no solution for Fajr/Maghrib/Isha during the
+      // midnight-sun weeks and returns an Invalid Date. Passing one to
+      // scheduleNotificationAsync throws and would take down the whole
+      // rescheduling pass, silencing the prayers that ARE computable.
+      if (!Number.isFinite(at.getTime())) continue;
       if (at.getTime() <= now) continue; // already gone today
 
       await Notifications.scheduleNotificationAsync({
+        identifier: `${ID_PREFIX}${prayer}-${dayOffset}`,
         content: {
           title: t("adhanTitle", { prayer: t(NAME_KEY[prayer]) }),
           body: t("adhanBody", {
@@ -133,6 +170,7 @@ export async function reschedule(
   return scheduled;
 }
 
+/** Turn the adhan off. Leaves dua reminders and anything else untouched. */
 export async function cancelAll(): Promise<void> {
-  await Notifications.cancelAllScheduledNotificationsAsync();
+  await cancelOwn();
 }

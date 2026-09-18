@@ -26,7 +26,7 @@ import {
   reschedule,
   setEnabled,
 } from "@/lib/notifications";
-import { COLORS } from "@/theme";
+import { COLORS, FONTS, TEXT } from "@/theme";
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -170,13 +170,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingBottom: 8,
   },
-  back: { color: COLORS.gold, fontSize: 16 },
-  title: { color: COLORS.bone, fontSize: 18 },
+  back: { color: COLORS.gold, fontSize: 16, fontFamily: FONTS.body },
+  title: { color: COLORS.bone, fontSize: 18, fontFamily: FONTS.display },
   spacer: { width: 44 },
   section: {
-    color: COLORS.bone,
-    opacity: 0.5,
-    fontSize: 13,
+    color: TEXT.soft,
+        fontSize: 13,
     marginTop: 14,
     marginBottom: 2,
   },
@@ -194,13 +193,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     minHeight: 48,
   },
-  optionText: { color: COLORS.bone, fontSize: 16, flexShrink: 1 },
+  optionText: {
+    color: COLORS.bone,
+    fontSize: 16,
+    flexShrink: 1,
+    fontFamily: FONTS.body,
+  },
   selected: { color: COLORS.gold },
   check: { color: COLORS.gold, fontSize: 16 },
   hint: {
-    color: COLORS.bone,
-    opacity: 0.45,
-    fontSize: 13,
+    color: TEXT.soft,
+    fontFamily: FONTS.body,
+        fontSize: 13,
     paddingHorizontal: 15,
     paddingBottom: 12,
     lineHeight: 19,

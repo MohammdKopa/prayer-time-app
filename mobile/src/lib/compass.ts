@@ -34,9 +34,16 @@ export function angleBetween(a: number, b: number): number {
 export function approachAngle(
   unwrapped: number,
   target: number,
-  smoothing = 0.15,
+  smoothing = 0.1,
+  deadbandDeg = 0.6,
 ): number {
-  return unwrapped + shortestTurn(unwrapped, target) * smoothing;
+  const turn = shortestTurn(unwrapped, target);
+  // Cheap magnetometers wander by a fraction of a degree even at rest. Below
+  // the deadband we hold still rather than chase noise — the alternative is a
+  // needle that never quite settles, which reads as untrustworthy even when
+  // the bearing is right.
+  if (Math.abs(turn) < deadbandDeg) return unwrapped;
+  return unwrapped + turn * smoothing;
 }
 
 /** True when the phone is pointed close enough to call it aligned. */
