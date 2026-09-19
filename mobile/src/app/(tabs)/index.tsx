@@ -16,6 +16,7 @@ import {
   isValidTime,
   toArabicIndic,
 } from "@/lib/time";
+import { ExactAlarmBanner } from "@/components/ExactAlarmBanner";
 import { SkyBackground } from "@/components/SkyBackground";
 import { hijriMonthName, toHijri } from "@/lib/hijri";
 import { fastingCountdown, fastingWindow, ramadanDay } from "@/lib/ramadan";
@@ -173,6 +174,8 @@ export default function ClockScreen() {
           </Text>
           <Text style={styles.heroTime}>{num(formatClock(target))}</Text>
         </View>
+
+        <ExactAlarmBanner />
 
         {ramadanInfo && fastingWin && (
           <View style={styles.ramadanCard}>

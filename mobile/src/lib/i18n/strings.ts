@@ -205,6 +205,9 @@ const ar = {
   exactAlarmBody:
     "أندرويد يؤخّر منبّهات هذا التطبيق. اسمح بـ«المنبّهات والتذكيرات» ليصدر الأذان في دقيقته.",
   exactAlarmGrant: "السماح بالمنبّهات الدقيقة",
+  exactAlarmLater: "لاحقًا",
+  exactAlarmBanner:
+    "قد يتأخر الأذان حتى ساعة. اضغط للسماح بالمنبّهات الدقيقة.",
   scheduledAlerts: "{count} تنبيهات مجدولة",
   scheduledNone: "لا تنبيهات مجدولة",
   scheduledShow: "عرض",
@@ -455,6 +458,9 @@ const de: Strings = {
   exactAlarmBody:
     "Android verzögert die Alarme dieser App. Erlaube „Wecker und Erinnerungen“, damit der Adhan auf die Minute kommt.",
   exactAlarmGrant: "Genaue Alarme erlauben",
+  exactAlarmLater: "Später",
+  exactAlarmBanner:
+    "Der Adhan kann bis zu eine Stunde zu spät kommen. Tippen, um genaue Alarme zu erlauben.",
   scheduledAlerts: "{count} Benachrichtigungen geplant",
   scheduledNone: "Nichts geplant",
   scheduledShow: "Anzeigen",
@@ -699,6 +705,9 @@ const tr: Strings = {
   exactAlarmBody:
     "Android bu uygulamanın alarmlarını geciktiriyor. Ezanın dakikasında çalması için “Alarmlar ve hatırlatıcılar” iznini ver.",
   exactAlarmGrant: "Tam alarmlara izin ver",
+  exactAlarmLater: "Daha sonra",
+  exactAlarmBanner:
+    "Ezan bir saate kadar gecikebilir. Tam alarmlara izin vermek için dokun.",
   scheduledAlerts: "{count} bildirim planlandı",
   scheduledNone: "Planlanmış bildirim yok",
   scheduledShow: "Göster",
@@ -943,6 +952,9 @@ const en: Strings = {
   exactAlarmBody:
     "Android is delaying this app's alarms. Allow “Alarms & reminders” so the adhan fires on the minute.",
   exactAlarmGrant: "Allow exact alarms",
+  exactAlarmLater: "Later",
+  exactAlarmBanner:
+    "The adhan may be up to an hour late. Tap to allow exact alarms.",
   scheduledAlerts: "{count} alerts scheduled",
   scheduledNone: "No alerts scheduled",
   scheduledShow: "Show",

@@ -317,7 +317,14 @@ mosque there" and "make the wall display universal":
       by default, so expo-notifications and the silence module both fall
       back to inexact alarms the OS may delay by minutes. Settings now shows
       a card with a button to the "Alarms & reminders" screen when it is
-      off (`PrayerSilence.canScheduleExactAlarms`). `USE_EXACT_ALARM` would
+      off (`PrayerSilence.canScheduleExactAlarms`). Android never asks for
+      this one itself, so the app does: an explain-then-open dialog the
+      moment notifications (or a dua reminder) are switched on, and a
+      tappable banner under the countdown on the clock screen for as long
+      as the adhan is on and the permission is not (`lib/exact-alarms.ts`,
+      `components/ExactAlarmBanner.tsx`). Verified on the device by
+      revoking with `appops set --uid … SCHEDULE_EXACT_ALARM ignore` —
+      without `--uid` the set is silently ignored. `USE_EXACT_ALARM` would
       make it automatic but Play reserves it for alarm/calendar apps —
       decide before store submission.
 - [x] **"Scheduled alerts" list in Settings** — the queue expo-notifications

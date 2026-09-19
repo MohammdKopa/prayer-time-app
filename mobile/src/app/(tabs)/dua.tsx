@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { askForExactAlarms } from "@/lib/exact-alarms";
 import { useI18n, type StringKey } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
 import { toArabicIndic } from "@/lib/time";
@@ -157,9 +158,12 @@ export default function DuaScreen() {
         return;
       }
       setDenied(false);
+      // A reminder at "30 minutes after Fajr" rides the same inexact alarms
+      // as the adhan unless this is granted.
+      askForExactAlarms(t);
       await apply(next);
     },
-    [apply],
+    [apply, t],
   );
 
   const toggle = useCallback(

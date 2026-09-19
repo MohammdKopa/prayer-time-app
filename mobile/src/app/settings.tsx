@@ -34,6 +34,7 @@ import {
   saveDisplaySettings,
   type DisplaySettings,
 } from "@/lib/display";
+import { askForExactAlarms } from "@/lib/exact-alarms";
 import { usePlaceContext } from "@/lib/place-context";
 import {
   cancelAll,
@@ -144,6 +145,8 @@ export default function SettingsScreen() {
       await setEnabled(true);
       setNotify(true);
       setExactAlarms(canScheduleExactAlarms());
+      // The second permission, the one Android never asks for itself.
+      askForExactAlarms(t);
       await reschedule(place, t);
     } else {
       await setEnabled(false);
