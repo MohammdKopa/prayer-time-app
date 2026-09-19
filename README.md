@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-2f6f4e"></a>
+  <a href="LICENSE"><img alt="License: PolyForm Noncommercial 1.0.0" src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-2f6f4e"></a>
   <img alt="Android · Expo" src="https://img.shields.io/badge/Android-Expo%20SDK%2057-2f6f4e">
   <img alt="Offline" src="https://img.shields.io/badge/works-offline-d9b871">
   <img alt="Languages" src="https://img.shields.io/badge/languages-ar%20·%20de%20·%20tr%20·%20en-d9b871">
@@ -183,8 +183,12 @@ Please keep the app's promises intact in any change: no network calls at runtime
 
 ## License
 
-Code is released under the [MIT License](LICENSE). Third-party data and media are listed in [NOTICE.md](NOTICE.md).
+Source code is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE).
 
-Bundled data and media keep their own licenses: mosque locations from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL) and [Overture Maps](https://overturemaps.org) (CDLA-Permissive 2.0); photographs and adhan recordings are credited in `mobile/assets/photos/CREDITS.md` and `mobile/assets/sounds/LICENSES.md`.
+In plain words: you may use, copy, modify, share and build on this code **for any noncommercial purpose**, free of charge. That covers personal use, mosques, charities and other nonprofits, schools and research. **Commercial use is not permitted** without a separate agreement: do not sell it, ship it in a paid or ad-supported product, or offer it as a paid service. For a commercial license, contact mohamedkeba@kametrix.com.
+
+Required Notice: Copyright Mohamed Keba (Kametrix), https://github.com/MohammdKopa/prayer-time-app
+
+Third-party data and media are listed in [NOTICE.md](NOTICE.md) and keep their own licenses.
 
 Built by Mohamed Keba under the name Kametrix. The web version runs at [prayer.kametrix.com](https://prayer.kametrix.com).
