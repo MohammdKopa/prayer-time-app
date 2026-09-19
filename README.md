@@ -183,7 +183,7 @@ Please keep the app's promises intact in any change: no network calls at runtime
 
 ## License
 
-Code is released under the [MIT License](LICENSE).
+Code is released under the [MIT License](LICENSE). Third-party data and media are listed in [NOTICE.md](NOTICE.md).
 
 Bundled data and media keep their own licenses: mosque locations from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL) and [Overture Maps](https://overturemaps.org) (CDLA-Permissive 2.0); photographs and adhan recordings are credited in `mobile/assets/photos/CREDITS.md` and `mobile/assets/sounds/LICENSES.md`.
 

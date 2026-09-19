@@ -19,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-This license covers the source code. Bundled data and media carry their own
-licenses and attribution requirements, which remain in force:
-
-- Mosque locations: OpenStreetMap contributors (ODbL) and Overture Maps
-  (CDLA-Permissive 2.0). See mobile/src/lib/mosques/index.ts.
-- Photographs shown on the mosque display: see mobile/assets/photos/CREDITS.md.
-- Adhan recordings: see mobile/assets/sounds/LICENSES.md.
