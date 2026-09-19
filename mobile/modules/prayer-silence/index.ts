@@ -18,6 +18,8 @@ function loadNativeModule(): PrayerSilenceModuleType {
     return {
       hasPolicyAccess: () => false,
       openPolicyAccessSettings: () => {},
+      canScheduleExactAlarms: () => true,
+      openExactAlarmSettings: () => {},
       scheduleSilence: () => {},
       cancelSilence: () => {},
     };

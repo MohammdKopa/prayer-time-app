@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -32,6 +32,10 @@ const NAME_KEY: Record<PrayerName, keyof Strings> = {
 
 /** Sunrise is shown but is never "the next prayer". */
 const PRAYERS = PRAYER_ORDER.filter((p) => p !== "sunrise");
+
+/** Long enough for the first frame and a GPS fix, short enough that an app
+ *  opened for a glance still gets its horizon pushed out. */
+const RESCHEDULE_DELAY_MS = 1500;
 
 export default function ClockScreen() {
   const { t, locale } = useI18n();
@@ -86,12 +90,18 @@ export default function ClockScreen() {
   const hasTarget = isValidTime(target);
   const countdown = countdownTo(target, now);
 
+  // Reschedule the adhan when anything it depends on changes — but not in
+  // the same tick. On a cold open the saved place renders first and the GPS
+  // fix lands a second or two later; both used to kick off a reschedule at
+  // once, on top of the first frame. A short delay lets the frame paint and
+  // folds the two into one run (a jittered fix that rounds to the same
+  // kilometre is then a no-op inside reschedule itself).
+  // `place` and `t` only change when the key does (coordinates, locale), so
+  // listing them adds no runs — it just keeps the closure honest.
   const scheduleKey = `${place.latitude},${place.longitude},${locale},${dayKey},${prefsKey}`;
-  const lastScheduled = useRef<string | null>(null);
   useEffect(() => {
-    if (lastScheduled.current === scheduleKey) return;
-    lastScheduled.current = scheduleKey;
-    void reschedule(place, t);
+    const id = setTimeout(() => void reschedule(place, t), RESCHEDULE_DELAY_MS);
+    return () => clearTimeout(id);
   }, [scheduleKey, place, t]);
 
   // The sky moves over minutes, not seconds. Rebuilding a full-screen

@@ -15,7 +15,7 @@ serving the mosque plasma display; this is a second front-end over the same engi
 | **Scope** | Germany-wide, Arabic-first |
 | **Languages** | Arabic (primary), German, Turkish, English |
 | **Money** | Free. No ads, no tracking, no analytics, no accounts. Data Safety = "no data collected" |
-| **Play account** | Created 2026-09-17, identity verification pending |
+| **Play account** | Created 2026-09-17. **Approved 2026-09-18** — identity verified, publishing unlocked |
 
 ### Founding principles (from 2026-05-27, still binding)
 
@@ -143,9 +143,14 @@ JS and runs in RN. The imam's `SeventhOfTheNight` ruling travels with it.
 - **GPS becomes the primary input** (`expo-location`). The 39 hand-picked NRW
   cities in `cities.ts` don't stretch to 80+ German cities over 100k. The city
   picker is demoted to manual override + offline fallback.
-- **Mosques**: widen the Overpass bbox in `scripts/fetch-mosques.mjs` from NRW to
-  Germany. ~318 → ~2,500–3,000. The curated Marl layer (IGMG Kuba,
-  عباد الرحمن, الخضر) sits on top untouched — that is what it was built for.
+- **Mosques**: three bundled layers, no network. OpenStreetMap Germany-wide
+  (1,587 — that is OSM's real coverage, not the 2,500–3,000 hoped for) +
+  Overture Maps places (449 more, mostly Facebook-page mosques OSM never got)
+  + the curated layer in `shared/mosques-curated.ts`, now shared with the
+  website. ≈2,040 total. See "Done 2026-09-19" for what was tried and rejected.
+- **Cities**: `mobile/src/lib/cities/germany.json` — every German city/town of
+  10,000+ from OSM (1,130), merged under the curated NRW list. The picker
+  shows the biggest 40 until you type.
 
 ---
 
@@ -167,7 +172,7 @@ the calendar doesn't punish the polish.
 
 ---
 
-## Sprint to v1.0 — updated 2026-09-17, 23:30
+## Sprint to v1.0 — updated 2026-09-19, 04:40
 
 Goal: an app worth putting in front of 12 testers. Ordered so that stopping
 after ANY phase still leaves something shippable — the closed-test clock
@@ -250,6 +255,128 @@ Also closed, found by the new tests: `planAlerts` let a reminder for an
 uncomputable (Invalid Date) prayer through, which would have thrown inside
 `scheduleNotificationAsync` above 66°N.
 
+### Done 2026-09-19 (with the tail of 09-18)
+
+Play Console approved 2026-09-18. Then a long session on "why isn't my
+mosque there" and "make the wall display universal":
+
+- [x] **Mosque locator, fixed.** The mobile locator read raw OSM and so
+      missed Ibad Al-Rahman, IGMG Kuba and El Khodr in Marl, showed "DITB",
+      and listed the Alevi centre. The website's OVERRIDES/CURATED layer
+      moved to `shared/mosques-curated.ts` (now with coordinates) and both
+      apps consume it. Tests in `tests/mosques.test.ts`.
+- [x] **Overture Maps layer** — `scripts/fetch-mosques-overture.py`
+      (Python + DuckDB, ~20 min against the public bucket, `--save-raw` /
+      `--from-raw` to re-shape instantly). Category `mosque`, Germany,
+      confidence ≥ 0.5, deduped against OSM at 150 m and against itself at
+      40 m → 449 new mosques, 80 KB. CDLA-Permissive 2.0: made to be bundled.
+- [x] **Germany-wide city picker** — `scripts/fetch-cities-germany.mjs`.
+      Someone in Berlin who denies GPS is no longer stuck on Marl. A
+      same-name town far away (Münster/Westfalen vs Munster/Lower Saxony) is
+      a different place and stays; four such pairs remain without a state
+      label.
+- [x] **Real adhan, two voices** — `mobile/assets/sounds/` (CC0 "Beautiful
+      adhan" and a 32 s cut of it), normalised to −16 LUFS. One Android
+      channel per voice plus beep and silent (`lib/adhan-voice.ts`); retired
+      channels (the old single "adhan", the 1885 voice's) are deleted at
+      channel setup. Settings has the picker and a "Play sample" that
+      fires a real notification — through a channel-only trigger, so it is
+      immediate; the earlier 1 s alarm trigger landed ~2 s late on Android
+      14+ without the exact-alarm permission. The 1885 Makkah wax cylinder
+      was dropped on 2026-09-19 (a curiosity, not a wake-up call).
+      Licences and rejects in `assets/sounds/LICENSES.md` — the Sabah
+      Fakhri file on Commons is tagged PD but is a 1985 YouTube rip; not used.
+- [x] **Cold start** (2026-09-19, reported 6–7 s; **measured 18–20 s** on
+      the Redmi Note 13 Pro, splash to first frame, three runs). Root cause,
+      from `top -H`: the JS thread and ART's HeapTaskDaemon both pegged for
+      18 s before the first render. `lib/cities/index.ts` merged 1,130
+      towns against the 39 curated ones with
+      `localeCompare(…, "de", { sensitivity: "base" })` at module load —
+      ~44,000 calls, each a JNI trip into Java's Collator on Hermes. Now
+      `foldCityName()` once per name, distance checked first. Three further
+      things trimmed on the way: (1) `reschedule()` ran on every open —
+      twice, saved place then GPS fix — and each run is ~100 cancels + ~35
+      schedules, every one a broadcast into expo-notifications that rewrites
+      SharedPreferences. Now fingerprinted (`lib/adhan-schedule.ts`), **in
+      memory only**: within one process, same place/prefs/voice/language/day
+      and the store still full ⇒ one listing and done; every cold start
+      rebuilds. A persisted fingerprint was tried and caught on the device:
+      `am force-stop` (and Xiaomi's battery killer) wipes the app's alarms
+      but not expo-notifications' store, so "33 scheduled" was true and
+      AlarmManager held zero. Runs are serialised and the home screen delays
+      the first by 1.5 s so the frame paints. (2) Fonts: the five faces are
+      compiled in by the `expo-font` config plugin, so `useFonts` no longer
+      gates the splash on Android. (3) R8 minify via `expo-build-properties`
+      — the release APK carried 47 MB of dex across five files; now 17 MB in
+      three. **Resource shrinking stays OFF**: it deleted both adhan `.ogg`
+      files, because expo-notifications resolves the sound by name at
+      runtime and nothing references `R.raw.*` statically. Needs
+      `npx expo prebuild --clean`. Measure with
+      `adb shell am start -W app.kametrix.prayer/.MainActivity`.
+- [x] **Exact alarms** — from Android 14 `SCHEDULE_EXACT_ALARM` is denied
+      by default, so expo-notifications and the silence module both fall
+      back to inexact alarms the OS may delay by minutes. Settings now shows
+      a card with a button to the "Alarms & reminders" screen when it is
+      off (`PrayerSilence.canScheduleExactAlarms`). `USE_EXACT_ALARM` would
+      make it automatic but Play reserves it for alarm/calendar apps —
+      decide before store submission.
+- [x] **"Scheduled alerts" list in Settings** — the queue expo-notifications
+      actually holds, soonest first. A second ring with one entry per time
+      here is not this app's alarm: check the website's push subscription
+      (`public/sw.js` posts "أذان" for the Marl mosque) or a second
+      install.
+- [x] **Universal mosque display** — the website's illuminated-muṣḥaf wall
+      ported to the phone: `mobile/src/app/display.tsx` +
+      `components/display/`. Landscape, keep-awake, status AND navigation
+      bar hidden, nebula/vignette/star lattice/frame/corners/gold dust,
+      live clock + next prayer, wall sun arc with crescent, six glass cards,
+      rotating āyah/ḥadīth/dhikr with the right marks, night-dim, two-minute
+      prayer-now takeover, anti-burn-in drift, and the three photos with
+      their duʿāʾ every five minutes (1920 px copies in `assets/photos/`).
+      **First open asks for the mosque name and the Jumuʿa time** — it
+      differs per mosque — and stores both on the device only. Fridays:
+      Dhuhr becomes Jumuʿa with a gold ring and "window opens HH:MM".
+      Tap → Settings / Exit; D-pad OK and Back handled for a TV remote.
+      Amiri font added for the āyāt.
+- [x] **Credits screen** (More → المصادر والحقوق): OpenStreetMap ODbL
+      attribution (required), Overture, adhan recordings with Commons links,
+      adhan-js, Google Fonts OFL, and the three photos.
+- [x] **Double-city notification bug** — after moving from Marl to another
+      city the phone rang for both, each at its own local time — and, back
+      in Marl, every prayer rang twice. **Root cause found on the device
+      2026-09-19** (`dumpsys activity intents`): 23 scheduled notifications
+      with UUID identifiers sitting next to ours, same times, through 09-23.
+      Builds up to 49c6698 scheduled with no identifier (expo-notifications
+      mints a UUID) and cleared with `cancelAllScheduledNotificationsAsync`;
+      c7c1d4a switched to prefix-only cancel to spare the dua reminders, so
+      the last UUID set the old build made was never cancelled again.
+      `cancelOwn` now also cancels any UUID-shaped identifier
+      (`isOrphanIdentifier`). Not the website's push: no browser on the
+      phone has a site channel for prayer.kametrix.com.
+- [x] Tests 117, mobile + web `tsc` clean. Local debug-signed APKs in
+      `mobile/build-out/` (gitignored); latest `prayer-20260919-1558.apk` (R8, two sounds, embedded fonts; 104 MB universal, 17 MB dex vs 47).
+
+**Tried and removed — do not re-add without permission.**
+- *Mawaqit runtime lookup* (would have broken the "no network" policy and
+  Data Safety) and *Mawaqit build-time sweep* (890 mosques, 425 new). Their
+  help centre: "Our API is currently private and not publicly available";
+  a full extraction of their German entries is a substantial extraction
+  under the EU/German database right (§87a UrhG). Stripped 2026-09-19. The
+  three curated Marl pins are single facts and stay. **Ask
+  support@mawaqit.net** — same community, non-profit; if they say yes the
+  script is in git history.
+- *Google Places one-time pull* — never attempted: Maps Platform terms
+  forbid bulk export and any cache beyond 30 days. Live-only, which the
+  privacy policy rules out.
+
+**Found, not decided — needs the sheikh.** Ibad Al-Rahman publishes its
+own times on Mawaqit. Fitting its full-year calendar: Fajr 14.5°, Isha 14°,
+plain twilight angles, no high-latitude clamp, Maghrib +3 min (mean error
+0.16 min). That is **not** the fixed 90-minute rule the engine implements:
+mid-June the mosque says Fajr 03:26 / Isha 23:34, the app 03:43 / 23:21.
+Today they agree within two minutes. Whichever the adhan actually follows
+is one sentence from Sheikh Ayman; the engine change is small either way.
+
 ### Still to do, in order
 
 **A — content review. BLOCKS RELEASE.**
@@ -268,10 +395,25 @@ page exists; the URL does not until the VPS pulls.
 **D — production AAB via EAS → closed track.** The only item with a date
 attached. Starts the 14-day clock.
 
-**On-device checks for the two Kotlin modules** (compiled clean, not yet
-exercised on a phone): place the widget and watch it tick; grant DND access
-and confirm the phone goes quiet at the next adhan and comes back after the
-chosen minutes; reboot and confirm both survive.
+**E — commit today's work in three chunks** once the phone test is clean:
+mosque layers + cities; adhan voices; mosque display + credits + notification
+fix. Nothing from 09-18/19 is committed yet.
+
+**F — confirm the photo rights.** `assets/photos/CREDITS.md` still says
+"provided by Mohamed — confirm before publishing" for all three. Play does not
+ask, but it acts on complaints. Yours to confirm.
+
+**On-device checks** (compiled clean, not yet exercised on a phone):
+- Widget: place it and watch it tick; DND: grant access, confirm quiet at the
+  next adhan and back after the chosen minutes; reboot, confirm both survive.
+- Adhan voices: Play sample × 3. Decide whether the CC0 recording is good
+  enough; the fallback is "Azan.ogg" on Commons (CC BY-SA, needs a credit).
+- Display: landscape lock and back to portrait on exit; no bars; setup card
+  once; photo fades in within five minutes; Amiri renders the āyāt; the
+  crescent mask draws; Back closes setup → menu → exits.
+- Move cities (or pick Berlin manually) and confirm only one set of adhans.
+- Mosques: Ibad Al-Rahman and El Khodr near the top, once each; "DITIB Yunus
+  Emre" not "DITB"; the IGMG once.
 
 ### Carried over, not forgotten
 
@@ -281,6 +423,17 @@ chosen minutes; reboot and confirm both survive.
   Hijri; the mobile app avoids it entirely. The **website** still uses it.
 - The web app and plasma display do not show the "mosque timing" note.
   Declined 2026-09-17 — not an oversight.
+- `npm run validate` is red on Asr: Aladhan is 3 min later than the engine
+  for Marl. An independent NOAA computation lands within a minute of the
+  engine, so the engine is right and the 120 s tolerance is what to loosen
+  (Asr only). Pre-dates 2026-09-18.
+- Android TV proper (leanback launcher, banner, react-native-tvos) is not
+  done. Sideloading on a TV box works; remote OK/Back are handled.
+- Expo typed routes only regenerate via `expo start` — after adding a route,
+  start it briefly on a spare port and kill it, or `tsc` will not know the href.
+- Writing JS regex source through a Python/bash heredoc turned a word
+  boundary escape into a literal backspace once. Patch files with the editor
+  tools, not heredocs.
 - `expo prebuild` overwrites the launcher icons. Sources in
   `mobile/assets/images/` are correct, so a successful prebuild regenerates the
   same thing. Prebuild deletes all of `android/` and fails with `EBUSY` if any
@@ -317,29 +470,35 @@ chosen minutes; reboot and confirm both survive.
 - [ ] Native module — the most technically involved item in this roadmap
 
 ### P4 — Personalisation & trust
-- [ ] **Per-prayer manual offsets (±min)** to match the local masjid's iqama.
+- [x] **Per-prayer manual offsets (±min)** to match the local masjid's iqama.
       Saved per city. The feature that makes people switch.
 - [ ] Calculation method override, madhab for Asr
 - [ ] High-latitude rule (default stays the imam's seventh-of-the-night)
-- [ ] Auto-silence during prayer (DND) — needs a special Android permission,
+- [x] Auto-silence during prayer (DND) — needs a special Android permission,
       a clear explanation screen, and an honest Data Safety entry
-- [ ] Theme + language settings
+- [x] Language settings (theme: not planned — one dark palette is the design)
+- [x] Adhan voice picker (three recordings, per-voice channels)
 
 ### P5 — Depth
 - [ ] **Monthly timetable** — scrollable month, share/export as image (people
       screenshot these and send them to family)
-- [ ] **Qibla compass** — magnetometer + calibration UI
-- [ ] **Mosque locator** — Germany-wide, distance-sorted, opens in Maps
-- [ ] **Ramadan mode** — imsak/iftar countdown, auto-activates by Hijri date
-- [ ] **Tasbih counter** — offline, haptic, dead simple
-- [ ] **Adhkar** — morning/evening remembrances with counter
-- [ ] **Islamic calendar** — Ramadan, Eid, Ashura, etc.
+- [x] **Qibla compass** — magnetometer + calibration UI
+- [x] **Mosque locator** — Germany-wide, distance-sorted, opens in Maps
+      (OSM + Overture + curated, ≈2,040)
+- [x] **Ramadan mode** — imsak/iftar countdown, auto-activates by Hijri date
+- [x] **Tasbih counter** — offline, haptic, dead simple
+- [x] **Adhkar** — morning/evening remembrances with counter (content review pending — item A)
+- [x] **Islamic calendar** — Ramadan, Eid, Ashura, etc.
+- [x] **Mosque display** — the wall, on any phone or tablet; per-mosque name
+      and Jumuʿa time set on first open
 - [ ] **Prayer log** — opt-in, gentle, never guilt-inducing. Off by default.
 
 ### P6 — Store
 - [ ] Listing in 4 languages, feature graphic, screenshots
-- [ ] Privacy policy URL (hosted on kametrix.com)
+- [ ] Privacy policy URL (hosted on kametrix.com) — page built, VPS not pulled (item C)
 - [ ] Data Safety: no data collected. Content rating questionnaire.
+      Still true: every data layer is bundled at build time, no runtime fetch.
+- [x] Sources & credits screen in-app (ODbL attribution is a licence requirement)
 - [ ] Closed track live → 12 testers → 14 days
 
 ---
@@ -406,6 +565,17 @@ phone disagree with the website.
 
 - [ ] **Upload keystore into the password manager.** It becomes irreplaceable
       the moment the app is live on Play.
-- [ ] App display name per language — "Prayer Times" is a placeholder.
+- [ ] **Ask Sheikh Ayman which times the adhan follows** — the fixed 90-minute
+      rule, or the 14.5°/14° calendar the mosque publishes on Mawaqit. See
+      "Found, not decided" above. Up to 33 min apart in June.
+- [ ] **Email support@mawaqit.net** for permission to list their German
+      mosques (with attribution and a link per mosque). Script in git history.
+- [ ] **Add the missing mosques to OpenStreetMap** — Ibad Al-Rahman, IGMG
+      Kuba, El Khodr for a start. The next `npm run mosques:germany` picks
+      them up, the curated layer shrinks, and every other app benefits.
+- [ ] "Mosque missing?" report link in the locator → curated file. Skipped
+      2026-09-18; still the cheapest coverage multiplier.
+- [ ] Loosen the validate gate's Asr tolerance (engine is right, Aladhan is +3 min).
+- [x] App display name per language — done 2026-09-18 via `expo.locales`.
 - [ ] Check the chosen store name isn't taken (Mawaqit, Muslim Pro, Athan are
       all existing apps — avoid).

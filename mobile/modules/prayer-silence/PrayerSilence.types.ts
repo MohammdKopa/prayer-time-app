@@ -17,6 +17,16 @@ export interface PrayerSilenceModuleType {
    *  there is nothing to grant. */
   openPolicyAccessSettings(): void;
   /**
+   * Whether Android will honour exact alarm times for this app. From
+   * Android 14 this is off by default; without it both the adhan and the
+   * silence windows are "inexact" and may land minutes late. Always true
+   * below Android 12 and on iOS/web, where there is no such switch.
+   */
+  canScheduleExactAlarms(): boolean;
+  /** Opens the "Alarms & reminders" system screen for this app. No-op where
+   *  there is nothing to grant. */
+  openExactAlarmSettings(): void;
+  /**
    * Replaces every previously scheduled window with this list. Windows in
    * the past are the caller's responsibility to filter out; the native side
    * schedules exactly what it is given (subject to having policy access).

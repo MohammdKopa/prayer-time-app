@@ -1,6 +1,7 @@
 import * as Location from "expo-location";
 
-import { NRW_CITIES, type City } from "@shared/cities";
+import type { City } from "@shared/cities";
+import { CITIES, nearestCity } from "@/lib/cities";
 import { loadJSON, saveJSON, loadSetting, saveSetting } from "@/lib/storage";
 
 // Where the times are computed for.
@@ -30,7 +31,8 @@ export const DEFAULT_PLACE: Place = {
   source: "city",
 };
 
-export const CITIES: City[] = NRW_CITIES;
+/** Re-exported so callers keep importing the picker list from here. */
+export { CITIES, nearestCity };
 
 export type LocationMode = "gps" | "manual";
 
@@ -116,34 +118,6 @@ async function describe(lat: number, lng: number): Promise<string> {
   }
 
   return `${lat.toFixed(2)}, ${lng.toFixed(2)}`;
-}
-
-export function nearestCity(
-  lat: number,
-  lng: number,
-): { city: City; km: number } | null {
-  let best: { city: City; km: number } | null = null;
-  for (const city of CITIES) {
-    const km = haversineKm(lat, lng, city.latitude, city.longitude);
-    if (!best || km < best.km) best = { city, km };
-  }
-  return best;
-}
-
-function haversineKm(
-  aLat: number,
-  aLng: number,
-  bLat: number,
-  bLng: number,
-): number {
-  const R = 6371;
-  const rad = (x: number) => (x * Math.PI) / 180;
-  const dLat = rad(bLat - aLat);
-  const dLng = rad(bLng - aLng);
-  const s =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(s));
 }
 
 export function placeFromCity(city: City): Place {

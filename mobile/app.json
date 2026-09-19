@@ -72,7 +72,11 @@
       [
         "expo-notifications",
         {
-          "color": "#D9B871"
+          "color": "#D9B871",
+          "sounds": [
+            "./assets/sounds/adhan_full.ogg",
+            "./assets/sounds/adhan_short.ogg"
+          ]
         }
       ],
       [
@@ -83,8 +87,29 @@
           "imageWidth": 76
         }
       ],
-      "expo-font",
-      "expo-sharing"
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./node_modules/@expo-google-fonts/reem-kufi/400Regular/ReemKufi_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/reem-kufi/600SemiBold/ReemKufi_600SemiBold.ttf",
+            "./node_modules/@expo-google-fonts/noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/noto-naskh-arabic/500Medium/NotoNaskhArabic_500Medium.ttf",
+            "./node_modules/@expo-google-fonts/amiri/400Regular/Amiri_400Regular.ttf"
+          ]
+        }
+      ],
+      "expo-sharing",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": false,
+            "extraProguardRules": "-keep class expo.modules.prayersilence.** { *; }\n-keep class expo.modules.prayerwidget.** { *; }"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

@@ -26,6 +26,8 @@ export const FONTS = {
   displayRegular: "ReemKufi_400Regular",
   body: "NotoNaskhArabic_400Regular",
   bodyMedium: "NotoNaskhArabic_500Medium",
+  /** Amiri — the muṣḥaf face. Only for āyāt and adhkār on the mosque display. */
+  quran: "Amiri_400Regular",
 } as const;
 
 /**

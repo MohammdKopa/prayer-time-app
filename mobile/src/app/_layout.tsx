@@ -1,3 +1,4 @@
+import { Amiri_400Regular } from "@expo-google-fonts/amiri";
 import {
   NotoNaskhArabic_400Regular,
   NotoNaskhArabic_500Medium,
@@ -6,11 +7,12 @@ import {
   ReemKufi_400Regular,
   ReemKufi_600SemiBold,
 } from "@expo-google-fonts/reem-kufi";
-import { useFonts } from "expo-font";
+import { useFonts, type FontSource } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
+import { Platform } from "react-native";
 
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import { PlaceProvider } from "@/lib/place-context";
@@ -18,14 +20,24 @@ import { COLORS } from "@/theme";
 
 SplashScreen.preventAutoHideAsync();
 
+// On Android the five faces are compiled into the APK by the expo-font config
+// plugin (see app.json) under these same family names, so they are usable
+// before any JS runs and the splash never waits on them. iOS has no such
+// entry yet and still loads them here; an empty map resolves at once.
+const RUNTIME_FONTS: Record<string, FontSource> =
+  Platform.OS === "android"
+    ? {}
+    : {
+        ReemKufi_400Regular,
+        ReemKufi_600SemiBold,
+        NotoNaskhArabic_400Regular,
+        NotoNaskhArabic_500Medium,
+        Amiri_400Regular,
+      };
+
 function Navigator() {
   const { ready } = useI18n();
-  const [fontsLoaded, fontError] = useFonts({
-    ReemKufi_400Regular,
-    ReemKufi_600SemiBold,
-    NotoNaskhArabic_400Regular,
-    NotoNaskhArabic_500Medium,
-  });
+  const [fontsLoaded, fontError] = useFonts(RUNTIME_FONTS);
 
   // A font failure must not leave the user staring at a splash screen forever.
   // Falling back to the system face is ugly; showing nothing is broken.

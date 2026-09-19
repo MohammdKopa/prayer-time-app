@@ -12,7 +12,7 @@
 // │ generated file:                                                        │
 // │   • OVERRIDES — patch/rename/hide a specific OSM entry by its id        │
 // │   • CURATED   — add mosques OSM is missing                             │
-// │ Both are where the imam's announcements (`info`) and `verified` live.  │
+// │ Both live in shared/mosques-curated.ts, shared with the mobile app.    │
 // └────────────────────────────────────────────────────────────────────────┘
 //
 // We deliberately do NOT store prayer/jamāʿa or Jumuʿa times here: the app
@@ -23,6 +23,7 @@
 // "قيد المراجعة" until then.
 
 import osmData from "./mosques.osm.json";
+import { CURATED_MOSQUES, OSM_OVERRIDES } from "./mosques-curated";
 
 export interface Mosque {
   id: string;
@@ -46,60 +47,30 @@ export interface Mosque {
   hidden?: boolean;
 }
 
-// ── OVERRIDES — patch a specific OSM entry by its generated id ──────────
-// Find ids by name in src/data/mosques.osm.json after a regenerate.
-const OVERRIDES: Record<string, Partial<Mosque>> = {
-  // Marl — clean up what OSM has
-  "osm-way-336507003": { hidden: true }, // Alevi-Bektaşi: theologically distinct, imam's call
-  "osm-way-250110022": {
-    name: "DITIB Yunus Emre Camii (Brassert)",
-    nameAr: "جامع يونس إمره – ديتيب (براسرت)",
-  },
-  "osm-way-300417075": {
-    name: "DITIB Fatih Camii (Marl-Hamm)",
-    nameAr: "جامع الفاتح – ديتيب (مارل-هام)",
-    phone: "+49 2365 23150",
-  },
-  "osm-way-303382998": {
-    name: "Süleymaniye Camii (VIKZ)",
-    nameAr: "جامع السليمانية – VIKZ",
-  },
-};
-
-// ── CURATED — mosques OSM is missing (verified by hand / pending imam) ──
-const CURATED: Mosque[] = [
-  // Marl — OSM has neither of these three
-  {
-    id: "marl-igmg-kuba",
-    cityId: "marl",
-    name: "IGMG Kuba Camii (Hüls)",
-    nameAr: "جامع قُباء – IGMG (هولس)",
-    address: "Sickingstr. 40, 45772 Marl",
-  },
-  {
-    id: "marl-ibad-al-rahman",
-    cityId: "marl",
-    name: "Ibad Al-Rahman Moschee (arabisch)",
-    nameAr: "مسجد عباد الرحمن (عربي)",
-    address: "Heyerhoffstr. 152A, 45770 Marl",
-  },
-  {
-    // Mohamed's local mosque — official name مسجد الخضر / "El Khodr Moschee".
-    // Exact pin from the Google Maps link he shared.
-    id: "marl-el-khodr",
-    cityId: "marl",
-    name: "El Khodr Moschee (Drewer)",
-    nameAr: "مسجد الخضر",
-    address: "Bergstr. 156, 45770 Marl",
-    latitude: 51.6609159,
-    longitude: 7.1126207,
-  },
-];
+// ── OVERRIDES + CURATED live in shared/mosques-curated.ts ───────────────
+// The same layer feeds the mobile app's Germany-wide locator, so a rename,
+// a hide, or a mosque OSM is missing is fixed once for both. Here we only
+// project the curated shape onto the website's Mosque (street + postcode +
+// city → address, lat/lng → latitude/longitude).
+const CURATED: Mosque[] = CURATED_MOSQUES.map((c) => ({
+  id: c.id,
+  cityId: c.cityId,
+  name: c.name,
+  nameAr: c.nameAr,
+  address: [c.street, [c.postcode, c.city].filter(Boolean).join(" ")]
+    .filter(Boolean)
+    .join(", "),
+  phone: c.phone,
+  latitude: c.lat,
+  longitude: c.lng,
+  info: c.info,
+  verified: c.verified,
+}));
 
 // ── Merge: OSM (patched, minus hidden) + curated ───────────────────────
 export const MOSQUES: Mosque[] = [
   ...(osmData as unknown as Mosque[])
-    .map((m) => ({ ...m, ...OVERRIDES[m.id] }))
+    .map((m) => ({ ...m, ...OSM_OVERRIDES[m.id] }))
     .filter((m) => !m.hidden),
   ...CURATED,
 ];

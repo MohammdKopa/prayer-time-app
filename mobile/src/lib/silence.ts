@@ -68,6 +68,20 @@ export function openPolicyAccessSettings(): void {
 }
 
 /**
+ * Whether Android will fire this app's alarms on the minute. Off by default
+ * from Android 14: the adhan and the silence windows then ride "inexact"
+ * alarms the OS is free to delay by minutes. Always true off Android.
+ */
+export function canScheduleExactAlarms(): boolean {
+  return PrayerSilence.canScheduleExactAlarms();
+}
+
+/** Opens the "Alarms & reminders" system screen for this app. */
+export function openExactAlarmSettings(): void {
+  PrayerSilence.openExactAlarmSettings();
+}
+
+/**
  * Replace every scheduled silence window with a fresh set for the next
  * HORIZON_DAYS, or cancel outright when the feature is off or access has
  * not been granted. Meant to be called from notifications.ts's reschedule()
