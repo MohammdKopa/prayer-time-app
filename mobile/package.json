@@ -1,6 +1,7 @@
 {
   "name": "mobile",
   "main": "expo-router/entry",
+  "license": "MIT",
   "version": "1.0.0",
   "dependencies": {
     "@expo-google-fonts/amiri": "^0.4.1",

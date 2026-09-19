@@ -56,3 +56,7 @@ Thumbs.db
 /preview-*.png
 
 certificates
+# store screenshot working files (only docs/shots/store is committed)
+/docs/shots/raw/
+/docs/shots/clean/
+/docs/shots/*.png
