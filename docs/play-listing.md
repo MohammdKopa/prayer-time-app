@@ -615,6 +615,28 @@ The icon is `mobile/assets/images/icon.png` (1024 × 1024, the sun arc) resized 
 the 512 Play wants. Regenerate it with sharp if the app icon ever changes; do not
 hand Play the 1024 and let it resize.
 
+## AI asset declaration
+
+Console asks whether the uploaded graphics were created or edited with AI.
+**Answer: label them.** Three of the mosque photos on the display screenshot
+went through a Real-ESRGAN 4× upscale, which is an AI edit of an image:
+
+| Asset | Photo | Declare |
+|---|---|---|
+| `ar/06_Display.png` | al-Masjid al-Haram, Makkah — AI-upscaled | **yes** |
+| `de/de-DE_06_Display.png` | Umayyad Mosque, Damascus — AI-upscaled | **yes** |
+| `tr/tr_06_Display.png` | Umayyad Mosque, Damascus — AI-upscaled | **yes** |
+| `en/en-US_06_Display.png` | Dome of the Rock, Jerusalem — untouched | no |
+
+Everything else — the icon, the feature graphics, the other seven screens per
+language — is the app's own rendered interface and real photography, composited
+by a script. No image model drew any of it. Source of truth for what was done to
+each photo is `mobile/assets/photos/CREDITS.md`; update this table if the photo
+set changes.
+
+Note that the same three photos ship **inside** the app, on the mosque display.
+The in-app AI declaration, if Console asks for one, follows the same facts.
+
 ## Screenshots
 
 The finished sets are in `docs/shots/store/<lang>/` — 8 phone screens plus the
