@@ -49,9 +49,9 @@ Alternates if the primary title is taken or feels too generic, all within 30 cha
 
 ---
 
-## Timing-rule wording — one thing to confirm before publishing
+## Timing-rule wording — settled 2026-09-20
 
-The copy describes the fixed 90-minute Fajr and Isha rule accurately, but it does **not** name Sheikh Ayman or the Marl mosque. Naming a living scholar or a named mosque in a public store listing implies their endorsement of the app, and that is his to give, not ours to assume. If he agrees, add a line such as "وفق ما اعتمده الشيخ أيمن (مارل)" to the Arabic description and the equivalent elsewhere — it would make the trust argument much stronger. Until then the rule is described on its own merits.
+The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it does **not** name Sheikh Ayman or the Marl mosque. Naming a living scholar in a public store listing implies their endorsement of the app, and that is his to give, not ours to assume. He approved the app on 2026-09-20 and Mohamed's decision is to keep his name out of the listing regardless. The rule stands on its own merits. Do not add a name here in a later release without asking him first.
 
 ---
 
@@ -502,19 +502,12 @@ Content ratings must be kept accurate. If a later release adds anything interact
 
 Added 2026-09-20, the day Sheikh Ayman approved the app.
 
-## Before anything else — two open decisions
+## Before anything else
 
-**1. May we name him?** He approved the app. That is not the same as agreeing to
-appear in a public store listing, where his name reads as an endorsement to every
-stranger who scrolls past. Ask him plainly. If he says yes, add the line to the
-Arabic description and its equivalents:
-
-```
-وفق ما اعتمده الشيخ أيمن (مارل)
-```
-
-If he says no, or if the answer is unclear, publish as is. The 90-minute rule is
-already described on its own merits and needs no name to stand up.
+**1. Naming the sheikh — decided: no.** He approved the app; his name stays out
+of the listing. Approving something is not the same as endorsing it to every
+stranger who scrolls past, and the 90-minute rule is described on its own merits
+throughout. Do not add it later without asking him first.
 
 **2. Which track?** The 12-testers-for-14-days rule applies to *personal*
 developer accounts. This is an **organization account**, so production is open
