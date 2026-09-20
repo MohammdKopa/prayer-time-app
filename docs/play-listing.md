@@ -38,14 +38,20 @@ The roadmap flags that Mawaqit, Muslim Pro and Athan are existing apps to avoid.
 
 Note that Play's metadata policy **bans "No Ads" in the app title and the developer name**. It is our strongest selling point and it has to live in the descriptions instead — which is where it is, in all four languages.
 
+**Updated 2026-09-20, at submission.** The country was dropped from all four
+titles. The app went out worldwide, and a title ending in Germany reads as "not
+for me" to everyone outside it while the descriptions already explain the German
+focus. A happy side effect: the store title now matches the launcher name in
+`mobile/locales/` exactly, in every language.
+
 Alternates if the primary title is taken or feels too generic, all within 30 characters:
 
 | Language | Primary | Alternate A | Alternate B |
 |---|---|---|---|
-| ar | مواقيت الصلاة — ألمانيا | مواقيت الصلاة \| كامتريكس | مواقيت الصلاة بدون إنترنت |
-| de | Gebetszeiten Deutschland | Gebetszeiten offline | Gebetszeiten — Kametrix |
-| tr | Namaz Vakitleri Almanya | Namaz Vakitleri Çevrimdışı | Namaz Vakitleri — Kametrix |
-| en | Prayer Times Germany | Prayer Times Offline | Prayer Times — Kametrix |
+| ar | مواقيت الصلاة | مواقيت الصلاة \| كامتريكس | مواقيت الصلاة بدون إنترنت |
+| de | Gebetszeiten | Gebetszeiten offline | Gebetszeiten — Kametrix |
+| tr | Namaz Vakitleri | Namaz Vakitleri Çevrimdışı | Namaz Vakitleri — Kametrix |
+| en | Prayer Times | Prayer Times Offline | Prayer Times — Kametrix |
 
 ---
 
@@ -60,10 +66,10 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 ### App title
 
 ```
-مواقيت الصلاة — ألمانيا
+مواقيت الصلاة
 ```
 
-**23 characters** (limit 30)
+**13 characters** (limit 30)
 
 ### Short description
 
@@ -145,10 +151,10 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 ### App title
 
 ```
-Gebetszeiten Deutschland
+Gebetszeiten
 ```
 
-**24 characters** (limit 30)
+**12 characters** (limit 30)
 
 ### Short description
 
@@ -230,10 +236,10 @@ Kontakt: mohamedkeba@kametrix.com
 ### App title
 
 ```
-Namaz Vakitleri Almanya
+Namaz Vakitleri
 ```
 
-**23 characters** (limit 30)
+**15 characters** (limit 30)
 
 ### Short description
 
@@ -315,10 +321,10 @@ Gizlilik politikası: https://prayer.kametrix.com/privacy
 ### App title
 
 ```
-Prayer Times Germany
+Prayer Times
 ```
 
-**20 characters** (limit 30)
+**12 characters** (limit 30)
 
 ### Short description
 
