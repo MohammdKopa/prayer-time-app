@@ -650,15 +650,16 @@ supersede them. Upload in filename order.
 - [ ] Ask the sheikh about being named; apply the answer to all four descriptions
 - [ ] `version` 1.0.0 and `versionCode` 1 in `mobile/app.json`
 - [ ] Production AAB built and the install checked on a real device
-- [ ] Prayer names on the mosque display render joined on that device — this was the
-      one bug he reported, and only a device can prove it fixed
+- [x] Prayer names on the mosque display render joined on that device — this was the
+      one bug he reported, and only a device can prove it fixed.
+      **Verified 2026-09-20** on the internal-testing install from Play.
 - [ ] Listing pasted per language: title, short description, full description
 - [ ] Screenshots and feature graphic uploaded per language
 - [ ] Privacy policy live at the URL in the header before submitting
 - [ ] Data safety form answered against the real build — no network, no SDKs
 - [ ] Content rating questionnaire completed
 - [ ] Release notes pasted per language
-- [ ] Internal testing release installed from Play and opened on a real phone
+- [x] Internal testing release installed from Play and opened on a real phone
 - [ ] Promoted to production, countries selected, rolled out
 
 ---
