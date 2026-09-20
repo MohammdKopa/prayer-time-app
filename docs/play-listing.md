@@ -103,6 +103,16 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, but it doe
 
 حدّد موقعك عبر GPS، أو اختر مدينتك يدويًا واتركها محفوظة.
 
+وفي التطبيق أيضًا
+
+• جدول الشهر كاملًا، يُحفظ صورةً تُشارَك مع المصلّين
+• أدعية وأذكار، ولكلٍّ منها تذكير مستقل، وجميعها مغلقة حتى تفتحها بنفسك
+• سبحة
+• دليل يضم أكثر من 1500 مسجد في ألمانيا
+• تقويم هجري، ووضع خاص لشهر رمضان
+• أداة على الشاشة الرئيسية تعرض الصلاة القادمة
+• شاشة المسجد: عرضٌ للجدار فيه الساعة والمواقيت وقوس النهار
+
 مجاني بالكامل
 
 لا إعلانات، ولا اشتراك، ولا نسخة مدفوعة، ولا شراء داخل التطبيق. لا شيء مقفل.
@@ -177,6 +187,16 @@ Arabisch zuerst, mit korrektem Rechts-nach-links-Layout, dazu Deutsch, Türkisch
 Deutschlandweit
 
 Per GPS orten oder die Stadt manuell wählen und gespeichert lassen.
+
+Außerdem enthalten
+
+• Eine Monatstabelle, als Bild teilbar
+• Bittgebete und Adhkar, jeweils mit eigener Erinnerung, alle standardmäßig aus
+• Ein Tasbih-Zähler
+• Ein Verzeichnis von über 1.500 Moscheen in Deutschland
+• Ein islamischer Kalender und ein Ramadan-Modus
+• Ein Widget für den Startbildschirm mit dem nächsten Gebet
+• Die Moschee-Anzeige: eine Wandansicht mit Uhr, Gebetszeiten und Tagesbogen
 
 Vollständig kostenlos
 
@@ -253,6 +273,16 @@ Almanya genelinde
 
 GPS ile konumlanın veya şehrinizi elle seçip kayıtlı bırakın.
 
+Ayrıca içinde
+
+• Görsel olarak paylaşılabilen aylık vakit çizelgesi
+• Dualar ve zikirler; her biri için ayrı, varsayılan olarak kapalı hatırlatmalar
+• Tesbih sayacı
+• Almanya'daki 1.500'den fazla cami için rehber
+• Hicri takvim ve Ramazan modu
+• Sonraki vakti gösteren ana ekran widget'ı
+• Cami ekranı: saat, vakitler ve günün yayı ile duvar görünümü
+
 Tamamen ücretsiz
 
 Reklam yok, abonelik yok, Pro sürüm yok, uygulama içi satın alma yok. Hiçbir şey kilitli değil.
@@ -327,6 +357,16 @@ Arabic first, with proper right-to-left layout, alongside German, Turkish and En
 Germany-wide
 
 Locate by GPS, or pick your city by hand and leave it saved.
+
+Also inside
+
+• A full month timetable, shareable as an image
+• Duas and adhkar, each with its own reminder, all off until you turn them on
+• A tasbih counter
+• A directory of over 1,500 mosques in Germany
+• An Islamic calendar and a Ramadan mode
+• A home-screen widget showing the next prayer
+• The mosque display: a wall view with the clock, the times and the day's arc
 
 Completely free
 
@@ -450,6 +490,108 @@ A religious reference utility that displays the five daily Islamic prayer times,
 Everyone / PEGI 3 / USK 0 — the lowest rating band in every region. If the questionnaire returns anything higher, an answer was misread; go back through it rather than accepting the rating, because a wrong rating is itself a policy violation.
 
 Content ratings must be kept accurate. If a later release adds anything interactive — the prayer log, a shared timetable, anything that transmits or displays user content — retake the questionnaire in that release.
+
+---
+
+# Release 1.0.0 — Play Console runbook
+
+Added 2026-09-20, the day Sheikh Ayman approved the app.
+
+## Before anything else — two open decisions
+
+**1. May we name him?** He approved the app. That is not the same as agreeing to
+appear in a public store listing, where his name reads as an endorsement to every
+stranger who scrolls past. Ask him plainly. If he says yes, add the line to the
+Arabic description and its equivalents:
+
+```
+وفق ما اعتمده الشيخ أيمن (مارل)
+```
+
+If he says no, or if the answer is unclear, publish as is. The 90-minute rule is
+already described on its own merits and needs no name to stand up.
+
+**2. Which track?** Personal Play accounts must run **12 testers × 14 continuous
+days** on a closed track before the production track unlocks; see the release plan
+in `ROADMAP-MOBILE.md`. The clock starts the day the closed track goes live, so
+upload now and keep polishing during the fortnight. Confirm the number in Console
+before counting on it — Google moves it.
+
+## Version
+
+`mobile/app.json` carries `version` and `android.versionCode`. Every upload needs a
+`versionCode` strictly higher than the last one Play accepted; the string `version`
+is what people see. 1.0.0 / 1 for the first upload.
+
+## Build and upload
+
+```bash
+cd mobile
+npx eas build --platform android --profile production   # app-bundle (.aab)
+npx eas submit --platform android --latest              # or upload the .aab by hand
+```
+
+The `preview` profile builds an installable APK instead — that is what went to the
+sheikh, and it is not what Play wants.
+
+## What's new (release notes)
+
+Limit **500 characters per language**. Plain text; no HTML, no Markdown.
+
+### Arabic (ar)
+
+```
+أول إصدار.
+
+مواقيت الصلوات الخمس محسوبة داخل الهاتف: بلا إنترنت، وبلا إعلانات، وبلا حساب. أذان في وقته يُجدول على الجهاز، وبوصلة قبلة، وجدول الشهر كاملًا، وأدعية وأذكار، وسبحة، ودليل مساجد ألمانيا، وتقويم هجري، وشاشة للمسجد تُعرض على الجدار. بالعربية والألمانية والتركية والإنجليزية.
+```
+
+### German (de-DE)
+
+```
+Erste Veröffentlichung.
+
+Die fünf Gebetszeiten werden im Telefon selbst berechnet: ohne Internet, ohne Werbung, ohne Konto. Dazu Adhan-Benachrichtigungen, die auf dem Gerät geplant werden, ein Qibla-Kompass, die Monatstabelle, Bittgebete und Adhkar, ein Tasbih-Zähler, ein Moscheeverzeichnis für Deutschland, ein islamischer Kalender und die Moschee-Wandanzeige. Auf Arabisch, Deutsch, Türkisch und Englisch.
+```
+
+### Turkish (tr-TR)
+
+```
+İlk sürüm.
+
+Beş vakit namaz saati telefonun içinde hesaplanır: internet yok, reklam yok, hesap yok. Ayrıca cihazda planlanan ezan bildirimleri, kıble pusulası, aylık vakit çizelgesi, dualar ve zikirler, tesbih sayacı, Almanya için cami rehberi, hicri takvim ve cami duvar ekranı. Arapça, Almanca, Türkçe ve İngilizce.
+```
+
+### English (en-US)
+
+```
+First release.
+
+The five daily prayer times, calculated inside your phone: no internet, no ads, no account. With adhan notifications scheduled on the device, a qibla compass, the month timetable, duas and adhkar, a tasbih counter, a directory of mosques in Germany, an Islamic calendar, and the mosque wall display. In Arabic, German, Turkish and English.
+```
+
+## Screenshots
+
+The finished sets are in `docs/shots/store/<lang>/` — 8 phone screens plus the
+feature graphic, per language, with their captions already burned into the images.
+Play Console has no caption field, so nothing else needs typing; the caption lists
+earlier in this document were the plan for a five-screen set and the shipped eight
+supersede them. Upload in filename order.
+
+## Checklist
+
+- [ ] Ask the sheikh about being named; apply the answer to all four descriptions
+- [ ] `version` 1.0.0 and `versionCode` 1 in `mobile/app.json`
+- [ ] Production AAB built and the install checked on a real device
+- [ ] Prayer names on the mosque display render joined on that device — this was the
+      one bug he reported, and only a device can prove it fixed
+- [ ] Listing pasted per language: title, short description, full description
+- [ ] Screenshots and feature graphic uploaded per language
+- [ ] Privacy policy live at the URL in the header before submitting
+- [ ] Data safety form answered against the real build — no network, no SDKs
+- [ ] Content rating questionnaire completed
+- [ ] Release notes pasted per language
+- [ ] Closed track live, 12 testers invited, day one of fourteen noted somewhere
 
 ---
 
