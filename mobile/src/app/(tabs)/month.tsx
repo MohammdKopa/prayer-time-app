@@ -27,7 +27,6 @@ import {
   TableHeaderRow,
 } from "@/lib/month/table";
 import { usePlaceContext } from "@/lib/place-context";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 // The month.
@@ -61,11 +60,6 @@ export default function MonthScreen() {
   const { width } = useWindowDimensions();
 
   const compact = width < COMPACT_WIDTH;
-  const num = useCallback(
-    (s: string | number) =>
-      locale === "ar" ? toArabicIndic(String(s)) : String(s),
-    [locale],
-  );
 
   // ---------------------------------------------------------------------
   // Which month
@@ -137,7 +131,7 @@ export default function MonthScreen() {
 
   const heading = t("monthHeading", {
     month: gregorianMonthName(cursor.month, locale),
-    year: num(cursor.year),
+    year: cursor.year,
   });
 
   const hijriHeading = useMemo(() => {
@@ -151,23 +145,23 @@ export default function MonthScreen() {
     if (span.length === 1) {
       return `${t("hijriMonthSingle", {
         month: hijriMonthName(first.month, locale),
-        year: num(first.year),
+        year: first.year,
       })} ${suffix}`;
     }
     if (first.year === last.year) {
       return `${t("hijriMonthSpan", {
         from: hijriMonthName(first.month, locale),
         to: hijriMonthName(last.month, locale),
-        year: num(last.year),
+        year: last.year,
       })} ${suffix}`;
     }
     return `${t("hijriMonthSpanYears", {
       from: hijriMonthName(first.month, locale),
-      fromYear: num(first.year),
+      fromYear: first.year,
       to: hijriMonthName(last.month, locale),
-      toYear: num(last.year),
+      toYear: last.year,
     })} ${suffix}`;
-  }, [table, locale, t, num]);
+  }, [table, locale, t]);
 
   // ---------------------------------------------------------------------
   // Where the month opens

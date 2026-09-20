@@ -7,7 +7,6 @@ import { upcomingEvents } from "@/lib/calendar/events";
 import { hijriMonthName } from "@/lib/hijri";
 import { useI18n } from "@/lib/i18n";
 import { gregorianMonthName } from "@/lib/month/calendar-names";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 // The Islamic calendar.
@@ -21,9 +20,6 @@ import { COLORS, FONTS, TEXT } from "@/theme";
 export default function CalendarScreen() {
   const router = useRouter();
   const { t, locale } = useI18n();
-
-  const num = (s: string | number) =>
-    locale === "ar" ? toArabicIndic(String(s)) : String(s);
 
   const events = useMemo(() => upcomingEvents(new Date()), []);
 
@@ -41,19 +37,19 @@ export default function CalendarScreen() {
         <View style={styles.card}>
           {events.map((item, index) => {
             const hijriDate = t("eventDateFormat", {
-              day: num(item.hijri.day),
+              day: item.hijri.day,
               month: hijriMonthName(item.hijri.month, locale),
-              year: num(item.hijri.year),
+              year: item.hijri.year,
             });
             const gregorianDate = t("eventDateFormat", {
-              day: num(item.gregorian.getDate()),
+              day: item.gregorian.getDate(),
               month: gregorianMonthName(item.gregorian.getMonth(), locale),
-              year: num(item.gregorian.getFullYear()),
+              year: item.gregorian.getFullYear(),
             });
             const relative =
               item.daysAway === 0
                 ? t("today")
-                : t("eventInDays", { days: num(item.daysAway) });
+                : t("eventInDays", { days: item.daysAway });
 
             return (
               <View

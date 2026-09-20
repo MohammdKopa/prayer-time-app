@@ -14,7 +14,6 @@ import {
   formatClockWithSeconds,
   formatCountdown,
   isValidTime,
-  toArabicIndic,
 } from "@/lib/time";
 import { ExactAlarmBanner } from "@/components/ExactAlarmBanner";
 import { SkyBackground } from "@/components/SkyBackground";
@@ -113,8 +112,6 @@ export default function ClockScreen() {
     [`${now.getHours()}:${now.getMinutes()}`],
   );
 
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
-
   // Deterministic Umm al-Qura, never Intl — Hermes falls back to the Gregorian
   // calendar silently, which would print a Gregorian date wearing a هـ.
   // Out of range (before 1300 AH or after 1600 AH) it throws; the date is
@@ -122,9 +119,9 @@ export default function ClockScreen() {
   const hijri = useMemo(() => {
     try {
       const h = toHijri(new Date());
-      return `${num(String(h.day))} ${hijriMonthName(h.month, locale)} ${num(
-        String(h.year),
-      )} ${t("hijriSuffix")}`;
+      return `${h.day} ${hijriMonthName(h.month, locale)} ${h.year} ${t(
+        "hijriSuffix",
+      )}`;
     } catch {
       return null;
     }
@@ -155,7 +152,7 @@ export default function ClockScreen() {
             </Text>
             {hijri && <Text style={styles.hijri}>{hijri}</Text>}
             <Text style={styles.clockSmall}>
-              {num(formatClockWithSeconds(now))}
+              {formatClockWithSeconds(now)}
             </Text>
           </View>
         </View>
@@ -170,9 +167,9 @@ export default function ClockScreen() {
             {next ? t(NAME_KEY[next]) : t("fajr")}
           </Text>
           <Text style={styles.heroCountdown}>
-            {hasTarget ? num(formatCountdown(countdown)) : "—"}
+            {hasTarget ? formatCountdown(countdown) : "—"}
           </Text>
-          <Text style={styles.heroTime}>{num(formatClock(target))}</Text>
+          <Text style={styles.heroTime}>{formatClock(target)}</Text>
         </View>
 
         <ExactAlarmBanner />
@@ -180,27 +177,27 @@ export default function ClockScreen() {
         {ramadanInfo && fastingWin && (
           <View style={styles.ramadanCard}>
             <Text style={styles.ramadanTitle}>
-              {t("ramadanDayLabel", { day: num(String(ramadanInfo.day)) })}
+              {t("ramadanDayLabel", { day: String(ramadanInfo.day) })}
             </Text>
             <View style={styles.ramadanRow}>
               <View style={styles.ramadanCol}>
                 <Text style={styles.ramadanLabel}>{t("imsak")}</Text>
                 <Text style={styles.ramadanTime}>
-                  {num(formatClock(fastingWin.imsak))}
+                  {formatClock(fastingWin.imsak)}
                 </Text>
               </View>
               <View style={styles.ramadanDivider} />
               <View style={styles.ramadanCol}>
                 <Text style={styles.ramadanLabel}>{t("iftar")}</Text>
                 <Text style={styles.ramadanTime}>
-                  {num(formatClock(fastingWin.iftar))}
+                  {formatClock(fastingWin.iftar)}
                 </Text>
               </View>
             </View>
             {fasting && (
               <Text style={styles.ramadanCountdown}>
                 {t(fasting.target === "iftar" ? "untilIftar" : "untilImsak", {
-                  time: num(fasting.formatted),
+                  time: fasting.formatted,
                 })}
               </Text>
             )}
@@ -249,7 +246,7 @@ export default function ClockScreen() {
                     (isNext || isCurrent) && styles.gold,
                   ]}
                 >
-                  {num(formatClock(times[p]))}
+                  {formatClock(times[p])}
                 </Text>
               </View>
             );

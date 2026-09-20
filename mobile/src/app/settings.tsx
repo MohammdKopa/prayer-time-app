@@ -59,7 +59,7 @@ import {
   SILENCE_DURATIONS,
   type SilenceDuration,
 } from "@/lib/silence";
-import { formatClock, toArabicIndic } from "@/lib/time";
+import { formatClock } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 const CITY_LIST_CAP = 40;
@@ -101,8 +101,6 @@ export default function SettingsScreen() {
   // told apart from "one entry" (a second app, or the website's push).
   const [alerts, setAlerts] = useState<ScheduledAlert[]>([]);
   const [showAlerts, setShowAlerts] = useState(false);
-
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
 
   function refreshAlerts() {
     listScheduledAlerts()
@@ -176,7 +174,7 @@ export default function SettingsScreen() {
   /** "Tue 19/9 19:42" without Intl, which Hermes only half-implements. */
   function alertWhen(at: Date | null): string {
     if (!at) return "—";
-    return num(`${at.getDate()}/${at.getMonth() + 1} ${formatClock(at)}`);
+    return `${at.getDate()}/${at.getMonth() + 1} ${formatClock(at)}`;
   }
 
   async function toggleSilence(on: boolean) {
@@ -273,7 +271,7 @@ export default function SettingsScreen() {
                 <Text style={styles.label}>
                   {alerts.length === 0
                     ? t("scheduledNone")
-                    : t("scheduledAlerts", { count: num(String(alerts.length)) })}
+                    : t("scheduledAlerts", { count: String(alerts.length) })}
                 </Text>
                 {alerts.length > 0 && (
                   <Text style={styles.queueToggle}>
@@ -292,7 +290,7 @@ export default function SettingsScreen() {
                 ))}
               {showAlerts && alerts.length > ALERT_LIST_CAP && (
                 <Text style={styles.queueWhen}>
-                  {num(`+${alerts.length - ALERT_LIST_CAP}`)}
+                  {`+${alerts.length - ALERT_LIST_CAP}`}
                 </Text>
               )}
             </View>
@@ -315,7 +313,7 @@ export default function SettingsScreen() {
                   </Text>
                   <Text style={styles.voiceMeta}>
                     {isRecordedVoice(v)
-                      ? num(t("voiceSeconds", { seconds: VOICE_SECONDS[v] }))
+                      ? t("voiceSeconds", { seconds: VOICE_SECONDS[v] })
                       : t("voiceSystemHint")}
                   </Text>
                 </View>
@@ -363,7 +361,7 @@ export default function SettingsScreen() {
                           active && styles.chipTextActive,
                         ]}
                       >
-                        {num(t("silenceMinutesOption", { minutes }))}
+                        {t("silenceMinutesOption", { minutes })}
                       </Text>
                     </Pressable>
                   );

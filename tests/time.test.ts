@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  countdownTo,
-  formatCountdown,
-  isValidTime,
-  toArabicIndic,
-} from "@/lib/time";
+import { countdownTo, formatCountdown, isValidTime } from "@/lib/time";
 
 describe("isValidTime", () => {
   it("true for a normal Date", () => {
@@ -60,19 +55,5 @@ describe("formatCountdown", () => {
     expect(
       formatCountdown({ hours: 2, minutes: 3, seconds: 4, remainingMs: 0 }),
     ).toBe("2:03:04");
-  });
-});
-
-describe("toArabicIndic", () => {
-  it("maps every ASCII digit 0-9 to its Arabic-Indic counterpart", () => {
-    expect(toArabicIndic("0123456789")).toBe("٠١٢٣٤٥٦٧٨٩");
-  });
-
-  it("leaves non-digit characters untouched", () => {
-    expect(toArabicIndic("05:31")).toBe("٠٥:٣١");
-  });
-
-  it("is a no-op on a string with no digits", () => {
-    expect(toArabicIndic("hello")).toBe("hello");
   });
 });

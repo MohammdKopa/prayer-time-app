@@ -50,7 +50,6 @@ import {
   formatClockWithSeconds,
   formatCountdown,
   isValidTime,
-  toArabicIndic,
 } from "@/lib/time";
 import { usePrefs } from "@/lib/use-prefs";
 import { COLORS, FONTS } from "@/theme";
@@ -183,14 +182,12 @@ export default function DisplayScreen() {
   const countdown = countdownTo(target, now);
   const prayerNow = prayerNowAt(times, now);
   const nightDim = nightDimAt(now);
-
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
-  const clock = (d: Date) => num(formatClock(d));
+  const clock = (d: Date) => formatClock(d);
 
   const hijri = useMemo(() => {
     try {
       const h = toHijri(new Date());
-      return `${num(String(h.day))} ${hijriMonthName(h.month, locale)} ${num(String(h.year))} ${t("hijriSuffix")}`;
+      return `${String(h.day)} ${hijriMonthName(h.month, locale)} ${String(h.year)} ${t("hijriSuffix")}`;
     } catch {
       return null;
     }
@@ -199,7 +196,7 @@ export default function DisplayScreen() {
   const gregorian = useMemo(() => {
     const dd = String(now.getDate()).padStart(2, "0");
     const mm = String(now.getMonth() + 1).padStart(2, "0");
-    return num(`${dd}.${mm}.${now.getFullYear()}`);
+    return `${dd}.${mm}.${now.getFullYear()}`;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dayKey, locale]);
 
@@ -318,7 +315,7 @@ export default function DisplayScreen() {
                 {t("now")}
               </Text>
               <Text style={[styles.clock, { fontSize: fs(10.5, 8), lineHeight: fs(10.5, 8) * 1.1 }]} numberOfLines={1}>
-                {num(formatClockWithSeconds(now))}
+                {formatClockWithSeconds(now)}
               </Text>
               <Text style={[styles.currentLabel, { fontSize: fs(2.6, 1.9), marginTop: vh }]}>
                 {t("timeOf", { prayer: label(current) })}
@@ -339,7 +336,7 @@ export default function DisplayScreen() {
                 {clock(target)}
               </Text>
               <Text style={[styles.nextCountdown, { fontSize: fs(3, 2.2), marginTop: vh * 0.8 }]}>
-                {isValidTime(target) ? num(formatCountdown(countdown)) : "—"}
+                {isValidTime(target) ? formatCountdown(countdown) : "—"}
               </Text>
             </View>
           </View>

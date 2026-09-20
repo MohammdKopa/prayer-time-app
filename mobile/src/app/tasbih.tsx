@@ -21,7 +21,6 @@ import {
   useTasbih,
   type TasbihTarget,
 } from "@/lib/tasbih";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS } from "@/theme";
 
 // Tasbih.
@@ -130,8 +129,6 @@ export default function TasbihScreen() {
     },
     [cancelConfirm, chooseTarget, target],
   );
-
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
   const scale = pulse.interpolate({
     inputRange: [0, 1],
     outputRange: [1, 1.04],
@@ -162,7 +159,7 @@ export default function TasbihScreen() {
               { transform: [{ scale }] },
             ]}
           >
-            <Text style={styles.count}>{num(String(count))}</Text>
+            <Text style={styles.count}>{String(count)}</Text>
           </Animated.View>
 
           {counting && (
@@ -173,19 +170,14 @@ export default function TasbihScreen() {
                 />
               </View>
               <Text style={styles.progress}>
-                {num(
-                  t("tasbihProgress", {
-                    count: inRound,
-                    target,
-                  }),
-                )}
+                {t("tasbihProgress", { count: inRound, target })}
               </Text>
             </>
           )}
 
           {counting && rounds > 0 && (
             <Text style={styles.rounds}>
-              {num(t("tasbihRounds", { rounds }))}
+              {t("tasbihRounds", { rounds })}
             </Text>
           )}
 
@@ -213,7 +205,7 @@ export default function TasbihScreen() {
                 >
                   {value === FREE_TARGET
                     ? t("tasbihFree")
-                    : num(String(value))}
+                    : String(value)}
                 </Text>
               </Pressable>
             );

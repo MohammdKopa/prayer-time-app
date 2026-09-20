@@ -15,7 +15,6 @@ import { qiblaBearing } from "@shared/qibla";
 import { angleBetween, approachAngle, isAligned } from "@/lib/compass";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 // Qibla.
@@ -109,8 +108,6 @@ export default function QiblaScreen() {
       sub?.remove();
     };
   }, [target, dial]);
-
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
   const spin = dial.interpolate({
     inputRange: [-360, 360],
     outputRange: ["-360deg", "360deg"],
@@ -214,7 +211,7 @@ export default function QiblaScreen() {
         </View>
 
         <Text style={styles.bearing}>
-          {num(t("degrees", { value: Math.round(target) }))}
+          {t("degrees", { value: Math.round(target) })}
         </Text>
 
         {unavailable ? (
@@ -228,7 +225,7 @@ export default function QiblaScreen() {
             <Text style={styles.hint}>{t("qiblaHint")}</Text>
             {off !== null && (
               <Text style={styles.off}>
-                {num(t("degrees", { value: off }))}
+                {t("degrees", { value: off })}
               </Text>
             )}
             {accuracy < 2 && (

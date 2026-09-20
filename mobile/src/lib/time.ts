@@ -65,12 +65,8 @@ export function formatCountdown(c: Countdown): string {
   return c.hours > 0 ? `${c.hours}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
-const ARABIC_INDIC = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
-
-/**
- * Convert ASCII digits to Arabic-Indic. Applied at render time only, never to
- * stored values, so nothing downstream has to parse them back.
- */
-export function toArabicIndic(s: string): string {
-  return s.replace(/[0-9]/g, (d) => ARABIC_INDIC[Number(d)]);
-}
+// Numerals are the standard Arabic (Hindu-Arabic) 0-9 in every language,
+// including Arabic — what the imam asked for, and what the web app and the
+// wall display already render (see shared/format.ts). The Eastern Arabic-Indic
+// ٠-٩ set is no longer produced anywhere; parseClock still accepts it on input
+// so a keyboard that emits it keeps working.

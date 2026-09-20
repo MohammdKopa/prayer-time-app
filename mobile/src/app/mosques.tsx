@@ -17,7 +17,6 @@ import {
   type MosqueWithDistance,
 } from "@/lib/mosques";
 import { usePlaceContext } from "@/lib/place-context";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 // Mosques.
@@ -45,11 +44,6 @@ export default function MosquesScreen() {
     [place.latitude, place.longitude],
   );
 
-  const num = useCallback(
-    (s: string) => (locale === "ar" ? toArabicIndic(s) : s),
-    [locale],
-  );
-
   const displayName = useCallback(
     (m: MosqueWithDistance) =>
       (locale === "ar" && m.nameAr) || m.name || m.city || t("mosqueUnnamed"),
@@ -64,9 +58,9 @@ export default function MosquesScreen() {
   const distanceLabel = useCallback(
     (m: MosqueWithDistance) => {
       const { value, unit } = formatDistance(m.distanceMeters);
-      return num(t(unit === "m" ? "distanceMeters" : "distanceKm", { value }));
+      return t(unit === "m" ? "distanceMeters" : "distanceKm", { value });
     },
-    [num, t],
+    [t],
   );
 
   const openMosque = useCallback((m: MosqueWithDistance) => {

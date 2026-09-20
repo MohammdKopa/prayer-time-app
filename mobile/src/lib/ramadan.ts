@@ -88,8 +88,8 @@ export type FastingTarget = "imsak" | "iftar";
 export interface FastingCountdown {
   target: FastingTarget;
   countdown: Countdown;
-  /** `formatCountdown(countdown)` — plain ASCII digits; apply
-   *  `toArabicIndic` at render time, same as every other clock on screen. */
+  /** `formatCountdown(countdown)` — 0-9, same as every other clock on
+   *  screen, in every language. */
   formatted: string;
 }
 

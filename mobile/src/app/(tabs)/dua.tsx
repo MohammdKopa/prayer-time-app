@@ -16,7 +16,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { askForExactAlarms } from "@/lib/exact-alarms";
 import { useI18n, type StringKey } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
-import { toArabicIndic } from "@/lib/time";
 import {
   DUAS,
   HAS_UNREVIEWED_TRANSLATIONS,
@@ -101,13 +100,6 @@ export default function DuaScreen() {
   const d = useCallback(
     (key: StringKey, vars?: Record<string, string | number>) =>
       t(key, vars),
-    [locale],
-  );
-
-  /** Arabic-Indic digits at render time only, exactly as the other screens do
-   *  it — nothing stored ever carries them. */
-  const num = useCallback(
-    (s: string) => (locale === "ar" ? toArabicIndic(s) : s),
     [locale],
   );
 
@@ -221,7 +213,7 @@ export default function DuaScreen() {
           />
           {s.morning && (
             <Stepper
-              label={d("afterFajr", { minutes: num(String(s.morningAfterFajrMin)) })}
+              label={d("afterFajr", { minutes: String(s.morningAfterFajrMin) })}
               earlier={d("duaEarlier")}
               later={d("duaLater")}
               onEarlier={() => setOffset("morningAfterFajrMin", -OFFSET_STEP)}
@@ -236,7 +228,7 @@ export default function DuaScreen() {
           />
           {s.evening && (
             <Stepper
-              label={d("afterAsr", { minutes: num(String(s.eveningAfterAsrMin)) })}
+              label={d("afterAsr", { minutes: String(s.eveningAfterAsrMin) })}
               earlier={d("duaEarlier")}
               later={d("duaLater")}
               onEarlier={() => setOffset("eveningAfterAsrMin", -OFFSET_STEP)}
@@ -252,7 +244,7 @@ export default function DuaScreen() {
           {s.sleep && (
             <ClockStepper
               time={s.sleepAt}
-              render={(v) => d("atTime", { time: num(v) })}
+              render={(v) => d("atTime", { time: v })}
               earlier={d("duaEarlier")}
               later={d("duaLater")}
               onStep={(delta) => setTime("sleepAt", delta)}
@@ -292,7 +284,7 @@ export default function DuaScreen() {
               </View>
               <ClockStepper
                 time={s.salawatAt}
-                render={(v) => d("atTime", { time: num(v) })}
+                render={(v) => d("atTime", { time: v })}
                 earlier={d("duaEarlier")}
                 later={d("duaLater")}
                 onStep={(delta) => setTime("salawatAt", delta)}
@@ -308,7 +300,7 @@ export default function DuaScreen() {
           {s.quran && (
             <ClockStepper
               time={s.quranAt}
-              render={(v) => d("atTime", { time: num(v) })}
+              render={(v) => d("atTime", { time: v })}
               earlier={d("duaEarlier")}
               later={d("duaLater")}
               onStep={(delta) => setTime("quranAt", delta)}
@@ -323,7 +315,7 @@ export default function DuaScreen() {
           {!denied && anyEnabled(s) && (
             <Text style={[styles.hint, styles.inCard, { textAlign: align }]}>
               {count > 0
-                ? d("duaScheduled", { count: num(String(count)) })
+                ? d("duaScheduled", { count: String(count) })
                 : d("duaNoneScheduled")}
             </Text>
           )}
@@ -365,7 +357,6 @@ export default function DuaScreen() {
                     }}
                     locale={locale}
                     align={align}
-                    num={num}
                     d={d}
                   />
                 ))}
@@ -375,7 +366,7 @@ export default function DuaScreen() {
         })}
 
         <Text style={[styles.footnote, { textAlign: align }]}>
-          {num(String(DUAS.length))}
+          {String(DUAS.length)}
         </Text>
       </ScrollView>
     </SafeAreaView>
@@ -499,7 +490,6 @@ function DuaRow({
   onPress,
   locale,
   align,
-  num,
   d,
 }: {
   item: DuaItem;
@@ -508,7 +498,6 @@ function DuaRow({
   onPress: () => void;
   locale: string;
   align: "left" | "right";
-  num: (s: string) => string;
   d: (key: StringKey, vars?: Record<string, string | number>) => string;
 }) {
   const translation =
@@ -523,7 +512,7 @@ function DuaRow({
           {item.title[locale as keyof typeof item.title] ?? item.title.en}
         </Text>
         {item.repeat !== undefined && (
-          <Text style={styles.repeat}>{num(`${item.repeat}×`)}</Text>
+          <Text style={styles.repeat}>{`${item.repeat}×`}</Text>
         )}
       </Pressable>
 
@@ -548,7 +537,7 @@ function DuaRow({
 
           {item.repeat !== undefined && (
             <Text style={[styles.label, { textAlign: align }]}>
-              {d("duaRepeatCount", { count: num(String(item.repeat)) })}
+              {d("duaRepeatCount", { count: String(item.repeat) })}
             </Text>
           )}
 

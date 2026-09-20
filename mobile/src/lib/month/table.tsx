@@ -22,7 +22,6 @@ import { memo } from "react";
 import { StyleSheet, Text, View, type ViewStyle } from "react-native";
 
 import { PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
-import { toArabicIndic } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 import { weekdayShort } from "./calendar-names";
@@ -48,9 +47,6 @@ export function dayKey(d: Date): string {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
-const num = (s: string | number, arabic: boolean) =>
-  arabic ? toArabicIndic(String(s)) : String(s);
-
 // ---------------------------------------------------------------------------
 // Rows
 // ---------------------------------------------------------------------------
@@ -71,7 +67,6 @@ export const MonthRow = memo(function MonthRow({
   compact,
 }: RowProps) {
   const styles = compact ? COMPACT : REGULAR;
-  const arabic = locale === "ar";
 
   return (
     <View
@@ -107,11 +102,11 @@ export const MonthRow = memo(function MonthRow({
               isToday && styles.todayText,
             ]}
           >
-            {num(day.day, arabic)}
+            {day.day}
           </Text>
         </View>
         <Text numberOfLines={1} style={styles.dateHijri}>
-          {day.hijri ? num(day.hijri.day, arabic) : "—"}
+          {day.hijri ? day.hijri.day : "—"}
         </Text>
       </View>
 
@@ -129,7 +124,7 @@ export const MonthRow = memo(function MonthRow({
               (isToday ? styles.sunriseToday : styles.sunrise),
           ]}
         >
-          {num(day.times[prayer], arabic)}
+          {day.times[prayer]}
         </Text>
       ))}
     </View>

@@ -118,10 +118,9 @@ export interface FormattedDistance {
 }
 
 /**
- * Splits a metre distance into a value + unit so the UI can localize both —
- * digits through toArabicIndic, and the unit through the strings table
- * (distanceMeters / distanceKm) rather than a hardcoded "m"/"km" in a
- * component.
+ * Splits a metre distance into a value + unit so the UI can localize the unit
+ * through the strings table (distanceMeters / distanceKm) rather than a
+ * hardcoded "m"/"km" in a component. Digits stay 0-9 in every language.
  */
 export function formatDistance(meters: number): FormattedDistance {
   if (meters < 1000) {

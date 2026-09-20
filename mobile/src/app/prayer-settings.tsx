@@ -34,7 +34,7 @@ import {
   type NotifiedPrayer,
   type PrayerPrefs,
 } from "@/lib/prayer-prefs";
-import { formatClock, toArabicIndic } from "@/lib/time";
+import { formatClock } from "@/lib/time";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
 // Per-prayer personalisation.
@@ -172,26 +172,20 @@ function CityPrefs() {
     void savePrefs(place, next);
   }
 
-  const num = (s: string) => (locale === "ar" ? toArabicIndic(s) : s);
-
   function offsetLine(prayer: PrayerName): string {
     const minutes = shown.offsets[prayer];
     if (minutes === 0) return t("offsetNone");
-    return num(
-      minutes > 0
-        ? t("offsetAfter", { minutes })
-        : t("offsetBefore", { minutes: -minutes }),
-    );
+    return minutes > 0
+      ? t("offsetAfter", { minutes })
+      : t("offsetBefore", { minutes: -minutes });
   }
 
   function offsetBadge(prayer: PrayerName): string | null {
     const minutes = adjusted.applied[prayer];
     if (minutes === 0) return null;
-    return num(
-      minutes > 0
-        ? t("plusMinutes", { minutes })
-        : t("minusMinutes", { minutes: -minutes }),
-    );
+    return minutes > 0
+      ? t("plusMinutes", { minutes })
+      : t("minusMinutes", { minutes: -minutes });
   }
 
   return (
@@ -221,7 +215,7 @@ function CityPrefs() {
                     <Text style={styles.badge}>{badge}</Text>
                   )}
                   <Text style={styles.time}>
-                    {num(formatClock(adjusted.times[prayer]))}
+                    {formatClock(adjusted.times[prayer])}
                   </Text>
                 </View>
               </Pressable>
@@ -229,11 +223,9 @@ function CityPrefs() {
               {open && (
                 <View style={styles.body}>
                   <Text style={styles.calculated}>
-                    {num(
-                      t("calculatedAt", {
-                        time: formatClock(base[prayer]),
-                      }),
-                    )}
+                    {t("calculatedAt", {
+                      time: formatClock(base[prayer]),
+                    })}
                   </Text>
   
                   <Text style={styles.label}>{t("offsetLabel")}</Text>
@@ -256,7 +248,7 @@ function CityPrefs() {
                               styles.stepDisabled,
                           ]}
                         >
-                          {num(t("minusMinutes", { minutes: step }))}
+                          {t("minusMinutes", { minutes: step })}
                         </Text>
                       </Pressable>
                     ))}
@@ -281,7 +273,7 @@ function CityPrefs() {
                               styles.stepDisabled,
                           ]}
                         >
-                          {num(t("plusMinutes", { minutes: step }))}
+                          {t("plusMinutes", { minutes: step })}
                         </Text>
                       </Pressable>
                     ))}
@@ -298,7 +290,6 @@ function CityPrefs() {
                       prayer={prayer}
                       prefs={shown}
                       t={t}
-                      num={num}
                       customText={customText}
                       setCustomText={setCustomText}
                       update={update}
@@ -335,7 +326,6 @@ function PrayerAlerts({
   prayer,
   prefs,
   t,
-  num,
   customText,
   setCustomText,
   update,
@@ -343,7 +333,6 @@ function PrayerAlerts({
   prayer: NotifiedPrayer;
   prefs: PrayerPrefs;
   t: (key: any, vars?: Record<string, string | number>) => string;
-  num: (s: string) => string;
   customText: string;
   setCustomText: (s: string) => void;
   update: (next: PrayerPrefs) => void;
@@ -403,7 +392,7 @@ function PrayerAlerts({
               onPress={() => update(withReminder(prefs, prayer, minutes))}
             >
               <Text style={[styles.chipText, active && styles.chipTextActive]}>
-                {num(t("reminderMinutes", { minutes }))}
+                {t("reminderMinutes", { minutes })}
               </Text>
             </Pressable>
           );
@@ -411,7 +400,7 @@ function PrayerAlerts({
         {reminder !== null && !isPreset && (
           <View style={[styles.chip, styles.chipActive]}>
             <Text style={[styles.chipText, styles.chipTextActive]}>
-              {num(t("reminderMinutes", { minutes: reminder }))}
+              {t("reminderMinutes", { minutes: reminder })}
             </Text>
           </View>
         )}
@@ -429,12 +418,10 @@ function PrayerAlerts({
         placeholderTextColor={TEXT.faint}
       />
       <Text style={styles.hint}>
-        {num(
-          t("reminderCustomHint", {
-            min: REMINDER_MIN_MINUTES,
-            max: REMINDER_MAX_MINUTES,
-          }),
-        )}
+        {t("reminderCustomHint", {
+          min: REMINDER_MIN_MINUTES,
+          max: REMINDER_MAX_MINUTES,
+        })}
       </Text>
     </>
   );
