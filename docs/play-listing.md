@@ -603,6 +603,18 @@ First release.
 The five daily prayer times, calculated inside your phone: no internet, no ads, no account. With adhan notifications scheduled on the device, a qibla compass, the month timetable, duas and adhkar, a tasbih counter, a directory of mosques in Germany, an Islamic calendar, and the mosque wall display. In Arabic, German, Turkish and English.
 ```
 
+## Graphics — where every file is
+
+| Play field | File | Checked 2026-09-20 |
+|---|---|---|
+| App icon | `docs/shots/store/play-icon-512.png` | 512 × 512, 32-bit with alpha, 39 KB |
+| Feature graphic | `docs/shots/store/<lang>/*_00_Feature_Graphic.png` | 1024 × 500, no alpha |
+| Phone screenshots | `docs/shots/store/<lang>/01…08_*.png` | 1080 × 1920 each — above the 1080 px floor for promotion eligibility |
+
+The icon is `mobile/assets/images/icon.png` (1024 × 1024, the sun arc) resized to
+the 512 Play wants. Regenerate it with sharp if the app icon ever changes; do not
+hand Play the 1024 and let it resize.
+
 ## Screenshots
 
 The finished sets are in `docs/shots/store/<lang>/` — 8 phone screens plus the
