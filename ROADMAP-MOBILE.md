@@ -160,15 +160,17 @@ Two waits stack back-to-back, and they are not the same wait:
 
 1. **Identity verification** — days. Cannot publish during it. Can build,
    can fill the listing.
-2. **Closed testing** — 12 testers × 14 continuous days before production
-   unlocks (personal accounts). The clock starts when the closed track goes
-   live, not when the app feels finished.
+2. ~~**Closed testing** — 12 testers × 14 continuous days before production
+   unlocks.~~ **Does not apply.** That rule is for *personal* developer
+   accounts; this is an **organization account** (confirmed 2026-09-20), which
+   publishes straight to production. First review still takes days.
 
-**Therefore:** build until verification lands, ship whatever exists that day to
-the closed track, keep polishing while the 14 days run. Testers watch it improve;
-the calendar doesn't punish the polish.
+**Therefore:** build until verification lands, then upload. Internal testing is
+worth one pass first — it is instant, takes the same AAB, and installing from
+Play is the only honest check that the release build works on a real phone.
+Promote the same build to production once it does.
 
-*(Verify both numbers in Console — Google moves them.)*
+*(Verify in Console — Google moves these rules.)*
 
 ---
 

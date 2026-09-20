@@ -511,11 +511,12 @@ Arabic description and its equivalents:
 If he says no, or if the answer is unclear, publish as is. The 90-minute rule is
 already described on its own merits and needs no name to stand up.
 
-**2. Which track?** Personal Play accounts must run **12 testers × 14 continuous
-days** on a closed track before the production track unlocks; see the release plan
-in `ROADMAP-MOBILE.md`. The clock starts the day the closed track goes live, so
-upload now and keep polishing during the fortnight. Confirm the number in Console
-before counting on it — Google moves it.
+**2. Which track?** The 12-testers-for-14-days rule applies to *personal*
+developer accounts. This is an **organization account**, so production is open
+from the first upload. Still go through **Internal testing** once: the track is
+instant, takes the same AAB, and installing it from Play is the only honest proof
+that the signed release build works on a real phone. Promote that same build to
+production afterwards — no rebuild, no second review queue.
 
 ## Version
 
@@ -525,14 +526,48 @@ is what people see. 1.0.0 / 1 for the first upload.
 
 ## Build and upload
 
+The build runs on EAS, not on this machine. `mobile/android/` is gitignored, so
+EAS regenerates it in the cloud from `app.json` — which is why the version lives
+there and nowhere else. The signing keystore is the one EAS generated for the
+first preview build on 2026-09-17 and holds for the account; Play then adds its
+own app-signing key on top of it at the first upload, so a lost upload key is
+recoverable. Do not sign locally: the checked-out `android/` template signs
+release builds with the **debug** key, and Play rejects debug-signed uploads.
+
 ```bash
 cd mobile
-npx eas build --platform android --profile production   # app-bundle (.aab)
-npx eas submit --platform android --latest              # or upload the .aab by hand
+npx eas-cli@latest build --platform android --profile production   # .aab
+npx eas-cli@latest submit --platform android --latest              # or upload by hand
 ```
 
 The `preview` profile builds an installable APK instead — that is what went to the
 sheikh, and it is not what Play wants.
+
+`eas submit` needs a Google service-account JSON the first time (Play Console →
+Setup → API access). Uploading the `.aab` by hand in Console is fine for a first
+release and skips that setup entirely.
+
+## Play Console, in order
+
+1. **All apps → Create app.** Name, default language **Arabic**, type *App*, and
+   *Free*. The name here is not the store title; the title is per-language and
+   comes from this document.
+2. **Dashboard → set up your app**, and work the checklist Console gives you:
+   app access (no login exists — say so), ads (**no ads**), content rating,
+   target audience, data safety, privacy policy URL, and the government-apps and
+   financial-features declarations (all *no*).
+3. **Store presence → Main store listing.** Paste the Arabic title, short and
+   full description, then upload the screenshots and feature graphic from
+   `docs/shots/store/ar/`. Add de-DE, tr-TR and en-US under *Manage translations*
+   and repeat with their folders.
+4. **Test and release → Testing → Internal testing → Create new release.**
+   Upload the `.aab`, paste the release notes, roll out. Add yourself as a tester,
+   open the opt-in link, install from Play, and check the mosque display: the
+   prayer names under the arc must read الفجر, not ا ل ف ج ر.
+5. **Promote to production** from that same release — no rebuild — then fill the
+   countries list and roll out at 100%.
+
+First review takes days. The listing can be edited while it waits.
 
 ## What's new (release notes)
 
@@ -591,7 +626,8 @@ supersede them. Upload in filename order.
 - [ ] Data safety form answered against the real build — no network, no SDKs
 - [ ] Content rating questionnaire completed
 - [ ] Release notes pasted per language
-- [ ] Closed track live, 12 testers invited, day one of fourteen noted somewhere
+- [ ] Internal testing release installed from Play and opened on a real phone
+- [ ] Promoted to production, countries selected, rolled out
 
 ---
 
