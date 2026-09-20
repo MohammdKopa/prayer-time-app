@@ -1,6 +1,6 @@
 # Privacy policy — Prayer Times (`app.kametrix.prayer`)
 
-**Intended hosting location:** https://kametrix.com/prayer/privacy
+**Hosting location:** https://prayer.kametrix.com/privacy — rendered from this file by `src/app/privacy/page.tsx`
 This is the URL to enter in Play Console → **Policy → App content → Privacy policy**, and in the store listing. Google requires a live, publicly reachable privacy policy URL for **every** app, including apps that collect no data. It must be up before the app is submitted for review.
 
 **Last updated / effective:** 17 September 2026

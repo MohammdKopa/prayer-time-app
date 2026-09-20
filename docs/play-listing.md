@@ -3,7 +3,12 @@
 **Package:** `app.kametrix.prayer`
 **Developer:** Mohamed Keba / Kametrix
 **Website:** https://kametrix.com
-**Privacy policy URL (to publish):** https://kametrix.com/prayer/privacy — see `docs/privacy-policy.md`
+**Privacy policy URL:** https://prayer.kametrix.com/privacy — rendered from
+`docs/privacy-policy.md` by `src/app/privacy/page.tsx`. **Checked 2026-09-20: it
+404s.** The route landed in commit 912e718, after the container on the VPS was
+last built, so the site has to be redeployed before submitting — Play requires a
+URL that resolves. See `DEPLOY.md`; it is a `git pull` and a
+`docker compose up -d --build`.
 **Default listing language:** Arabic (ar). German (de-DE), Turkish (tr-TR) and English (en-US) are localised listings.
 
 Everything inside a fenced block below is the exact text to paste into Play Console.
@@ -121,7 +126,7 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, but it doe
 
 تطبيق صنعه Mohamed Keba تحت اسم Kametrix، بدأ لمسجد واحد ثم امتد. النسخة الإلكترونية متاحة على prayer.kametrix.com.
 
-سياسة الخصوصية: https://kametrix.com/prayer/privacy
+سياسة الخصوصية: https://prayer.kametrix.com/privacy
 للتواصل: mohamedkeba@kametrix.com
 ```
 
@@ -206,7 +211,7 @@ Wer dahintersteht
 
 Entwickelt von Mohamed Keba unter dem Namen Kametrix. Entstanden für eine einzelne Moschee, dann größer geworden. Die Web-Version läuft auf prayer.kametrix.com.
 
-Datenschutzerklärung: https://kametrix.com/prayer/privacy
+Datenschutzerklärung: https://prayer.kametrix.com/privacy
 Kontakt: mohamedkeba@kametrix.com
 ```
 
@@ -291,7 +296,7 @@ Arkasındaki kişi
 
 Kametrix adı altında Mohamed Keba tarafından geliştirildi. Tek bir cami için başladı, sonra büyüdü. Web sürümü prayer.kametrix.com adresinde.
 
-Gizlilik politikası: https://kametrix.com/prayer/privacy
+Gizlilik politikası: https://prayer.kametrix.com/privacy
 İletişim: mohamedkeba@kametrix.com
 ```
 
@@ -376,7 +381,7 @@ Who makes it
 
 Built by Mohamed Keba under the name Kametrix. It started for a single mosque and grew from there. The web version runs at prayer.kametrix.com.
 
-Privacy policy: https://kametrix.com/prayer/privacy
+Privacy policy: https://prayer.kametrix.com/privacy
 Contact: mohamedkeba@kametrix.com
 ```
 
@@ -438,7 +443,7 @@ The public Data safety card will read: **"No data collected"** and **"No data sh
 
 | Item | Answer |
 |---|---|
-| Privacy policy URL | https://kametrix.com/prayer/privacy — required for every app, including ones that collect nothing. It must be live and publicly reachable before you submit, or the review fails on that alone. |
+| Privacy policy URL | https://prayer.kametrix.com/privacy — required for every app, including ones that collect nothing. It must be live and publicly reachable before you submit, or the review fails on that alone. |
 | Ads — does your app contain ads? | **No** |
 | App access — is any part restricted by login? | **No, all functionality is available without special access** |
 | Government apps | **No** |
