@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { useMemo, useState } from "react";
+import { StyleSheet, Text, View, type LayoutChangeEvent } from "react-native";
 import Svg, {
   Circle,
   Defs,
@@ -11,9 +11,10 @@ import Svg, {
   RadialGradient,
   Rect,
   Stop,
-  Text as SvgText,
 } from "react-native-svg";
 import type { PrayerName } from "@shared/prayer-engine";
+
+import { ARC_VIEWBOX, fitViewBox } from "@/lib/display";
 
 import { FONTS } from "@/theme";
 
@@ -25,13 +26,13 @@ import { FONTS } from "@/theme";
 
 const ARC_PRAYERS: PrayerName[] = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 
-const W = 1000;
-const H = 372;
+const W = ARC_VIEWBOX.width;
+const H = ARC_VIEWBOX.height;
 const MARGIN_X = 70;
 const BASELINE_Y = 250;
 const ARC_PEAK_Y = 42;
 const LABEL_MIN_GAP = 96;
-const ROW_STEP = 30;
+const ROW_STEP = 56;
 
 const STARS = [
   { x: 120, y: 70, r: 2.4, a: 0.9 },
@@ -63,6 +64,22 @@ function arcPoint(f: number): { x: number; y: number } {
   return { x: CX - ARC_RX * Math.cos(theta), y: BASELINE_Y - ARC_RY * Math.sin(theta) };
 }
 
+/** Baseline, in viewBox units, of the label on a given row. */
+function labelBaseline(row: number): number {
+  return BASELINE_Y + 34 + row * ROW_STEP;
+}
+
+// Half-width, in viewBox units, of the box a centred label is laid out in.
+// Wide enough for the longest name at the largest size, narrow enough that two
+// neighbours on the same row never overlap invisibly.
+const LABEL_HALF_W = 110;
+
+// Reem Kufi's metrics, as ems: the line box we ask for, and how far the
+// baseline sits below the top of it. Used to place a <Text> by the baseline
+// the arc was drawn to.
+const LINE_EM = 1.25;
+const ASCENT_EM = 0.98;
+
 export function WallSunArc({
   now,
   times,
@@ -78,29 +95,44 @@ export function WallSunArc({
   /** Localised "HH:MM" (Arabic-Indic when the app is in Arabic). */
   clock: (d: Date) => string;
 }) {
+  // react-native-svg's <Text> does not shape Arabic on Android: the letters
+  // come out in their isolated forms, unjoined — "ا ل ف ج ر" instead of
+  // "الفجر". The prayer names therefore live in real <Text>, positioned over
+  // the drawing, which goes through the platform text engine and joins them.
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const onLayout = (e: LayoutChangeEvent) => {
+    const { width, height } = e.nativeEvent.layout;
+    setBox((prev) => (prev.w === width && prev.h === height ? prev : { w: width, h: height }));
+  };
+  const fit = fitViewBox(box.w, box.h);
+
   const nowF = fractionOfDay(now);
   const sun = arcPoint(nowF);
   const sunriseF = fractionOfDay(times.sunrise);
   const sunsetF = fractionOfDay(times.maghrib);
   const isDay = nowF >= sunriseF && nowF <= sunsetF;
 
-  const dots = useMemo(() => {
-    let prevX = -Infinity;
-    let row = 0;
-    return ARC_PRAYERS.map((p) => {
-      const pt = arcPoint(fractionOfDay(times[p]));
-      row = pt.x - prevX < LABEL_MIN_GAP ? (row === 0 ? 1 : 0) : 0;
-      prevX = pt.x;
-      return { p, x: pt.x, y: pt.y, row };
-    });
-  }, [times]);
+  // Two prayers close together on the arc get their labels on alternating
+  // rows so the names never collide.
+  const dots = useMemo(
+    () =>
+      ARC_PRAYERS.reduce<{ p: PrayerName; x: number; y: number; row: number }[]>((out, p) => {
+        const pt = arcPoint(fractionOfDay(times[p]));
+        const prev = out[out.length - 1];
+        const crowded = prev !== undefined && pt.x - prev.x < LABEL_MIN_GAP;
+        const row = crowded && prev.row === 0 ? 1 : 0;
+        out.push({ p, x: pt.x, y: pt.y, row });
+        return out;
+      }, []),
+    [times],
+  );
 
   const elapsedEnd = arcPoint(nowF);
   const mx = MARGIN_X + (W - 2 * MARGIN_X) * nowF;
   const my = ARC_PEAK_Y + 36;
 
   return (
-    <View style={styles.wrap}>
+    <View style={styles.wrap} onLayout={onLayout}>
       <Svg viewBox={`0 0 ${W} ${H}`} style={styles.svg} preserveAspectRatio="xMidYMid meet">
         <Defs>
           <LinearGradient id="wArc" x1="0" x2="1" y1="0" y2="0">
@@ -193,8 +225,7 @@ export function WallSunArc({
 
         {dots.map(({ p, x, y, row }) => {
           const isNext = next === p;
-          const labelY = BASELINE_Y + 34 + row * ROW_STEP;
-          const timeY = labelY + 26;
+          const labelY = labelBaseline(row);
           return (
             <G key={p}>
               <Line
@@ -213,26 +244,6 @@ export function WallSunArc({
                 r={isNext ? 11 : 6}
                 fill={isNext ? "rgb(255,244,214)" : "rgba(232,200,120,0.9)"}
               />
-              <SvgText
-                x={x}
-                y={labelY}
-                textAnchor="middle"
-                fontFamily={FONTS.display}
-                fontSize={isNext ? 29 : 25}
-                fill={isNext ? "rgb(246,228,172)" : "rgba(244,236,216,0.72)"}
-              >
-                {label(p)}
-              </SvgText>
-              <SvgText
-                x={x}
-                y={timeY}
-                textAnchor="middle"
-                fontFamily={FONTS.display}
-                fontSize={18}
-                fill={isNext ? "rgba(246,228,172,0.85)" : "rgba(244,236,216,0.4)"}
-              >
-                {clock(times[p])}
-              </SvgText>
             </G>
           );
         })}
@@ -249,6 +260,60 @@ export function WallSunArc({
           </>
         )}
       </Svg>
+
+      {fit.scale > 0 && (
+        <View style={styles.labels} pointerEvents="none">
+          {dots.flatMap(({ p, x, row }) => {
+            const isNext = next === p;
+            const baseline = labelBaseline(row);
+            // Each line is placed from its own baseline rather than stacked,
+            // so the two sit exactly where the SVG text used to.
+            return [
+              {
+                key: `${p}-name`,
+                text: label(p),
+                size: isNext ? 29 : 25,
+                baseline,
+                color: isNext ? "rgb(246,228,172)" : "rgba(244,236,216,0.72)",
+                x,
+              },
+              {
+                key: `${p}-time`,
+                text: clock(times[p]),
+                size: 18,
+                baseline: baseline + 26,
+                color: isNext ? "rgba(246,228,172,0.85)" : "rgba(244,236,216,0.4)",
+                x,
+              },
+            ];
+          }).map(({ key, text, size, baseline, color, x }) => {
+            const fontSize = size * fit.scale;
+            return (
+              <Text
+                key={key}
+                numberOfLines={1}
+                style={[
+                  styles.labelText,
+                  {
+                    left: fit.offsetX + (x - LABEL_HALF_W) * fit.scale,
+                    // The SVG y was a baseline; a <Text> box is placed by its
+                    // top. With Android's extra font padding off and an
+                    // explicit line height, the baseline sits ASCENT_EM down.
+                    top: fit.offsetY + baseline * fit.scale - fontSize * ASCENT_EM,
+                    width: 2 * LABEL_HALF_W * fit.scale,
+                    fontFamily: FONTS.display,
+                    fontSize,
+                    lineHeight: fontSize * LINE_EM,
+                    color,
+                  },
+                ]}
+              >
+                {text}
+              </Text>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }
@@ -256,4 +321,12 @@ export function WallSunArc({
 const styles = StyleSheet.create({
   wrap: { flex: 1, width: "100%" },
   svg: { width: "100%", height: "100%" },
+  labels: { position: "absolute", left: 0, top: 0, right: 0, bottom: 0 },
+  labelText: {
+    position: "absolute",
+    textAlign: "center",
+    // Android pads text boxes by the font's line metrics, which would push the
+    // names off the baseline the dots were drawn to.
+    includeFontPadding: false,
+  },
 });

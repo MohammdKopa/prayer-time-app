@@ -4,6 +4,7 @@ import {
   clockOn,
   DISPLAY_PHOTO_META,
   displayTimes,
+  fitViewBox,
   isFriday,
   nightDimAt,
   parseClock,
@@ -11,10 +12,10 @@ import {
   PHOTO_SHOW_S,
   photoAt,
   prayerNowAt,
-  SAYINGS,
-  SAYINGS_FRIDAY,
   sayingAt,
   sayingMarks,
+  SAYINGS,
+  SAYINGS_FRIDAY,
 } from "@/lib/display";
 import { computeDay } from "@shared/prayer-engine";
 
@@ -125,5 +126,39 @@ describe("wall behaviours", () => {
     const again = photoAt(at(photos.length * PHOTO_CYCLE_S), photos);
     expect(again.photo).toBe(first.photo);
     expect(again.line).not.toBe(first.line);
+  });
+});
+
+describe("fitViewBox (arc label overlay)", () => {
+  it("is a no-op scale with no measured box yet", () => {
+    expect(fitViewBox(0, 0)).toEqual({ scale: 0, offsetX: 0, offsetY: 0 });
+    expect(fitViewBox(-10, 200)).toEqual({ scale: 0, offsetX: 0, offsetY: 0 });
+  });
+
+  it("scales to the exact viewBox with no letterbox", () => {
+    expect(fitViewBox(1000, 372)).toEqual({ scale: 1, offsetX: 0, offsetY: 0 });
+    expect(fitViewBox(2000, 744)).toEqual({ scale: 2, offsetX: 0, offsetY: 0 });
+  });
+
+  it("letterboxes vertically when the box is too tall", () => {
+    // Width-bound: scale 1, 100px of slack split above and below.
+    expect(fitViewBox(1000, 472)).toEqual({ scale: 1, offsetX: 0, offsetY: 50 });
+  });
+
+  it("letterboxes horizontally when the box is too wide", () => {
+    expect(fitViewBox(1200, 372)).toEqual({ scale: 1, offsetX: 100, offsetY: 0 });
+  });
+
+  it("puts a label at the dot it belongs to, whatever the box", () => {
+    // A dot drawn at viewBox x=500 must land in the middle of the view.
+    for (const [w, h] of [
+      [1000, 372],
+      [1920, 900],
+      [800, 600],
+      [2560, 700],
+    ] as const) {
+      const { scale, offsetX } = fitViewBox(w, h);
+      expect(offsetX + 500 * scale).toBeCloseTo(w / 2, 6);
+    }
   });
 });

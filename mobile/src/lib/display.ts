@@ -304,3 +304,32 @@ export function photoAt<P extends DisplayPhotoMeta>(
   const line = photo.texts[round % photo.texts.length];
   return { photo, line, active: cyclePos < PHOTO_SHOW_S, slot };
 }
+
+// ---------------------------------------------------------------------------
+// Wall sun arc
+// ---------------------------------------------------------------------------
+
+/** The sun arc's viewBox, shared by the drawing and the label overlay. */
+export const ARC_VIEWBOX = { width: 1000, height: 372 } as const;
+
+/**
+ * Where `preserveAspectRatio="xMidYMid meet"` puts that viewBox inside a box
+ * of `w` x `h` device pixels: one uniform scale, letterboxed on the long axis.
+ *
+ * The prayer names are drawn as real `<Text>` rather than SVG text — Android's
+ * SVG text does not join Arabic letters — so the overlay has to reproduce this
+ * mapping by hand to land on the dots.
+ */
+export function fitViewBox(
+  w: number,
+  h: number,
+  view: { width: number; height: number } = ARC_VIEWBOX,
+): { scale: number; offsetX: number; offsetY: number } {
+  if (!(w > 0) || !(h > 0)) return { scale: 0, offsetX: 0, offsetY: 0 };
+  const scale = Math.min(w / view.width, h / view.height);
+  return {
+    scale,
+    offsetX: (w - view.width * scale) / 2,
+    offsetY: (h - view.height * scale) / 2,
+  };
+}
