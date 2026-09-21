@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  updatePeriodMillis is 0 on purpose: the system's own periodic update floor
+  is 30 minutes, which is useless for a live countdown. PrayerWidgetProvider
+  instead arms an AlarmManager alarm for the next minute boundary itself
+  (see scheduleNextTick in PrayerWidgetProvider.kt) and re-arms on every tick,
+  on boot, and whenever a widget instance is (re-)enabled.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="140dp"
+    android:minHeight="40dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/widget_prayer"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />

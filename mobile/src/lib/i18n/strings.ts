@@ -208,6 +208,12 @@ const ar = {
   exactAlarmLater: "لاحقًا",
   exactAlarmBanner:
     "قد يتأخر الأذان حتى ساعة. اضغط للسماح بالمنبّهات الدقيقة.",
+  autostartTitle: "التشغيل التلقائي متوقف",
+  autostartBody:
+    "هاتف شاومي يمنع هذا التطبيق من العمل في الخلفية، فقد يتأخر الأذان ساعات. فعّل «التشغيل التلقائي» للتطبيق.",
+  autostartGrant: "تفعيل التشغيل التلقائي",
+  autostartBanner:
+    "قد يتأخر الأذان على هاتف شاومي. اضغط لتفعيل التشغيل التلقائي.",
   scheduledAlerts: "{count} تنبيهات مجدولة",
   scheduledNone: "لا تنبيهات مجدولة",
   scheduledShow: "عرض",
@@ -461,6 +467,12 @@ const de: Strings = {
   exactAlarmLater: "Später",
   exactAlarmBanner:
     "Der Adhan kann bis zu eine Stunde zu spät kommen. Tippen, um genaue Alarme zu erlauben.",
+  autostartTitle: "Autostart ist aus",
+  autostartBody:
+    "Dein Xiaomi hält diese App im Hintergrund an, der Adhan kann Stunden zu spät kommen. Schalte „Autostart“ für die App ein.",
+  autostartGrant: "Autostart einschalten",
+  autostartBanner:
+    "Auf deinem Xiaomi kann der Adhan zu spät kommen. Tippen, um Autostart einzuschalten.",
   scheduledAlerts: "{count} Benachrichtigungen geplant",
   scheduledNone: "Nichts geplant",
   scheduledShow: "Anzeigen",
@@ -708,6 +720,12 @@ const tr: Strings = {
   exactAlarmLater: "Daha sonra",
   exactAlarmBanner:
     "Ezan bir saate kadar gecikebilir. Tam alarmlara izin vermek için dokun.",
+  autostartTitle: "Otomatik başlatma kapalı",
+  autostartBody:
+    "Xiaomi telefonun bu uygulamayı arka planda durduruyor, ezan saatlerce gecikebilir. Uygulama için “Otomatik başlatma”yı aç.",
+  autostartGrant: "Otomatik başlatmayı aç",
+  autostartBanner:
+    "Xiaomi telefonunda ezan gecikebilir. Otomatik başlatmayı açmak için dokun.",
   scheduledAlerts: "{count} bildirim planlandı",
   scheduledNone: "Planlanmış bildirim yok",
   scheduledShow: "Göster",
@@ -955,6 +973,12 @@ const en: Strings = {
   exactAlarmLater: "Later",
   exactAlarmBanner:
     "The adhan may be up to an hour late. Tap to allow exact alarms.",
+  autostartTitle: "Autostart is off",
+  autostartBody:
+    "Your Xiaomi phone stops this app in the background, so the adhan can be hours late. Turn on “Autostart” for the app.",
+  autostartGrant: "Turn on Autostart",
+  autostartBanner:
+    "On your Xiaomi the adhan may be late. Tap to turn on Autostart.",
   scheduledAlerts: "{count} alerts scheduled",
   scheduledNone: "No alerts scheduled",
   scheduledShow: "Show",

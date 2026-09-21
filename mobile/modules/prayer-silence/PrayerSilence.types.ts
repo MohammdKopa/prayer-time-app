@@ -9,6 +9,8 @@ export interface SilenceWindow {
   durationMinutes: number;
 }
 
+export type AutostartState = "allowed" | "denied" | "unknown";
+
 export interface PrayerSilenceModuleType {
   /** Whether this app currently holds Android's notification-policy
    *  (Do Not Disturb) access. False on iOS and web. */
@@ -26,6 +28,15 @@ export interface PrayerSilenceModuleType {
   /** Opens the "Alarms & reminders" system screen for this app. No-op where
    *  there is nothing to grant. */
   openExactAlarmSettings(): void;
+  /**
+   * Xiaomi's "Autostart" switch for this app. "denied" means an alarm cannot
+   * restart the app once the system has killed it, so the adhan can arrive
+   * hours late. "unknown" on every other phone and on iOS/web.
+   */
+  autostartState(): AutostartState;
+  /** Opens Xiaomi's Autostart screen, or this app's settings page when that
+   *  screen is not there. No-op off Android. */
+  openAutostartSettings(): void;
   /**
    * Replaces every previously scheduled window with this list. Windows in
    * the past are the caller's responsibility to filter out; the native side

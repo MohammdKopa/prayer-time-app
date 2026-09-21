@@ -82,6 +82,22 @@ export function openExactAlarmSettings(): void {
 }
 
 /**
+ * True only on a Xiaomi phone whose "Autostart" switch is off for this app.
+ * There an alarm cannot restart the app once the system has killed it, so
+ * the adhan can wait hours for the next app start. Exact alarms do not help
+ * with that; only the user can flip the switch. False everywhere else,
+ * including when the state could not be read.
+ */
+export function autostartBlocked(): boolean {
+  return PrayerSilence.autostartState() === "denied";
+}
+
+/** Opens Xiaomi's Autostart screen (or this app's settings page). */
+export function openAutostartSettings(): void {
+  PrayerSilence.openAutostartSettings();
+}
+
+/**
  * Replace every scheduled silence window with a fresh set for the next
  * HORIZON_DAYS, or cancel outright when the feature is off or access has
  * not been granted. Meant to be called from notifications.ts's reschedule()

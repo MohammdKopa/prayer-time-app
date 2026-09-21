@@ -1,0 +1,30 @@
+diff --git a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoSchedulingDelegate.kt b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoSchedulingDelegate.kt
+index eddd142..7b41ad1 100644
+--- a/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoSchedulingDelegate.kt
++++ b/node_modules/expo-notifications/android/src/main/java/expo/modules/notifications/service/delegates/ExpoSchedulingDelegate.kt
+@@ -103,7 +103,25 @@ class ExpoSchedulingDelegate(protected val context: Context) : SchedulingDelegat
+   }
+ 
+   private fun setupAlarm(triggerAtMillis: Long, operation: PendingIntent) {
++    // prayer-time-app patch (patches/expo-notifications+*.patch): every
++    // scheduled notification in this app is an adhan or a prayer reminder,
++    // so each is armed as an alarm clock. setAlarmClock is the one alarm type
++    // that neither Doze nor OEM battery managers defer; the exact
++    // allow-while-idle alarm below was held for 2.5 hours on a Xiaomi
++    // (HyperOS, 2026-09-21: Maghrib delivered together with Isha). The cost
++    // is the system's alarm icon and "next alarm" showing the next adhan.
+     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarmManager.canScheduleExactAlarms()) {
++      val launch = context.packageManager.getLaunchIntentForPackage(context.packageName)
++      if (launch != null) {
++        val showIntent = PendingIntent.getActivity(
++          context,
++          0,
++          launch,
++          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
++        )
++        AlarmManagerCompat.setAlarmClock(alarmManager, triggerAtMillis, showIntent, operation)
++        return
++      }
+       AlarmManagerCompat.setExactAndAllowWhileIdle(
+         alarmManager,
+         AlarmManager.RTC_WAKEUP,

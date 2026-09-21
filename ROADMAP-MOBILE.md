@@ -386,6 +386,45 @@ mid-June the mosque says Fajr 03:26 / Isha 23:34, the app 03:43 / 23:21.
 Today they agree within two minutes. Whichever the adhan actually follows
 is one sentence from Sheikh Ayman; the engine change is small either way.
 
+### Done 2026-09-22 — the late Maghrib
+
+- [x] **Maghrib arrived 2.5 hours late, together with Isha** (Mohamed's
+      Xiaomi 23078PND5G "corot", HyperOS 3.0, Play build, 2026-09-21). Read off the device
+      with adb: all five alarms of the day were delivered, Asr (16:43) on
+      time and the last one delivered while idle; Maghrib and Isha both
+      went out at about 21:57. Exact alarms were allowed; Xiaomi's
+      **Autostart** (MIUI app-op 10008) was **off**, and the system had
+      been killing the process for memory. Logs from the Maghrib minute
+      itself had already rotated, so the mechanism is inferred, not seen.
+- [x] **Adhan armed with `setAlarmClock`**, the one alarm type neither Doze
+      nor OEM battery managers defer. expo-notifications has no option for
+      it, so it is a patch-package patch
+      (`mobile/patches/expo-notifications+57.0.19.patch`, applied by
+      `postinstall`). SDK 57 links expo-notifications as a **prebuilt
+      AAR** that ignores its own sources, so `mobile/package.json` sets
+      `expo.autolinking.android.buildFromSource: ["expo-notifications"]`;
+      without it the patch compiles into nothing (the first build did
+      exactly that). Re-check the patch on every expo-notifications
+      upgrade. Cost: the status-bar alarm icon, and "next alarm" shows the
+      next adhan.
+- [x] **Autostart prompt on Xiaomi**: `PrayerSilence.autostartState()`
+      reads op 10008 by reflection; the clock-screen banner and a Settings
+      card send the user to the Security app's Autostart list (app settings
+      as a fallback). Silent on every other phone.
+- [x] **Widget tick no longer runs without a widget.** `refreshAll` armed
+      the per-minute alarm on every adhan reschedule even with no instance
+      placed (71 ticks on a phone with no widget). It now cancels instead,
+      and the tick is a non-wakeup `RTC` alarm: it used to wake the phone
+      1,440 times a day and share the adhan's allow-while-idle budget.
+- [x] **Native module sources were not in git.** `mobile/.gitignore`'s bare
+      `android/` also matched `modules/*/android/`, so the widget and
+      auto-silence Kotlin existed only on this drive. Anchored to
+      `/android/`; module build output ignored separately.
+- [ ] Ship as versionCode 2 through Play, then confirm on the Redmi:
+      `adb shell dumpsys alarm` should list the next adhan under
+      "Next alarm clock" for app.kametrix.prayer, the status bar should
+      show the alarm icon, and Maghrib should arrive on its own.
+
 ### Still to do, in order
 
 **A — content review. BLOCKS RELEASE.**

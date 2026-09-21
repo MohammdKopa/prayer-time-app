@@ -2,7 +2,11 @@ import { Platform } from "react-native";
 
 import type { PrayerSilenceModuleType } from "./PrayerSilence.types";
 
-export type { SilenceWindow, PrayerSilenceModuleType } from "./PrayerSilence.types";
+export type {
+  AutostartState,
+  SilenceWindow,
+  PrayerSilenceModuleType,
+} from "./PrayerSilence.types";
 
 /**
  * Do Not Disturb has no equivalent third-party API on iOS, and none at all
@@ -20,6 +24,8 @@ function loadNativeModule(): PrayerSilenceModuleType {
       openPolicyAccessSettings: () => {},
       canScheduleExactAlarms: () => true,
       openExactAlarmSettings: () => {},
+      autostartState: () => "unknown",
+      openAutostartSettings: () => {},
       scheduleSilence: () => {},
       cancelSilence: () => {},
     };

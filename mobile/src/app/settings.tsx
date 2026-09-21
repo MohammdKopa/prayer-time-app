@@ -47,10 +47,12 @@ import {
   type ScheduledAlert,
 } from "@/lib/notifications";
 import {
+  autostartBlocked,
   canScheduleExactAlarms,
   hasPolicyAccess,
   isSilenceEnabled,
   loadSilenceMinutes,
+  openAutostartSettings,
   openExactAlarmSettings,
   openPolicyAccessSettings,
   rescheduleSilenceFor,
@@ -95,6 +97,8 @@ export default function SettingsScreen() {
   // every return to the foreground because the user grants it on a system
   // screen we send them to.
   const [exactAlarms, setExactAlarms] = useState(() => canScheduleExactAlarms());
+  // Xiaomi's Autostart switch, same shape again. Always false elsewhere.
+  const [autostartOff, setAutostartOff] = useState(() => autostartBlocked());
 
   // What is actually sitting in the alarm queue. Not decoration: when the
   // phone rings twice, this is where "two entries at one time" (our bug) is
@@ -125,6 +129,7 @@ export default function SettingsScreen() {
       if (next === "active") {
         setSilenceAccess(hasPolicyAccess());
         setExactAlarms(canScheduleExactAlarms());
+        setAutostartOff(autostartBlocked());
         refreshAlerts();
       }
     });
@@ -143,6 +148,7 @@ export default function SettingsScreen() {
       await setEnabled(true);
       setNotify(true);
       setExactAlarms(canScheduleExactAlarms());
+      setAutostartOff(autostartBlocked());
       // The second permission, the one Android never asks for itself.
       askForExactAlarms(t);
       await reschedule(place, t);
@@ -254,6 +260,21 @@ export default function SettingsScreen() {
               >
                 <Text style={styles.explainButtonText}>
                   {t("exactAlarmGrant")}
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
+          {notify && exactAlarms && autostartOff && (
+            <View style={[styles.explainCard, styles.explainInCard]}>
+              <Text style={styles.explainTitle}>{t("autostartTitle")}</Text>
+              <Text style={styles.explainBody}>{t("autostartBody")}</Text>
+              <Pressable
+                style={styles.explainButton}
+                onPress={() => openAutostartSettings()}
+              >
+                <Text style={styles.explainButtonText}>
+                  {t("autostartGrant")}
                 </Text>
               </Pressable>
             </View>

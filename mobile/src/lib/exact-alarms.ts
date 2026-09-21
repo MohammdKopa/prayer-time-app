@@ -2,7 +2,12 @@ import { Alert } from "react-native";
 
 import type { Translate } from "@/lib/i18n";
 import { isEnabled } from "@/lib/notifications";
-import { canScheduleExactAlarms, openExactAlarmSettings } from "@/lib/silence";
+import {
+  autostartBlocked,
+  canScheduleExactAlarms,
+  openAutostartSettings,
+  openExactAlarmSettings,
+} from "@/lib/silence";
 
 // The exact-alarm permission, surfaced where it matters.
 //
@@ -15,10 +20,24 @@ import { canScheduleExactAlarms, openExactAlarmSettings } from "@/lib/silence";
 // until it is granted. It is never asked while notifications are off: an
 // alarm permission for alarms the user does not want is noise.
 
-/** True when the adhan is on but Android may deliver it late. */
-export async function adhanMayBeLate(): Promise<boolean> {
-  if (canScheduleExactAlarms()) return false;
-  return isEnabled();
+/**
+ * Why the adhan may be late, or null when nothing we can see stands in its
+ * way. Only asked while the adhan is on. Exact alarms come first: without
+ * them every phone is late, while autostart only matters on Xiaomi.
+ */
+export type LateReason = "exact" | "autostart";
+
+export async function adhanLateReason(): Promise<LateReason | null> {
+  if (!(await isEnabled())) return null;
+  if (!canScheduleExactAlarms()) return "exact";
+  if (autostartBlocked()) return "autostart";
+  return null;
+}
+
+/** Sends the user to the one system screen that fixes `reason`. */
+export function openFixFor(reason: LateReason): void {
+  if (reason === "exact") openExactAlarmSettings();
+  else openAutostartSettings();
 }
 
 /**
@@ -27,9 +46,24 @@ export async function adhanMayBeLate(): Promise<boolean> {
  * back to the foreground.
  */
 export function askForExactAlarms(t: Translate): void {
-  if (canScheduleExactAlarms()) return;
+  if (canScheduleExactAlarms()) {
+    askForAutostart(t);
+    return;
+  }
   Alert.alert(t("exactAlarmTitle"), t("exactAlarmBody"), [
     { text: t("exactAlarmLater"), style: "cancel" },
     { text: t("exactAlarmGrant"), onPress: () => openExactAlarmSettings() },
+  ]);
+}
+
+/**
+ * The Xiaomi half of the same question, asked when the adhan is switched on
+ * and exact alarms are already allowed. Silent on every other phone.
+ */
+export function askForAutostart(t: Translate): void {
+  if (!autostartBlocked()) return;
+  Alert.alert(t("autostartTitle"), t("autostartBody"), [
+    { text: t("exactAlarmLater"), style: "cancel" },
+    { text: t("autostartGrant"), onPress: () => openAutostartSettings() },
   ]);
 }

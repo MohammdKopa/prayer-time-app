@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <!--
+    Do Not Disturb access. Declared here rather than in app.json so it stays
+    scoped to this module and stands out in review as belonging to one
+    optional, off-by-default feature rather than being lost in the app's main
+    permission list.
+  -->
+  <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
+  <application>
+    <receiver
+      android:name=".SilenceAlarmReceiver"
+      android:exported="false" />
+
+    <!--
+      RECEIVE_BOOT_COMPLETED is already declared by the app (app.json) for
+      the adhan notifications; this receiver rides on that same permission to
+      re-arm silence windows, since AlarmManager alarms do not survive a
+      reboot on their own.
+    -->
+    <receiver
+      android:name=".BootReceiver"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+      </intent-filter>
+    </receiver>
+  </application>
+
+</manifest>

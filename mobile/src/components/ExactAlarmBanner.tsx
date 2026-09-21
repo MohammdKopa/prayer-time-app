@@ -2,23 +2,23 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { AppState, Pressable, StyleSheet, Text } from "react-native";
 
-import { adhanMayBeLate } from "@/lib/exact-alarms";
+import { adhanLateReason, openFixFor, type LateReason } from "@/lib/exact-alarms";
 import { useI18n } from "@/lib/i18n";
-import { openExactAlarmSettings } from "@/lib/silence";
 import { COLORS, FONTS } from "@/theme";
 
 /**
- * One line on the clock screen, shown only while the adhan is on and Android
- * is free to deliver it late. Tapping opens the system screen that fixes it.
+ * One line on the clock screen, shown only while the adhan is on and the
+ * phone is free to deliver it late: exact alarms off, or on a Xiaomi, the
+ * Autostart switch off. Tapping opens the system screen that fixes it.
  * Re-checked on every focus and every return from the background, so it
  * disappears the moment the permission is granted.
  */
 export function ExactAlarmBanner() {
   const { t } = useI18n();
-  const [late, setLate] = useState(false);
+  const [reason, setReason] = useState<LateReason | null>(null);
 
   const refresh = useCallback(() => {
-    void adhanMayBeLate().then(setLate);
+    void adhanLateReason().then(setReason);
   }, []);
 
   useFocusEffect(refresh);
@@ -30,11 +30,13 @@ export function ExactAlarmBanner() {
     return () => sub.remove();
   }, [refresh]);
 
-  if (!late) return null;
+  if (!reason) return null;
 
   return (
-    <Pressable style={styles.banner} onPress={() => openExactAlarmSettings()}>
-      <Text style={styles.text}>{t("exactAlarmBanner")}</Text>
+    <Pressable style={styles.banner} onPress={() => openFixFor(reason)}>
+      <Text style={styles.text}>
+        {t(reason === "exact" ? "exactAlarmBanner" : "autostartBanner")}
+      </Text>
       <Text style={styles.chevron}>{"›"}</Text>
     </Pressable>
   );
