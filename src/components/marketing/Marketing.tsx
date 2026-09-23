@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { StoreLinks } from "@/lib/store-links";
 import { COPY, LANG_NAMES, LANGS, type Lang } from "./copy";
 import { DayBand } from "./DayBand";
+import { AppleIcon, GooglePlayIcon } from "./StoreIcons";
 
 // The public face of prayer.kametrix.com once both apps are in their stores
 // (see lib/store-links.ts). One quiet column; the only bold element is the
@@ -65,14 +66,16 @@ export function Marketing({
           <div className="mt-12 flex flex-wrap items-center gap-4">
             <a
               href={stores.ios}
-              className={`${focus} rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
+              className={`${focus} inline-flex items-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
             >
+              <AppleIcon />
               {c.getIos}
             </a>
             <a
               href={stores.android}
-              className={`${focus} rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
+              className={`${focus} inline-flex items-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
             >
+              <GooglePlayIcon />
               {c.getAndroid}
             </a>
             <span className="text-base text-[#f4ecd8]/70">{c.free}</span>
