@@ -1,0 +1,36 @@
+# What EAS Build uploads. eas-cli reads this file from the git root only
+# (not mobile/), and it REPLACES every .gitignore for the upload, so secrets
+# and generated directories have to be named here too. .git and
+# node_modules (at any depth) are always excluded by eas-cli itself.
+
+# Secrets and private data
+.env*
+*.pem
+certificates/
+/data/
+/.claude/
+
+# Web app output and assets; the Android build does not use them
+/.next/
+/out/
+/build/
+/dist/
+/docs/
+/public/
+/coverage/
+*.tsbuildinfo
+*.log
+/shot*.png
+/preview-*.png
+/*.jpeg
+
+# Mobile: generated native projects, local builds, caches
+/mobile/android/
+/mobile/ios/
+/mobile/.expo/
+/mobile/build-out/
+/mobile/modules/*/android/build/
+/mobile/modules/*/android/.gradle/
+/mobile/modules/*/android/.cxx/
+*.apk
+*.aab
