@@ -23,7 +23,8 @@
         "CFBundleDevelopmentRegion": "ar",
         "ExpoLocalization_supportsRTL": true,
         "ExpoLocalization_forcesRTL": false,
-        "NSLocationWhenInUseUsageDescription": "Prayer Times uses your location to calculate prayer times where you are."
+        "NSLocationWhenInUseUsageDescription": "Prayer Times uses your location to calculate prayer times where you are.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
