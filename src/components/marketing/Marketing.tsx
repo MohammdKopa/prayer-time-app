@@ -93,9 +93,10 @@ export function Marketing({
         <h2 className="mx-auto max-w-5xl px-5 font-[family-name:var(--font-kufi)] text-3xl sm:px-8">
           {c.screensTitle}
         </h2>
-        <ul className="mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 sm:px-8 lg:justify-[safe_center]">
+        {/* A swipeable strip on phones; five columns on the page grid from lg. */}
+        <ul className="mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-6 sm:px-8 lg:mx-auto lg:grid lg:max-w-5xl lg:grid-cols-5 lg:overflow-visible">
           {c.screens.map((s) => (
-            <li key={s.file} className="w-[62vw] max-w-[250px] shrink-0 snap-center">
+            <li key={s.file} className="w-[62vw] max-w-[250px] shrink-0 snap-center lg:w-auto lg:max-w-none">
               <figure className="m-0">
                 <Image
                   src={`/marketing/${lang}/${s.file}.webp`}
