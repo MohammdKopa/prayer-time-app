@@ -9,11 +9,18 @@ import {
   CHANNEL_SILENT,
   channelFor,
   isAdhanVoice,
+  IOS_ADHAN_SECONDS,
+  IOS_ADHAN_SOUND,
   isRecordedVoice,
   RECORDED_VOICES,
   RETIRED_CHANNELS,
+  soundForOs,
   VOICE_FILES,
+  VOICE_SECONDS,
   voiceChannel,
+  voiceForOs,
+  voicesFor,
+  voiceSeconds,
 } from "@/lib/adhan-voice";
 
 const SOUNDS_DIR = join(__dirname, "..", "mobile", "assets", "sounds");
@@ -87,5 +94,37 @@ describe("adhan voices", () => {
     expect(isAdhanVoice("system")).toBe(true);
     expect(isAdhanVoice("mp3")).toBe(false);
     expect(isAdhanVoice(null)).toBe(false);
+  });
+
+  describe("on iOS", () => {
+    it("bundles one registered cut under 30 s, which the shrinker drops on Android", async () => {
+      expect(existsSync(join(SOUNDS_DIR, IOS_ADHAN_SOUND))).toBe(true);
+      expect(await registeredSounds()).toContain(`./assets/sounds/${IOS_ADHAN_SOUND}`);
+      // iOS falls back to the default ding past 30 s.
+      expect(IOS_ADHAN_SECONDS).toBeLessThan(30);
+      // Android keeps res/raw/adhan_* only; the .caf must not match.
+      expect(IOS_ADHAN_SOUND.startsWith("adhan_")).toBe(false);
+    });
+
+    it("every recorded voice plays the cut; booleans pass through", () => {
+      for (const voice of RECORDED_VOICES) {
+        const { sound } = channelFor("adhan", voice);
+        expect(soundForOs(sound, "ios")).toBe(IOS_ADHAN_SOUND);
+        expect(soundForOs(sound, "android")).toBe(VOICE_FILES[voice]);
+        expect(voiceSeconds(voice, "ios")).toBe(IOS_ADHAN_SECONDS);
+        expect(voiceSeconds(voice, "android")).toBe(VOICE_SECONDS[voice]);
+      }
+      expect(soundForOs(true, "ios")).toBe(true);
+      expect(soundForOs(false, "ios")).toBe(false);
+    });
+
+    it("offers one recording, and a stored full adhan shows as it", () => {
+      expect(voicesFor("ios")).toEqual(["short", "system"]);
+      expect(voicesFor("android")).toEqual(ADHAN_VOICES);
+      expect(voiceForOs("full", "ios")).toBe("short");
+      expect(voiceForOs("full", "android")).toBe("full");
+      expect(voiceForOs("system", "ios")).toBe("system");
+      for (const v of ADHAN_VOICES) expect(voicesFor("ios")).toContain(voiceForOs(v, "ios"));
+    });
   });
 });

@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   alertIdentifier,
+  IOS_ADHAN_BUDGET,
+  IOS_ADHKAR_BUDGET,
+  IOS_PENDING_LIMIT,
   HORIZON_DAYS,
   ID_PREFIX,
   isOrphanIdentifier,
@@ -10,6 +13,7 @@ import {
   ownIdentifiers,
   PREVIEW_ID,
   scheduleFingerprint,
+  soonest,
   type FingerprintInput,
 } from "@/lib/adhan-schedule";
 
@@ -93,5 +97,22 @@ describe("localDayKey", () => {
   it("zero-pads and uses the local calendar", () => {
     expect(localDayKey(new Date(2026, 0, 5, 23, 59))).toBe("2026-01-05");
     expect(localDayKey(new Date(2026, 11, 31, 0, 0))).toBe("2026-12-31");
+  });
+});
+
+describe("iOS notification budget", () => {
+  it("adhan and adhkar together stay under the 64 iOS keeps, with room to spare", () => {
+    expect(IOS_ADHAN_BUDGET + IOS_ADHKAR_BUDGET).toBeLessThan(IOS_PENDING_LIMIT);
+    // At least three full days of every prayer with a reminder before each.
+    expect(IOS_ADHAN_BUDGET).toBeGreaterThanOrEqual(NOTIFIED.length * 2 * 3);
+  });
+
+  it("soonest keeps the earliest, in time order", () => {
+    const at = (h: number) => ({ h, at: new Date(2026, 8, 23, h) });
+    const items = [at(9), at(3), at(12), at(1), at(5)];
+    expect(soonest(items, 3, (i) => i.at).map((i) => i.h)).toEqual([1, 3, 5]);
+    expect(soonest(items, Infinity, (i) => i.at).map((i) => i.h)).toEqual([1, 3, 5, 9, 12]);
+    expect(soonest(items, 0, (i) => i.at)).toEqual([]);
+    expect(items.map((i) => i.h)).toEqual([9, 3, 12, 1, 5]); // input untouched
   });
 });

@@ -10,6 +10,17 @@ with the `expo-notifications` config plugin in `app.json` and end up in
 |---|---|---|---|
 | `adhan_full.ogg` | [Beautiful adhan.ogg](https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg) on Wikimedia Commons, own work by user Adam-synagda (2022) | CC0 1.0 (public domain dedication) | 2:33 |
 | `adhan_short.ogg` | First 32 s of `adhan_full.ogg`, 3 s fade-out | CC0 1.0 | 0:32 |
+| `ios_adhan.caf` | First 29 s of `adhan_full.ogg`, 3 s fade-out, mono IMA4 | CC0 1.0 | 0:29 |
+
+`ios_adhan.caf` exists because iOS cannot play Ogg in a notification and
+plays at most 30 s of one; a longer file falls back to the default sound.
+Both recorded voices play it on iOS. Made with:
+
+    ffmpeg -i adhan_full.ogg -t 29 -af "afade=t=out:st=26:d=3" -ar 44100 -ac 1 -c:a adpcm_ima_qt -f caf ios_adhan.caf
+
+It has no `adhan_` prefix on purpose: the config plugin also copies it into
+Android's res/raw, and the keep rule there covers `adhan_*` only, so the
+resource shrinker removes it from Android builds.
 
 ## Removed
 

@@ -13,6 +13,12 @@
 // The recordings live in mobile/assets/sounds/ and are registered with the
 // expo-notifications config plugin in app.json, which copies them into
 // android/app/src/main/res/raw at prebuild. Licences: assets/sounds/LICENSES.md.
+//
+// iOS is different on two counts: it cannot play Ogg in a notification, and
+// it plays at most 30 seconds of one (a longer file falls back to the
+// default ding). So iOS gets a single cut, IOS_ADHAN_SOUND, and the picker
+// there offers one recording instead of two. The OS is passed in rather than
+// read from react-native, so this file stays testable under node.
 
 import type { NotificationStyle } from "@/lib/prayer-prefs";
 import { loadSetting, saveSetting } from "@/lib/storage";
@@ -43,6 +49,35 @@ export const VOICE_SECONDS: Record<RecordedVoice, number> = {
   short: 32,
 };
 
+/** The only recording iOS plays: the first 29 s of the full adhan, faded
+ *  out, IMA4 in a .caf. Named without the adhan_ prefix so Android's
+ *  resource shrinker drops the copy the config plugin puts in res/raw. */
+export const IOS_ADHAN_SOUND = "ios_adhan.caf";
+export const IOS_ADHAN_SECONDS = 29;
+
+/** What the picker offers on this OS. On iOS "full" would play the same
+ *  29-second cut as "short", so it is not offered. */
+export function voicesFor(os: string): readonly AdhanVoice[] {
+  return os === "ios" ? ADHAN_VOICES.filter((v) => v !== "full") : ADHAN_VOICES;
+}
+
+/** A stored voice the picker on this OS does not offer maps to the one that
+ *  plays the same thing, so the picker always shows a selection. */
+export function voiceForOs(voice: AdhanVoice, os: string): AdhanVoice {
+  return os === "ios" && voice === "full" ? "short" : voice;
+}
+
+/** Seconds a recorded voice plays on this OS, for the picker's hint. */
+export function voiceSeconds(voice: RecordedVoice, os: string): number {
+  return os === "ios" ? IOS_ADHAN_SECONDS : VOICE_SECONDS[voice];
+}
+
+/** The content sound for this OS. channelFor names the Android raw file;
+ *  on iOS every recording is the one cut, and booleans pass through. */
+export function soundForOs(sound: string | boolean, os: string): string | boolean {
+  return os === "ios" && typeof sound === "string" ? IOS_ADHAN_SOUND : sound;
+}
+
 export function isAdhanVoice(v: unknown): v is AdhanVoice {
   return typeof v === "string" && (ADHAN_VOICES as readonly string[]).includes(v);
 }
@@ -54,9 +89,9 @@ export function isRecordedVoice(v: AdhanVoice): v is RecordedVoice {
 /** A stored value from a build that shipped a voice since removed (the 1885
  *  Makkah cylinder) fails isAdhanVoice and falls back to the default here —
  *  no migration step, the old value just stops matching. */
-export async function loadAdhanVoice(): Promise<AdhanVoice> {
+export async function loadAdhanVoice(os: string): Promise<AdhanVoice> {
   const v = await loadSetting(VOICE_KEY);
-  return isAdhanVoice(v) ? v : DEFAULT_ADHAN_VOICE;
+  return voiceForOs(isAdhanVoice(v) ? v : DEFAULT_ADHAN_VOICE, os);
 }
 
 export async function saveAdhanVoice(voice: AdhanVoice): Promise<void> {

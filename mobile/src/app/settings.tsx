@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   AppState,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -21,11 +22,11 @@ import {
   type StringKey,
 } from "@/lib/i18n";
 import {
-  ADHAN_VOICES,
   isRecordedVoice,
   loadAdhanVoice,
   saveAdhanVoice,
-  VOICE_SECONDS,
+  voicesFor,
+  voiceSeconds,
   type AdhanVoice,
 } from "@/lib/adhan-voice";
 import {
@@ -114,7 +115,7 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     void isEnabled().then(setNotify);
-    void loadAdhanVoice().then(setVoice);
+    void loadAdhanVoice(Platform.OS).then(setVoice);
     void loadDisplaySettings().then(setDisplay);
     void isSilenceEnabled().then(setSilenceOn);
     void loadSilenceMinutes().then(setSilenceMinutesState);
@@ -320,7 +321,7 @@ export default function SettingsScreen() {
 
         <Text style={styles.section}>{t("adhanVoiceSection")}</Text>
         <View style={styles.card}>
-          {ADHAN_VOICES.map((v) => {
+          {voicesFor(Platform.OS).map((v) => {
             const active = v === voice;
             return (
               <Pressable
@@ -334,7 +335,7 @@ export default function SettingsScreen() {
                   </Text>
                   <Text style={styles.voiceMeta}>
                     {isRecordedVoice(v)
-                      ? t("voiceSeconds", { seconds: VOICE_SECONDS[v] })
+                      ? t("voiceSeconds", { seconds: voiceSeconds(v, Platform.OS) })
                       : t("voiceSystemHint")}
                   </Text>
                 </View>

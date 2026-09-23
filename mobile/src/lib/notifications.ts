@@ -11,6 +11,7 @@ import {
   loadAdhanVoice,
   RECORDED_VOICES,
   RETIRED_CHANNELS,
+  soundForOs,
   VOICE_FILES,
   voiceChannel,
   type AdhanVoice,
@@ -20,11 +21,13 @@ import {
   alertIdentifier,
   HORIZON_DAYS,
   ID_PREFIX,
+  IOS_ADHAN_BUDGET,
   isOrphanIdentifier,
   localDayKey,
   ownIdentifiers,
   PREVIEW_ID,
   scheduleFingerprint,
+  soonest,
 } from "@/lib/adhan-schedule";
 import { planAlerts, type PrayerAlert } from "@/lib/prayer-prefs";
 import { adjustedDaysFor } from "@/lib/schedule";
@@ -193,7 +196,7 @@ export async function previewVoice(voice: AdhanVoice, t: Translate): Promise<voi
     content: {
       title: t("voicePreviewTitle"),
       body: t("voicePreviewBody"),
-      sound,
+      sound: soundForOs(sound, Platform.OS),
     },
     trigger: { channelId },
   });
@@ -299,7 +302,7 @@ async function runReschedule(place: Place, t: Translate): Promise<number> {
     return 0;
   }
 
-  const voice = await loadAdhanVoice();
+  const voice = await loadAdhanVoice(Platform.OS);
   const now = new Date();
 
   // planAlerts applies the per-prayer style ("off" drops the prayer, its
@@ -307,10 +310,16 @@ async function runReschedule(place: Place, t: Translate): Promise<number> {
   // past or uncomputable (above ~66N the engine returns an Invalid Date
   // for Fajr/Maghrib/Isha in the midnight-sun weeks; scheduling one throws
   // and would take the whole pass down with it).
-  const plan: { alert: PrayerAlert; dayOffset: number }[] = [];
+  const wanted: { alert: PrayerAlert; dayOffset: number }[] = [];
   days.forEach((day, dayOffset) => {
-    for (const alert of planAlerts(day, prefs, now)) plan.push({ alert, dayOffset });
+    for (const alert of planAlerts(day, prefs, now)) wanted.push({ alert, dayOffset });
   });
+  // iOS keeps only 64 pending notifications app-wide; see IOS_ADHAN_BUDGET.
+  const plan = soonest(
+    wanted,
+    Platform.OS === "ios" ? IOS_ADHAN_BUDGET : Infinity,
+    (p) => p.alert.at,
+  );
 
   const fingerprint = scheduleFingerprint({
     latitude: place.latitude,
@@ -360,9 +369,9 @@ async function runReschedule(place: Place, t: Translate): Promise<number> {
             city: place.name,
             time: formatClock(days[dayOffset][alert.prayer]),
           }),
-          // Android 8+ takes the sound from the channel, older Android from
-          // here; channelFor gives both for the same style + voice.
-          sound: route.sound,
+          // Android 8+ takes the sound from the channel, older Android and
+          // iOS from here; channelFor gives both for the same style + voice.
+          sound: soundForOs(route.sound, Platform.OS),
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,

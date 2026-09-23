@@ -2,6 +2,7 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
 import { computeDay } from "@shared/prayer-engine";
+import { IOS_ADHKAR_BUDGET, soonest } from "@/lib/adhan-schedule";
 import type { Place } from "@/lib/location";
 import { loadJSON, loadSetting, saveJSON, saveSetting } from "@/lib/storage";
 import type { Occasion } from "./content";
@@ -355,7 +356,14 @@ export async function reschedule(
 
   const scheduled: string[] = [];
 
-  for (const plan of planReminders(place, settings)) {
+  // iOS keeps only 64 pending notifications app-wide, shared with the
+  // adhan; see IOS_ADHKAR_BUDGET in adhan-schedule.ts.
+  const plans = soonest(
+    planReminders(place, settings),
+    Platform.OS === "ios" ? IOS_ADHKAR_BUDGET : Infinity,
+    (p) => p.when,
+  );
+  for (const plan of plans) {
     const identifier = identifierFor(plan.occasion, plan.dayOffset);
     try {
       await Notifications.scheduleNotificationAsync({

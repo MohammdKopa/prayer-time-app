@@ -10,6 +10,27 @@ import type { NotifiedPrayer } from "@/lib/prayer-prefs";
  *  and every app open pushes the horizon back out. */
 export const HORIZON_DAYS = 7;
 
+/**
+ * iOS holds at most 64 pending local notifications per app and silently
+ * drops the rest, keeping the soonest. With every prayer on and a reminder
+ * before each, the adhan alone would want 70 over HORIZON_DAYS, and the
+ * adhkar reminders draw on the same pool. So on iOS each scheduler takes a
+ * fixed share, the adhan the larger one: a missed dhikr nudge is a pity, a
+ * missed prayer is the one thing this app must not do. Two are left spare
+ * for "play sample". Every app open refills the queue, so a shorter horizon
+ * only matters to someone who does not open the app for days.
+ */
+export const IOS_PENDING_LIMIT = 64;
+export const IOS_ADHAN_BUDGET = 48;
+export const IOS_ADHKAR_BUDGET = 14;
+
+/** The `budget` soonest items, in time order. Everything when the budget
+ *  covers them all (Android passes Infinity). */
+export function soonest<T>(items: readonly T[], budget: number, when: (item: T) => Date): T[] {
+  const sorted = [...items].sort((a, b) => when(a).getTime() - when(b).getTime());
+  return sorted.slice(0, Math.max(0, budget));
+}
+
 /** Every adhan notification carries this prefix, so it can be cancelled
  *  without touching anything else scheduled by the app. */
 export const ID_PREFIX = "adhan-";

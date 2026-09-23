@@ -10,6 +10,7 @@
     "backgroundColor": "#05130D",
     "ios": {
       "bundleIdentifier": "app.kametrix.prayer",
+      "appleTeamId": "JSD24HLT77",
       "supportsTablet": false,
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
@@ -76,7 +77,8 @@
           "color": "#D9B871",
           "sounds": [
             "./assets/sounds/adhan_full.ogg",
-            "./assets/sounds/adhan_short.ogg"
+            "./assets/sounds/adhan_short.ogg",
+            "./assets/sounds/ios_adhan.caf"
           ]
         }
       ],
