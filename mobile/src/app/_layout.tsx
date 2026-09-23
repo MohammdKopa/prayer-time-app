@@ -15,10 +15,12 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { restoreDefaultOrientation } from "@/lib/orientation";
 import { PlaceProvider } from "@/lib/place-context";
 import { COLORS } from "@/theme";
 
 SplashScreen.preventAutoHideAsync();
+restoreDefaultOrientation();
 
 // On Android the five faces are compiled into the APK by the expo-font config
 // plugin (see app.json) under these same family names, so they are usable

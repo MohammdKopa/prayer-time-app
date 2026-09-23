@@ -1,5 +1,6 @@
+import { Image } from "expo-image";
 import { useEffect, useRef } from "react";
-import { Animated, Image, StyleSheet, Text, View } from "react-native";
+import { Animated, StyleSheet, Text, View } from "react-native";
 import Svg, { Defs, RadialGradient, Rect, Stop } from "react-native-svg";
 
 import { photoAt } from "@/lib/display";
@@ -44,7 +45,7 @@ export function PhotoOverlay({
 
   return (
     <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity }]}>
-      <Image key={slot} source={photo.source} style={styles.img} resizeMode="cover" />
+      <Image key={slot} source={photo.source} style={styles.img} contentFit="cover" />
       <View style={styles.wash} />
       <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
         <Defs>

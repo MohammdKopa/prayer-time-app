@@ -42,6 +42,7 @@ import {
 } from "@/lib/display";
 import { hijriMonthName, toHijri } from "@/lib/hijri";
 import { useI18n, type Strings } from "@/lib/i18n";
+import { restoreDefaultOrientation } from "@/lib/orientation";
 import { usePlaceContext } from "@/lib/place-context";
 import { adjustedDay } from "@/lib/schedule";
 import {
@@ -112,7 +113,7 @@ export default function DisplayScreen() {
       void NavigationBar.setVisibilityAsync("hidden").catch(() => {});
     }
     return () => {
-      void ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(() => {});
+      restoreDefaultOrientation();
       if (Platform.OS === "android") {
         void NavigationBar.setVisibilityAsync("visible").catch(() => {});
       }
