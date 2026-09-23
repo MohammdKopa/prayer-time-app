@@ -30,18 +30,19 @@ const notoArabic = Noto_Naskh_Arabic({
   weight: ["400", "500", "700"],
 });
 
-// Display-only faces for the mosque plasma (/display). Reem Kufi = geometric
-// kufic for headings/times (legible across a room); Amiri = calligraphic naskh
-// for Qurʾanic text. Loaded globally but only referenced on the display route.
+// Faces for the mosque plasma (/display) and the marketing page. Reem Kufi =
+// geometric kufic for headings/times (legible across a room); Amiri =
+// calligraphic naskh for Qurʾanic text, and the Latin body face of the
+// marketing page, hence the latin subsets.
 const reemKufi = Reem_Kufi({
   variable: "--font-kufi",
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["400", "500", "600", "700"],
 });
 
 const amiri = Amiri({
   variable: "--font-amiri",
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["400", "700"],
 });
 
