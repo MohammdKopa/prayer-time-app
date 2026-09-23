@@ -1,7 +1,8 @@
-# Prayer Times — Android app (ROADMAP)
+# Prayer Times — mobile app, Android and iOS (ROADMAP)
 
-The native Android app. The web PWA at prayer.kametrix.com stays as-is and keeps
-serving the mosque plasma display; this is a second front-end over the same engine.
+The native app, one Expo codebase for Android and (since 2026-09-23) iOS. The
+web PWA at prayer.kametrix.com stays as-is and keeps serving the mosque plasma
+display; this is a second front-end over the same engine.
 
 ---
 
@@ -420,12 +421,77 @@ is one sentence from Sheikh Ayman; the engine change is small either way.
       `android/` also matched `modules/*/android/`, so the widget and
       auto-silence Kotlin existed only on this drive. Anchored to
       `/android/`; module build output ignored separately.
-- [ ] Ship as versionCode 2 through Play, then confirm on the Redmi:
-      `adb shell dumpsys alarm` should list the next adhan under
-      "Next alarm clock" for app.kametrix.prayer, the status bar should
-      show the alarm icon, and Maghrib should arrive on its own.
+- [x] Ship as versionCode 2 through Play (1.0.1, Internal testing). On the
+      Redmi since then: no adhan missed and none late (Mohamed,
+      2026-09-23). The `dumpsys alarm` check was not run.
 
-### Still to do, in order
+### Done 2026-09-23 — Play's recommendations, and iOS
+
+- [x] **1.0.2 (versionCode 3)** on Internal testing. It answers Play's
+      pre-launch report for 1.0.0:
+  - **Resource shrinking on.** The adhan `.ogg` files are looked up by name,
+        so `mobile/plugins/with-keep-adhan-sounds.js` writes
+        `res/raw/adhan_keep.xml`. It must not be called `keep.xml`: React
+        Native generates that file during the release build and replaces
+        ours, and the first build shipped without the sounds because of it.
+        Checked in the APK and the AAB, and on the phone from Play: the adhan
+        plays.
+  - **No manifest orientation lock**, because Android 16 ignores it on large
+        screens and Play flags it. Phones lock to portrait at runtime
+        (`src/lib/orientation.ts`); tablets and foldables rotate.
+  - **Display photos through `expo-image`.**
+  - Not fixable on our side: the deprecated edge-to-edge calls and the
+        bitmap warning come from inside React Native and Material, and
+        AGP 9 waits for an Expo SDK that ships it.
+- [x] **EAS upload archive 908 MB → 25 MB.** eas-cli reads `.easignore`
+      only at the git root; the one in `mobile/` was never read. The root
+      file also lists the secrets `.gitignore` used to cover, because it
+      replaces `.gitignore` for the upload.
+- [x] **iOS.** Apple Developer team `JSD24HLT77`. First EAS build
+      `927bf2a9` (1.0.2, build 1); the credentials are stored on EAS, so
+      later builds can run non-interactive.
+  - **Adhan sound:** iOS cannot play Ogg in a notification and stops at
+        30 s, so it gets `ios_adhan.caf`, the first 29 s of the full adhan
+        (IMA4). The picker there offers one recording.
+  - **64-notification limit:** the adhan and adhkar share iOS's pool of
+        64 pending notifications, so on iOS the adhan takes 48 and adhkar 14,
+        soonest first. Android is unchanged.
+  - **Android-only features:** the widget and auto-silence are absent on
+        iOS; both modules already fall back safely.
+- [x] **App Store listing** in ar/en/de/tr (`docs/app-store-listing.md`)
+      and **iPhone 6.9" screenshots** (`docs/shots/store-ios/`), built from
+      the Play boards in iPhone frames. The Languages board shows only the
+      language list, because the full Settings screen has Android-only
+      cards. "Prayer Times" was taken on the App Store, so the name is
+      "Prayer Times Offline" (and the localized equivalents).
+- [x] **Submitted to App Store review** (2026-09-23). Accessibility label:
+      Dark Interface only, which is all that can be claimed honestly today.
+
+### Next
+
+- [ ] App Store review outcome; answer anything the reviewer asks.
+- [ ] Promote Android 1.0.2 from Internal testing to production.
+- [ ] **Accessibility pass:** labels on every button (18 of 45 today),
+      respect Reduce Motion, measure the faint text against contrast rules,
+      and test the largest text sizes. Then tick VoiceOver, Voice Control,
+      Reduced Motion and probably Larger Text on the App Store.
+- [ ] iOS: "open in maps" should go to Apple Maps. Today it opens Google
+      Maps in the browser.
+- [ ] iOS: when the adhan queue runs low, a last notification saying "open
+      the app to keep the adhan coming". Someone with every reminder on who
+      doesn't open the app for about 5 days runs out of adhans.
+- [ ] iOS home-screen widget (WidgetKit, Swift). It is a project of its own.
+- [ ] Real iOS screenshots from TestFlight to replace the Android captures
+      in iPhone frames (small differences, such as the toggle switches).
+- [ ] A `prayer.kametrix.com/support` page; the support URL currently
+      points at kametrix.com/impressum.
+
+### Still to do, in order (from 2026-09-19)
+
+**Status 2026-09-23:** B, C, D and E are done. The Play screenshots are in
+`docs/shots/store/`, the privacy page is live, both 1.0.x builds shipped
+through EAS (no closed-track clock, since this is an organization account),
+and the work is committed. A and F are unchanged below.
 
 **A — content review. BLOCKS RELEASE.**
 `docs/dua-content-review.md` needs a qualified human. 15 items, each with its
