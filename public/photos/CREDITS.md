@@ -4,28 +4,16 @@ Full-screen photographs shown on the mosque display.
 
 | File | Source | Licence |
 |---|---|---|
-| `aqsa.jpg` | Provided by Mohamed | Free to use — see note below |
-| `makkah.jpg` | Provided by Mohamed; AI-upscaled 4× (Real-ESRGAN x4plus) to 2560px | Free to use — see note below |
-| `umayyad-damascus.jpg` | Provided by Mohamed; AI-upscaled 4× (Real-ESRGAN x4plus) to 2520px | Free to use — see note below |
+| `aqsa.jpg` | ["Der Felsendom mitten in der Stadt"](https://unsplash.com/photos/oJMwapMuApk) by Thales Botelho de Sousa (@thalesbs) on Unsplash; source traced 2026-09-24 | [Unsplash License](https://unsplash.com/license) (commercial use allowed, attribution not required) |
+| `makkah.jpg` | ["Aerial view of Mecca's Grand Mosque at night"](https://www.pexels.com/photo/aerial-view-of-mecca-s-grand-mosque-at-night-36954370/) by Arjan Carja on Pexels. 4000×3000, cropped to 16:9 anchored at the bottom (the Kaʿba sits low); no upscaling. Replaced the Pinterest image 2026-09-24 | [Pexels License](https://www.pexels.com/license/) (commercial use allowed, attribution not required) |
+| `umayyad-damascus.jpg` | ["grau-braunes Domgebäude unter blauem Himmel"](https://unsplash.com/photos/coPHmh0kikU) by T Foz (@tfoz74) on Unsplash: the courtyard, prayer hall and Minaret of the Bride. 4032×3024, cropped to 16:9 from y=106; no upscaling. Replaced the Pinterest image 2026-09-24 | [Unsplash License](https://unsplash.com/license) (commercial use allowed, attribution not required) |
 
-**Provenance, recorded 2026-09-20, before the first Play release.** Mohamed
-found all three through Pinterest and confirms he checked at the time that they
-were free to use. The originating site was not recorded, so there is no licence
-page to cite and no author to attribute. Kept on that basis, as his decision.
-
-If a rights holder ever gets in touch, the swap is cheap — same three filenames,
-nothing else to change. Verified free-licence alternatives that were found on
-2026-09-20 and can drop straight in:
-
-- Makkah — *Masjid al-Haram, Tawaf 20092012 1130PM (8008466944).jpg*, CC BY 2.0,
-  Basheer Olakara, Wikimedia Commons
-- Damascus — *Damascus, Umayyad Mosque (6368698875).jpg*, CC BY 2.0,
-  Arian Zwegers, Wikimedia Commons
-- Jerusalem — *Jerusalem Dome of the rock BW 8.JPG*, public domain,
-  Berthold Werner, Wikimedia Commons
-
-The two CC BY ones would need the `credit` field set; the public-domain one
-would not.
+**Provenance.** Until 2026-09-24 all three were images Mohamed had found on
+Pinterest, with no recorded source. Before replying to App Review (which asked
+for documentation of third-party material), each was replaced by, or traced to,
+a photo on Unsplash or Pexels with its page linked above. Neither licence
+requires attribution; the in-app Credits screen names the photographers anyway.
+Keep it that way: no photo goes in without a source page that states its licence.
 
 ## When adding more
 

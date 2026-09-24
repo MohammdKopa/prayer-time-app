@@ -29,15 +29,18 @@ const SECTIONS: Section[] = [
     items: [
       {
         title: "قُبَّةُ الصَّخْرَة · القُدس — Dome of the Rock, Jerusalem",
-        detail: "Photo provided by the app's author.",
+        detail: "Photo by Thales Botelho de Sousa on Unsplash. Unsplash License.",
+        url: "https://unsplash.com/photos/oJMwapMuApk",
       },
       {
         title: "اَلْمَسْجِدُ الْحَرَام · مَكَّة — al-Masjid al-Ḥarām, Makkah",
-        detail: "Photo provided by the app's author; upscaled with Real-ESRGAN.",
+        detail: "Photo by Arjan Carja on Pexels. Pexels License.",
+        url: "https://www.pexels.com/photo/aerial-view-of-mecca-s-grand-mosque-at-night-36954370/",
       },
       {
         title: "اَلْجَامِعُ الْأُمَوِيّ · دِمَشْق — Umayyad Mosque, Damascus",
-        detail: "Photo provided by the app's author; upscaled with Real-ESRGAN.",
+        detail: "Photo by T Foz on Unsplash. Unsplash License.",
+        url: "https://unsplash.com/photos/coPHmh0kikU",
       },
     ],
   },

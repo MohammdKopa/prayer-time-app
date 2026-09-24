@@ -66,7 +66,7 @@ export const DISPLAY_PHOTOS: DisplayPhoto[] = [
     src: "/photos/makkah.jpg",
     place: "اَلْمَسْجِدُ الْحَرَام · مَكَّة",
     placeDe: "Die heilige Moschee · Mekka",
-    // Tall shot (2560×2100): bias the crop down so the Kaʿba shows behind the text.
+    // The Kaʿba sits below centre (~66%): on screens wider than 16:9, bias the crop down to keep it.
     focus: "center 62%",
     texts: [
       { text: "اللّٰهُمَّ ارْزُقْنَا حَجَّ بَيْتِكَ الْحَرَام" },

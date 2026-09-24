@@ -17,7 +17,7 @@ Generated from `docs/play-listing.md`: same descriptions, minus the home-screen 
 | Price | Free |
 | Age rating | Answer *None* / *No* to every question → **4+** |
 | App Privacy | **Data Not Collected**. Location is used only on the device and never sent anywhere; no analytics, no ads, no third-party SDKs. Same basis as the Play Data safety answers. |
-| Content rights | *Yes, it contains third-party content, and I have the rights*: CC0 adhan recordings and mosque photos (Wikimedia Commons), mosque data from OpenStreetMap (ODbL, credited in the app's Credits screen). |
+| Content rights | *Yes, it contains third-party content, and I have the rights*: CC0 adhan recording (Wikimedia Commons), mosque-display photos from Unsplash and Pexels (their free licences, sources in `public/photos/CREDITS.md`), mosque data from OpenStreetMap (ODbL, credited in the app's Credits screen). |
 | Encryption | Already answered in the build (`ITSAppUsesNonExemptEncryption = false`). |
 | Sign-in required | No. |
 

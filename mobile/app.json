@@ -10,6 +10,7 @@
     "backgroundColor": "#05130D",
     "ios": {
       "bundleIdentifier": "app.kametrix.prayer",
+      "buildNumber": "2",
       "appleTeamId": "JSD24HLT77",
       "supportsTablet": false,
       "infoPlist": {
@@ -29,7 +30,7 @@
     },
     "android": {
       "package": "app.kametrix.prayer",
-      "versionCode": 3,
+      "versionCode": 4,
       "adaptiveIcon": {
         "backgroundColor": "#05130D",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
