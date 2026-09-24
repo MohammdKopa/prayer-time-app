@@ -31,8 +31,11 @@ better, or the trust stronger?*
 
 ### Deliberately excluded
 
-- **Quran reader** — enormous scope, and one wrong character in the text is
-  unforgivable. Link out to a verified app.
+- ~~**Quran reader**~~ — **reversed 2026-09-24, planned for 1.1** (see
+  "1.1 — Quran reader" below). The reason it was excluded still stands and
+  became its first rule: one wrong character is unforgivable, so the text is
+  bundled verbatim from a verified source and a test fails the build if it
+  changes.
 - **AR qibla via camera** — gimmick, less accurate than the magnetometer.
 - **Social / feed / streak-shaming** — against the calm-clock ethos.
 
@@ -467,9 +470,31 @@ is one sentence from Sheikh Ayman; the engine change is small either way.
 - [x] **Submitted to App Store review** (2026-09-23). Accessibility label:
       Dark Interface only, which is all that can be claimed honestly today.
 
+### Done 2026-09-24 — App Review's questions, and the photos
+
+- [x] **App Review asked for more information** (standard for a new
+      developer account): a screen recording from launch on a physical
+      device, purpose and audience, setup steps, external services, regional
+      differences, and documentation for third-party material. The drafted
+      answer: no account, no user content, no purchases, no external services.
+- [x] **Mosque-display photos replaced** (`b21f21c`). Makkah and the
+      Umayyad Mosque came from Pinterest with no recorded source, which
+      cannot be documented to Apple. Now: Makkah by Arjan Carja (Pexels),
+      the Umayyad courtyard by T Foz (Unsplash), and the Dome of the Rock
+      traced to its Unsplash original (Thales Botelho de Sousa). No
+      upscaling; the Credits screen names each photographer. Rule from now
+      on: no photo without a source page that states its licence.
+- [x] **1.0.2 (2) for iOS and versionCode 4 for Android**, built on EAS
+      with the new photos.
+
 ### Next
 
-- [ ] App Store review outcome; answer anything the reviewer asks.
+- [ ] Answer App Review: select build 1.0.2 (2) on the submission, record
+      the screen recording on an iPhone from launch, reply in Resolution
+      Center and paste the same text into App Review Notes.
+- [ ] Recapture the 06_Display screenshots for ar/de/tr (Play and iOS);
+      they still show the old Makkah and Umayyad photos.
+- [ ] Redeploy the website: `/display` uses the same photos.
 - [ ] Promote Android 1.0.2 from Internal testing to production.
 - [ ] **Accessibility pass:** labels on every button (18 of 45 today),
       respect Reduce Motion, measure the faint text against contrast rules,
@@ -553,6 +578,57 @@ ask, but it acts on complaints. Yours to confirm.
   same thing. Prebuild deletes all of `android/` and fails with `EBUSY` if any
   process holds a handle inside it — including a shell whose cwd is in there.
 
+
+## 1.1 — Quran reader (decided 2026-09-24)
+
+Not in 1.0: that build is in App Review, and a new feature mid-review
+invites a new round of questions. The case for it is not competing with
+Quran.com or Muslim Pro. The app is already open for prayer times, and a
+worshipper who wants to read a juzʾ shouldn't have to switch apps.
+
+**Rules**
+1. **Verbatim, verified text.** The Uthmani text from Tanzil
+   (tanzil.net), bundled unchanged, with the attribution its licence
+   requires. A test hashes the bundled text against the released file,
+   so any change, even a single character, fails the build.
+2. **Offline, like everything else.** Text and translations are bundled
+   (about 1.5 MB of Arabic text plus about 1–2 MB per translation). No network, so
+   the privacy answers to Apple and Google stay "no data collected, no
+   network requests".
+3. **No translation without a documented licence.** The same lesson as
+   the photos. The likely candidates are copyrighted: Bubenheim & Elyas
+   (DE), Diyanet (TR), Sahih International (EN). Tanzil hosts many
+   translations for non-commercial use; the app is free, but each licence
+   is read and recorded before the translation ships. If a language has no
+   usable one, it ships Arabic-only.
+
+**Scope for 1.1** (about 1–1.5 weeks)
+- [ ] Licence check for the three translations; record the result in a
+      `CREDITS`/`LICENSES` file like the photos and sounds.
+- [ ] Bundle the Tanzil Uthmani text, plus the checksum test.
+- [ ] Quran font: *Amiri Quran* (OFL; Amiri is already bundled) or the
+      KFGQPC Uthmanic Hafs font. Test it on real devices, RTL, largest
+      text size.
+- [ ] Surah list (Arabic name, translated name, āyah count, Meccan/Medinan);
+      juzʾ index.
+- [ ] Reading screen: āyah numbers in the Arabic style, one translation below
+      each āyah (toggle), adjustable text size.
+- [ ] Continue where you left off, plus bookmarks (local storage only).
+- [ ] Search by surah name or number, then by āyah.
+- [ ] Credits screen: Tanzil and each translation.
+
+**Later, deliberately not in 1.1**
+- **Recitation audio.** About 1 GB per reciter offline is too big; streaming
+  (everyayah, quran.com) breaks "fully offline" and changes the privacy
+  answers in both stores. If it ever comes, it is opt-in and says plainly that
+  it uses the internet. Reciter rights are often unclear, so check them first.
+- **Mushaf page view** (the printed Madani pages): QUL/Tarteel page fonts,
+  604 pages, 100 MB+. About 2–3 weeks on its own.
+
+**Cost:** €0 in money (text and fonts are free); the cost is time and
+getting the licences right.
+
+---
 
 ## Phases
 
