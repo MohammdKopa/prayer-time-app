@@ -2,7 +2,7 @@
   "expo": {
     "name": "Prayer Times",
     "slug": "prayer-times",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "prayer",
@@ -10,7 +10,7 @@
     "backgroundColor": "#05130D",
     "ios": {
       "bundleIdentifier": "app.kametrix.prayer",
-      "buildNumber": "2",
+      "buildNumber": "1",
       "appleTeamId": "JSD24HLT77",
       "supportsTablet": false,
       "infoPlist": {

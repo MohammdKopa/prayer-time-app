@@ -484,12 +484,12 @@ is one sentence from Sheikh Ayman; the engine change is small either way.
       traced to its Unsplash original (Thales Botelho de Sousa). No
       upscaling; the Credits screen names each photographer. Rule from now
       on: no photo without a source page that states its licence.
-- [x] **1.0.2 (2) for iOS and versionCode 4 for Android**, built on EAS
-      with the new photos.
+- [x] **1.0.3** (iOS build 1, Android versionCode 4), built on EAS with the
+      new photos. A new version rather than 1.0.2 (2), because the content changed.
 
 ### Next
 
-- [ ] Answer App Review: select build 1.0.2 (2) on the submission, record
+- [ ] Answer App Review: change the App Store version to 1.0.3, select its build, record
       the screen recording on an iPhone from launch, reply in Resolution
       Center and paste the same text into App Review Notes.
 - [ ] Recapture the 06_Display screenshots for ar/de/tr (Play and iOS);

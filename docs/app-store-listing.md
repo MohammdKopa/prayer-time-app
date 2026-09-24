@@ -7,7 +7,7 @@ Generated from `docs/play-listing.md`: same descriptions, minus the home-screen 
 
 | Field | Value |
 |---|---|
-| Version | `1.0.2` (must match the uploaded build) |
+| Version | `1.0.3` (must match the uploaded build) |
 | Copyright | `2026 Mohamed Keba` |
 | Support URL | `https://kametrix.com/impressum` (has contact details; a dedicated prayer.kametrix.com/support page would be nicer later) |
 | Marketing URL (optional) | `https://prayer.kametrix.com` |
