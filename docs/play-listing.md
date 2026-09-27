@@ -624,24 +624,31 @@ hand Play the 1024 and let it resize.
 ## AI asset declaration
 
 Console asks whether the uploaded graphics were created or edited with AI.
-**Answer: label them.** Three of the mosque photos on the display screenshot
-went through a Real-ESRGAN 4× upscale, which is an AI edit of an image:
+**Answer since 2026-09-25: no, for every asset.**
+
+Until 1.0.2 the answer was yes for three screenshots: the Makkah and Umayyad
+photos on the display screen had been through a Real-ESRGAN 4× upscale, which
+is an AI edit, so `ar/06_Display.png`, `de/de-DE_06_Display.png` and
+`tr/tr_06_Display.png` were declared. On 2026-09-24 both photos were replaced
+by licensed originals (Pexels, Unsplash) cropped to 16:9 with no upscaling, and
+on 2026-09-25 those three screenshots were recaptured from the 1.0.3 build.
 
 | Asset | Photo | Declare |
 |---|---|---|
-| `ar/06_Display.png` | al-Masjid al-Haram, Makkah — AI-upscaled | **yes** |
-| `de/de-DE_06_Display.png` | Umayyad Mosque, Damascus — AI-upscaled | **yes** |
-| `tr/tr_06_Display.png` | Umayyad Mosque, Damascus — AI-upscaled | **yes** |
+| `ar/06_Display.png` | al-Masjid al-Haram, Makkah — original photo, cropped | no |
+| `de/de-DE_06_Display.png` | Umayyad Mosque, Damascus — original photo, cropped | no |
+| `tr/tr_06_Display.png` | Umayyad Mosque, Damascus — original photo, cropped | no |
 | `en/en-US_06_Display.png` | Dome of the Rock, Jerusalem — untouched | no |
 
 Everything else — the icon, the feature graphics, the other seven screens per
 language — is the app's own rendered interface and real photography, composited
-by a script. No image model drew any of it. Source of truth for what was done to
-each photo is `mobile/assets/photos/CREDITS.md`; update this table if the photo
-set changes.
+by a script. No image model drew or edited any of it. If the declaration was
+already ticked "yes" on the old uploads, untick it when the new files go up.
+Source of truth for what was done to each photo is
+`mobile/assets/photos/CREDITS.md`; update this table if the photo set changes.
 
-Note that the same three photos ship **inside** the app, on the mosque display.
-The in-app AI declaration, if Console asks for one, follows the same facts.
+The same three photos ship **inside** the app, on the mosque display. The
+in-app AI declaration, if Console asks for one, follows the same facts: none.
 
 ## Screenshots
 

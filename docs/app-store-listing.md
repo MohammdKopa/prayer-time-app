@@ -23,13 +23,30 @@ Generated from `docs/play-listing.md`: same descriptions, minus the home-screen 
 
 ### App Review Information
 
-Contact: Mohamed Keba, mohamedkeba@kametrix.com, plus a phone number. No demo account needed. Notes for the reviewer:
+Contact: Mohamed Keba, mohamedkeba@kametrix.com, plus a phone number. No demo account needed.
+
+On 2026-09-26 App Review asked the standard "limited App Review history" questionnaire (screen recording + six questions). The block below is the answer; Apple asks for it both as the reply in App Store Connect and in the Notes field of App Review Information, so paste it in both places. Attach the screen recording to the reply. Fill in the iOS version before sending.
 
 ```
-No account or login. The app works fully offline.
-On first launch it asks for location to calculate prayer times; if you decline, pick any city in Settings and everything works the same.
-To hear the adhan notification: Settings > Adhan voice > Play sample.
-All prayer times are calculated on the device. The app makes no network requests; the mosque directory is bundled, and "open in maps" hands off to a maps app.
+1. Screen recording
+Attached: a screen recording captured on a physical iPhone running iOS [VERSION], made from the TestFlight build of this version (1.0.3, build 1). It begins with launching the app and walks through the typical flow: prayer times for the detected location, the monthly timetable and its share sheet, the adhkar reminders, the Qibla compass, the tasbih counter, Settings (language, adhan notifications with the notifications permission alert, adhan voice sample, city choice) and the Sources & credits screen.
+Note: iOS does not include the location permission alert in on-device screen recordings. It was shown and answered "Allow" right after launch; in the recording this appears as a short pause on "Finding your location...".
+The app has no account registration or login, no user-generated content, and no paid content or in-app purchases.
+
+2. Purpose and target audience
+A prayer times app for Muslims, built first for the Muslim community in Germany and usable anywhere. It solves one problem: knowing the five daily prayer times and hearing the adhan on time, without internet, without ads and without an account. Everything is calculated on the device from the phone's location (or a chosen city), so it works offline and stays private. Around that core it offers a monthly timetable, a Qibla compass, morning and evening adhkar with reminders, a tasbih counter, an Islamic (Hijri) calendar, a directory of over 1,500 mosques in Germany, and a "mosque display" mode that turns the phone into a timetable screen for a mosque wall. The interface is available in Arabic, German, Turkish and English.
+
+3. Setup and access
+No login, no credentials, no sample files. Install and open. On first launch the app asks for location permission (While Using the App) to compute the times for where you are; if declined, choose any city under More > Settings > Choose city and everything works the same. To hear the adhan: More > Settings > Adhan voice > Play sample. Turning on "Notify at every adhan" schedules the real notifications and triggers the notifications permission alert. Main tabs: Times, Month, Adhkar, Qibla, More (Tasbih, Adjust times, Settings, Islamic Calendar, Mosques, Mosque display, Sources & credits).
+
+4. External services, tools and platforms
+None at runtime. The app makes no network requests and uses no data providers, authentication services, payment processors, analytics, advertising or AI services. It relies only on Apple frameworks: Core Location (position and compass heading), UserNotifications (local notifications for the adhan and adhkar), and the system geocoder to name the detected location when no bundled city is nearby. Prayer times are computed on the device with the open-source adhan-js library. The mosque directory and the adhan recording are bundled in the app; "Open in Maps" hands off to the Maps app.
+
+5. Regional differences
+None. The same features and content are available in every region. The only geographic scope is the bundled mosque directory, which covers Germany; prayer-time calculation, Qibla, adhkar and everything else work worldwide.
+
+6. Regulated industry / protected third-party material
+The app does not operate in a regulated industry. Third-party material is used under open licences and credited in the app's Sources & credits screen: the adhan recording (Wikimedia Commons, CC0), mosque data from OpenStreetMap (ODbL 1.0) and Overture Maps (CDLA-Permissive 2.0), mosque photos from Unsplash and Pexels under their free licences, the adhan-js library (MIT) and fonts from Google Fonts (SIL Open Font License 1.1). Qur'an and hadith texts are public religious texts, with the source listed next to each item in the app.
 ```
 
 ### Name note

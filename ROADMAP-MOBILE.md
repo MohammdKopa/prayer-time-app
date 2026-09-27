@@ -489,13 +489,19 @@ is one sentence from Sheikh Ayman; the engine change is small either way.
 
 ### Next
 
-- [ ] Answer App Review: change the App Store version to 1.0.3, select its build, record
-      the screen recording on an iPhone from launch, reply in Resolution
-      Center and paste the same text into App Review Notes.
-- [ ] Recapture the 06_Display screenshots for ar/de/tr (Play and iOS);
-      they still show the old Makkah and Umayyad photos.
-- [ ] Redeploy the website: `/display` uses the same photos.
-- [ ] Promote Android 1.0.2 from Internal testing to production.
+- [x] Answer App Review — done 2026-09-25 (recording `docs/video-ios.mp4`,
+      answer in `docs/app-store-listing.md`). **Approved 2026-09-27**, 1.0.3
+      build 1, "eligible for distribution".
+- [ ] DSA trader status: declared as trader 2026-09-27, Apple verification
+      pending. Until verified the app is not listed in EU storefronts.
+- [x] Recapture the 06_Display screenshots for ar/de/tr (Play and iOS) —
+      done 2026-09-25 with the licensed photos; files in `docs/shots/store*`,
+      not yet uploaded to either console.
+- [ ] Redeploy the website: `/display` uses the same photos. Held until
+      Play approves 1.0.2.
+- [ ] Promote Android 1.0.2 from Internal testing to production. Still in
+      review 2026-09-27; nothing is uploaded or replaced until Google answers,
+      so the queue place is kept.
 - [ ] **Accessibility pass:** labels on every button (18 of 45 today),
       respect Reduce Motion, measure the faint text against contrast rules,
       and test the largest text sizes. Then tick VoiceOver, Voice Control,
@@ -627,6 +633,158 @@ worshipper who wants to read a juzʾ shouldn't have to switch apps.
 
 **Cost:** €0 in money (text and fonts are free); the cost is time and
 getting the licences right.
+
+---
+
+## 2.0 — feedback round one (recorded 2026-09-25)
+
+Mohamed's sister used 1.0 and sent the first outside feedback. Recorded as
+the 2.0 backlog on 2026-09-25; nothing started, the order at the end is a
+proposal. Each item is held against the founding principles, and the first
+one sits right against a line in "Deliberately excluded", so its shape
+matters more than the feature.
+
+1. **Prayer check-off, with something that grows.** A tick per prayer once
+   its time has passed. The motivator she showed is an app where a tree
+   grows as you pray. Rules: private and local (no accounts, no sharing, no
+   leaderboard); the "no streak-shaming" exclusion stands, so nothing wilts
+   and nothing scolds — a missed prayer is simply unmarked, and the tree
+   grows but never dies. Calm, in the app's palette. Natural homes: five
+   small ticks under the clock, the month grid showing each day's marks.
+   Open design questions, to decide with her: a tree, or something in this
+   app's own language (a star that lights per prayer on the sun arc, a
+   garden per month); and whether a past day can be ticked (qadāʾ).
+
+2. **Quran reader** — already specified as 1.1 above. Unchanged, still
+   first in line.
+
+3. **Store review prompt.** `expo-store-review`, which wraps the OS-native
+   sheets (SKStoreReviewController on iOS, In-App Review on Android). No
+   custom "rate us" dialog; both stores' guidelines prefer the native one,
+   and it needs no network of our own, so Data Safety stays "no data
+   collected". Trigger after a good moment, never on first launch: about the
+   tenth open across at least a week, or the first completed month in the
+   tracker once that exists. Ask once; both OSes rate-limit it anyway.
+
+4. **Sun and moon on the clock screen.** The sky already shifts hue with
+   the day's prayer times (`lib/sky.ts`) and the SunArc already carries a
+   sun by day and a crescent by night. The ask is to make them present in
+   the scene, not only on the arc: a soft sun disc that climbs and warms
+   toward Maghrib, a crescent showing the real moon phase at night (a
+   two-line computation, no data). Same restraint as everything else on
+   that screen — subtle, low contrast, no motion beyond the slow drift that
+   is already there — and it honours Reduce Motion.
+
+5. **More adhkar and duʿāʾ.** Content today is 17 items in
+   `lib/dua/content.ts`, gated by the content review (item A above).
+   Growing it is a sourcing and review job more than a coding one: Hisn
+   al-Muslim is the obvious source (pick one edition, record it in
+   CREDITS), grouped by occasion — morning/evening, after prayer, sleep,
+   travel, food, entering and leaving home, distress. Every new item goes
+   through the same review file before it ships. Once the library is longer
+   than a screen: pin favourites and search.
+
+6. **SVG navigation icons.** The tab bar draws Unicode glyphs today
+   (◔ ▦ ❈ ☉ ☰), which render differently from one device font to the next.
+   Replace them with SVG icons via `react-native-svg`, already a
+   dependency. Reference: Tellro's customer app "Tinte" tab bar —
+   `lieferapp/apps/customer/src/components/tabbar/` (`InkTabBar.tsx`, the
+   SVG icon set in `icons.tsx`, the bell-dip path in `bell.ts`). Take the
+   construction — Path-based icons, Reduce Motion respected — not the look — this app keeps its bone-on-dark palette and
+   its labels (the bar is labelled on purpose; see the comment in
+   `components/TabBar.tsx`).
+
+Not from her, but belonging to the same release: the accessibility pass and
+the iOS widget listed under "Next".
+
+**Proposed order:** 1.1 Quran first (specified), then the icons (small and
+visible), the review prompt (small), sun and moon (medium), the adhkar
+growth (bound by the content review), and the prayer check-off last, because
+it needs the design decisions above made with her first.
+
+### After 2.0: low-maintenance mode (clarified 2026-09-25)
+
+After the 2.0 features ship, Mohamed's attention moves elsewhere. Not
+abandonment: if something breaks it gets fixed. But the app has to be
+bulletproof enough that months pass without it needing anyone. That changes
+what 2.0 is for: less features, more making sure nothing needs a hand.
+
+**What still needs a hand no matter what, so it is planned rather than
+discovered.**
+- Google requires the target SDK to stay within a year of the newest
+  Android. Fall behind and the app is hidden from new users on newer
+  phones, and fixes can no longer be uploaded until the SDK is bumped.
+- Apple removes apps that have not been updated for about three years and
+  have low downloads, and the €99/year membership must keep being paid.
+- Both listings die silently if the privacy-policy URL stops resolving,
+  which makes the kametrix.com domain renewal a store dependency.
+
+So the floor is **one maintenance day a year**: `expo` upgrade, rebuild,
+resubmit, no features. Put it in the calendar.
+
+**Hardening, so it does not break in between**
+
+- [ ] **Error boundary per tab.** A crash in the month view or the qibla
+      must never take the clock down; the tab shows a quiet "something went
+      wrong" and the rest keeps working. The clock screen itself gets the
+      most defensive treatment: every value has a fallback rendering.
+- [ ] **A year of dates in the tests.** Run the schedule, the notifications
+      and the Hijri conversion over every day of 2027 and 2028: both DST
+      switches, the year rollover, 29 February 2028, Ramadan's first and
+      last day, and the high-latitude guard. Bugs that appear once a year are
+      exactly the ones nobody is around to catch.
+- [ ] **Notification self-healing.** On every app open and on the OS
+      boot/time-change broadcasts, reschedule from scratch rather than
+      patching the queue. Test: change the timezone, change the clock,
+      reboot, kill the app, and check the next adhan still fires.
+- [ ] **Device matrix before release.** Android 10 through 16 on at least
+      one Xiaomi (battery killer), one Samsung, one Pixel; iOS current and
+      previous. Xiaomi's background restrictions are the single most likely
+      source of "the adhan stopped" reviews, so the app should detect them
+      and say what to change, once.
+- [ ] **Reviews are the only telemetry.** No analytics stays a principle,
+      so the store reviews are the sole signal that something broke. Turn on
+      review email notifications in both consoles and reply to the ones that
+      report a bug; that is the whole monitoring plan, and it is enough.
+
+**What a low-maintenance version needs that a normal one does not**
+
+- [ ] **`RUNBOOK.md`**, written while the knowledge is fresh: the yearly
+      SDK bump and resubmit in under an hour; where the keystore, the EAS
+      account, the Apple and Play accounts and the domain live and when each
+      renews; how to re-export the store graphics (`tools/osg-mcp`).
+- [ ] **Open the source, maybe.** PolyForm Noncommercial forbids the fork
+      that would keep the app alive if the maintenance days ever stop.
+      Switching to a real open licence (GPL-3.0 keeps derivatives open; MIT
+      is simplest) is cheap insurance. Mohamed's decision, no rush; the
+      photo, font and text licences all allow it.
+- [ ] **Close item A** (the duʿāʾ content review). A last version cannot
+      ship with "not yet reviewed" on religious text.
+- [ ] **Data export and import.** No accounts means the phone is the only
+      copy. Android auto-backup is on and iOS backs up the container, but
+      once the prayer tracker holds months of ticks, a JSON export through
+      the share sheet (and import on a new phone) is the user's only
+      migration path. Small, and it belongs in the same release as the tracker.
+- [ ] **Hijri date ±1 day.** Missing today. The most common request in
+      every prayer app, because moon sighting in Germany and Umm al-Qura
+      disagree a few times a year, and it decides when Ramadan mode starts.
+      A stepper in Settings, nothing more.
+- [ ] **Share the month as an image.** The month view rendered to a PNG
+      (`react-native-view-shot`) into the share sheet. Mosques print
+      timetables; this is the printable one, offline, no tracking, and the
+      only growth channel that fits the app's ethos besides the review prompt.
+- [ ] **First-launch screen.** None exists. One calm page: why location is
+      asked for, which calculation the times follow, that nothing leaves the
+      phone. Trust for the users who will never read a listing.
+- [ ] **Time-bomb audit**, then record the result: the Umm al-Qura table
+      runs to 1500 AH (2077), the city and mosque data are static and only
+      age, no certificates, no remote config, no runtime network. Confirm the
+      mobile app makes zero network requests and write that down as a rule.
+- [ ] **A support address that outlives the project**: a real mailbox
+      that forwards, on the support page already listed under "Next".
+- [ ] The three from "Next" that nobody will come back for later: the
+      accessibility pass, the iOS widget, the iOS "adhan queue running low"
+      notice.
 
 ---
 
