@@ -18,7 +18,7 @@ services:
       PUSH_STORE_PATH: "/app/data/subscriptions.json"
       # Both set => "/" serves the marketing page instead of the web clock
       # (src/lib/store-links.ts). Set either to "" in .env to fall back.
-      APP_STORE_URL: "${APP_STORE_URL-https://apps.apple.com/de/app/gebetszeiten-offline/id6815314217}"
+      APP_STORE_URL: "${APP_STORE_URL-https://apps.apple.com/us/app/prayer-times-offline/id6815314217}"
       PLAY_STORE_URL: "${PLAY_STORE_URL-https://play.google.com/store/apps/details?id=app.kametrix.prayer}"
     volumes:
       - ./data:/app/data

@@ -3,7 +3,7 @@
 // the live links as defaults. Read at request time, so overriding them in the
 // VPS .env (an empty value turns the web clock back on) needs no rebuild:
 //
-//   APP_STORE_URL=https://apps.apple.com/de/app/gebetszeiten-offline/id6815314217
+//   APP_STORE_URL=https://apps.apple.com/us/app/prayer-times-offline/id6815314217
 //   PLAY_STORE_URL=https://play.google.com/store/apps/details?id=app.kametrix.prayer
 
 export interface StoreLinks {
