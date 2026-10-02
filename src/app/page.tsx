@@ -24,7 +24,13 @@ async function resolve(searchParams: SearchParams) {
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
   const { stores, lang } = await resolve(searchParams);
   if (!stores) return {};
-  return { title: COPY[lang].title, description: COPY[lang].description };
+  // Safari on iPhone shows its own App Store banner for this id.
+  const appId = stores.ios.match(/\/id(\d+)/)?.[1];
+  return {
+    title: COPY[lang].title,
+    description: COPY[lang].description,
+    ...(appId && { itunes: { appId } }),
+  };
 }
 
 export default async function Home({ searchParams }: { searchParams: SearchParams }) {

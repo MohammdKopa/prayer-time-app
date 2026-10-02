@@ -36,7 +36,10 @@ export function Marketing({
         <header className="flex items-center justify-between gap-4 py-6">
           <span className="flex items-center gap-3">
             <Image src="/icons/icon-192.png" alt="" width={40} height={40} className="rounded-xl" />
-            <span className="font-[family-name:var(--font-kufi)] text-lg whitespace-nowrap">{c.appName}</span>
+            {/* On phones the headline already says it; the name would push the languages onto two lines. */}
+            <span className="sr-only font-[family-name:var(--font-kufi)] text-lg whitespace-nowrap sm:not-sr-only">
+              {c.appName}
+            </span>
           </span>
           <nav aria-label="Language" className="flex flex-wrap justify-end gap-x-4 gap-y-1 text-sm">
             {LANGS.map((l) => (
@@ -53,7 +56,7 @@ export function Marketing({
           </nav>
         </header>
 
-        <section className="pt-10 pb-20 sm:pt-16">
+        <section className="pt-10 pb-14 sm:pt-16 sm:pb-20">
           <h1 className="max-w-[16ch] font-[family-name:var(--font-kufi)] text-[clamp(2.5rem,7vw,5rem)] leading-[1.1] font-semibold">
             {c.headline}
           </h1>
@@ -63,17 +66,17 @@ export function Marketing({
             <DayBand copy={c} />
           </div>
 
-          <div className="mt-12 flex flex-wrap items-center gap-4">
+          <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
             <a
               href={stores.ios}
-              className={`${focus} inline-flex items-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
+              className={`${focus} inline-flex items-center justify-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
             >
               <AppleIcon />
               {c.getIos}
             </a>
             <a
               href={stores.android}
-              className={`${focus} inline-flex items-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
+              className={`${focus} inline-flex items-center justify-center gap-2.5 rounded-full bg-[#d9b871] px-7 py-3.5 text-lg font-semibold text-[#04100c] hover:bg-[#e8c878]`}
             >
               <GooglePlayIcon />
               {c.getAndroid}
@@ -82,7 +85,7 @@ export function Marketing({
           </div>
         </section>
 
-        <section className="grid gap-10 border-t border-[#f4ecd8]/10 py-16 sm:grid-cols-3">
+        <section className="grid gap-10 border-t border-[#f4ecd8]/10 py-12 sm:grid-cols-3 sm:py-16">
           {c.promises.map((p) => (
             <div key={p.title}>
               <h2 className="font-[family-name:var(--font-kufi)] text-2xl text-[#d9b871]">{p.title}</h2>

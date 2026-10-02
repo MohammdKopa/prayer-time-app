@@ -24,7 +24,9 @@ export interface Copy {
   description: string;
   headline: string;
   sub: string;
-  /** {city} is replaced with the city the band is computed for. */
+  /** The city the band is computed for, spelled for this language. */
+  city: string;
+  /** {city} is replaced with `city`. */
   bandCaption: string;
   now: string;
   prayers: Record<BandPrayer, string>;
@@ -56,6 +58,7 @@ export const COPY: Record<Lang, Copy> = {
     sub: "بلا إنترنت، بلا إعلانات، بلا حساب. الأذان يصل في وقته، حتى في وضع الطيران.",
     bandCaption:
       "مواقيت اليوم في {city}، حُسبت الآن في هذه الصفحة. التطبيق يفعل الشيء نفسه في هاتفك.",
+    city: "مارل",
     now: "الآن",
     prayers: {
       fajr: "الفجر",
@@ -112,6 +115,7 @@ export const COPY: Record<Lang, Copy> = {
     sub: "Ohne Internet, ohne Werbung, ohne Konto. Der Adhan kommt pünktlich, auch im Flugmodus.",
     bandCaption:
       "Heute in {city}, gerade eben in dieser Seite berechnet. Die App macht dasselbe auf deinem Handy.",
+    city: "Marl",
     now: "Jetzt",
     prayers: {
       fajr: "Fajr",
@@ -168,6 +172,7 @@ export const COPY: Record<Lang, Copy> = {
     sub: "İnternet yok, reklam yok, hesap yok. Ezan zamanında gelir, uçak modunda bile.",
     bandCaption:
       "{city} için bugünün vakitleri, az önce bu sayfada hesaplandı. Uygulama aynısını telefonunda yapar.",
+    city: "Marl",
     now: "Şimdi",
     prayers: {
       fajr: "İmsak",
@@ -224,6 +229,7 @@ export const COPY: Record<Lang, Copy> = {
     sub: "No internet, no ads, no account. The adhan arrives on time, even in airplane mode.",
     bandCaption:
       "Today in {city}, calculated in this page just now. The app does the same on your phone.",
+    city: "Marl",
     now: "Now",
     prayers: {
       fajr: "Fajr",

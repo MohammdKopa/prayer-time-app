@@ -93,7 +93,7 @@ export function DayBand({ copy }: { copy: Copy }) {
       </ol>
 
       <figcaption className="mt-5 max-w-[60ch] text-base text-[#f4ecd8]/70">
-        {copy.bandCaption.replace("{city}", DEFAULT_CITY.name)}
+        {copy.bandCaption.replace("{city}", copy.city)}
       </figcaption>
     </figure>
   );
