@@ -1,10 +1,9 @@
 import * as Location from "expo-location";
-import { useRouter } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  AccessibilityInfo,
   Animated,
   Easing,
-  Pressable,
   StyleSheet,
   Text,
   View,
@@ -12,7 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { qiblaBearing } from "@shared/qibla";
-import { angleBetween, approachAngle, isAligned } from "@/lib/compass";
+import { angleBetween, followAngle, isAligned } from "@/lib/compass";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
 import { COLORS, FONTS, TEXT } from "@/theme";
@@ -35,6 +34,16 @@ import { COLORS, FONTS, TEXT } from "@/theme";
 // The dial angle is kept UNWRAPPED and smoothed (lib/compass.ts): fed the raw
 // heading, a rotation style spins the long way round whenever the bearing
 // crosses 0/360, and twitches constantly in between.
+//
+// The dial is driven only by an Animated.Value on the native thread. React
+// state holds just what the text shows (rounded degrees off, accuracy bucket,
+// aligned flag) and is written only when one of those actually changes, so the
+// screen does not re-render at sensor rate.
+//
+// Each sample animates the dial LINEARLY over the measured sample interval:
+// consecutive samples then join into one continuous piecewise-linear motion.
+// An ease-out per sample would decelerate to zero velocity 30 times a second,
+// which reads as stepping.
 
 const SIZE = 280;
 const RADIUS = SIZE / 2 - 26;
@@ -49,11 +58,10 @@ const CARDINALS: { key: keyof Strings; deg: number }[] = [
 const TICKS = Array.from({ length: 24 }, (_, i) => i * 15);
 
 export default function QiblaScreen() {
-  const router = useRouter();
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const { place } = usePlaceContext();
 
-  const [heading, setHeading] = useState<number | null>(null);
+  const [off, setOff] = useState<number | null>(null);
   const [accuracy, setAccuracy] = useState(3);
   const [unavailable, setUnavailable] = useState(false);
   const [aligned, setAligned] = useState(false);
@@ -64,7 +72,27 @@ export default function QiblaScreen() {
   );
 
   const unwrapped = useRef(0);
-  const dial = useRef(new Animated.Value(0)).current;
+  const [dial] = useState(() => new Animated.Value(0));
+  const reduceMotion = useRef(false);
+  const lastSampleAt = useRef(0);
+  const shown = useRef({
+    off: null as number | null,
+    accuracy: 3,
+    aligned: false,
+    unavailable: false,
+  });
+
+  useEffect(() => {
+    const apply = (v: boolean) => {
+      reduceMotion.current = v;
+    };
+    AccessibilityInfo.isReduceMotionEnabled().then(apply, () => {});
+    const sub = AccessibilityInfo.addEventListener(
+      "reduceMotionChanged",
+      apply,
+    );
+    return () => sub.remove();
+  }, []);
 
   useEffect(() => {
     let sub: Location.LocationSubscription | null = null;
@@ -79,21 +107,52 @@ export default function QiblaScreen() {
         }
         sub = await Location.watchHeadingAsync((h) => {
           if (cancelled) return;
+          const last = shown.current;
           if (h.trueHeading < 0) {
-            setUnavailable(true);
-            setHeading(null);
+            if (!last.unavailable) {
+              last.unavailable = true;
+              setUnavailable(true);
+            }
+            if (last.off !== null) {
+              last.off = null;
+              setOff(null);
+            }
             return;
           }
-          setUnavailable(false);
-          setHeading(h.trueHeading);
-          setAccuracy(h.accuracy);
-          setAligned(isAligned(h.trueHeading, target));
+          if (last.unavailable) {
+            last.unavailable = false;
+            setUnavailable(false);
+          }
+          const nextOff = Math.round(angleBetween(h.trueHeading, target));
+          if (nextOff !== last.off) {
+            last.off = nextOff;
+            setOff(nextOff);
+          }
+          if (h.accuracy !== last.accuracy) {
+            last.accuracy = h.accuracy;
+            setAccuracy(h.accuracy);
+          }
+          const nextAligned = isAligned(h.trueHeading, target);
+          if (nextAligned !== last.aligned) {
+            last.aligned = nextAligned;
+            setAligned(nextAligned);
+          }
 
           // The dial turns opposite the phone, so north stays north.
-          unwrapped.current = approachAngle(unwrapped.current, -h.trueHeading);
+          const prev = unwrapped.current;
+          const next = followAngle(prev, -h.trueHeading);
+          unwrapped.current = next;
+          const now = Date.now();
+          const interval = now - lastSampleAt.current;
+          lastSampleAt.current = now;
+          if (next === prev) return;
+          if (reduceMotion.current) {
+            dial.setValue(next);
+            return;
+          }
           Animated.timing(dial, {
-            toValue: unwrapped.current,
-            duration: 90,
+            toValue: next,
+            duration: Math.min(120, Math.max(40, interval)),
             easing: Easing.linear,
             useNativeDriver: true,
           }).start();
@@ -111,13 +170,13 @@ export default function QiblaScreen() {
   const spin = dial.interpolate({
     inputRange: [-360, 360],
     outputRange: ["-360deg", "360deg"],
+    extrapolate: "extend",
   });
   const counterSpin = dial.interpolate({
     inputRange: [-360, 360],
     outputRange: ["360deg", "-360deg"],
+    extrapolate: "extend",
   });
-  const off =
-    heading === null ? null : Math.round(angleBetween(heading, target));
 
   return (
     <SafeAreaView style={styles.safe}>

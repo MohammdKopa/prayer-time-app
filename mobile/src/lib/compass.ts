@@ -46,6 +46,47 @@ export function approachAngle(
   return unwrapped + turn * smoothing;
 }
 
+/**
+ * Smoothing factor that grows with the size of the turn.
+ *
+ * A fixed factor has to compromise: heavy enough to hold still at rest is far
+ * too sluggish for a real turn, and light enough to follow a turn promptly
+ * lets sensor jitter through. Jitter is small and real turns are large, so the
+ * factor ramps from `minSmoothing` (turns <= `calmDeg`) to `maxSmoothing`
+ * (turns >= `fastDeg`) along a smoothstep, which avoids a visible knee.
+ */
+export function adaptiveSmoothing(
+  turnDeg: number,
+  minSmoothing = 0.12,
+  maxSmoothing = 0.45,
+  calmDeg = 2,
+  fastDeg = 25,
+): number {
+  const x = Math.min(
+    1,
+    Math.max(0, (Math.abs(turnDeg) - calmDeg) / (fastDeg - calmDeg)),
+  );
+  return minSmoothing + (maxSmoothing - minSmoothing) * x * x * (3 - 2 * x);
+}
+
+/**
+ * Like `approachAngle`, but the smoothing adapts to the size of the turn:
+ * heavy for jitter, light for a real swing of the phone.
+ */
+export function followAngle(
+  unwrapped: number,
+  target: number,
+  deadbandDeg = 0.5,
+): number {
+  const turn = shortestTurn(unwrapped, target);
+  return approachAngle(
+    unwrapped,
+    target,
+    adaptiveSmoothing(turn),
+    deadbandDeg,
+  );
+}
+
 /** True when the phone is pointed close enough to call it aligned. */
 export function isAligned(
   heading: number,
