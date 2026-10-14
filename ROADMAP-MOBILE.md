@@ -502,7 +502,7 @@ is one sentence from Sheikh Ayman; the engine change is small either way.
 - [ ] Promote Android 1.0.2 from Internal testing to production. Still in
       review 2026-09-27; nothing is uploaded or replaced until Google answers,
       so the queue place is kept.
-- [ ] **Accessibility pass:** labels on every button (18 of 45 today),
+- [ ] **Accessibility pass:** labels on every button — *done 2026-10-14* (every tappable has a role + label/state; still missing: a screen-reader action for bookmarking an āyah, a label on the display's tap-to-menu),
       respect Reduce Motion, measure the faint text against contrast rules,
       and test the largest text sizes. Then tick VoiceOver, Voice Control,
       Reduced Motion and probably Larger Text on the App Store.
@@ -652,9 +652,15 @@ worshipper who wants to read a juzʾ shouldn't have to switch apps.
       in printed tajweed mushafs. Known limit: Android WebView paints a
       tanwīn/ḥaraka in its letter's colour. Six colour families
       (Dar al-Maʿrifa style), off by default, legend in the reader.
-      **Open:** match Mohamed's own mushaf's colour scheme (asked which one);
-      **iOS:** `TajweedPage` FONT_SRC points at Android assets only — fix
-      before the iOS build ships tajweed; a qāriʾ should look it over.
+      **Matched to Mohamed's own muṣḥaf** (Dar al-Maʿrifa, checked against
+      a photo of its key, 2026-10-14): madd reds deepen with length (salmon
+      ʿāriḍ → crimson 4–5 → wine 6); idghām with ghunna greys the merged nūn
+      and greens the letter it merges into (test on 31:6). Not done:
+      tafkhīm (the print's dark blue on heavy letters) — the data has no
+      such rule; optional, ask Mohamed before adding.
+      **iOS font (fixed 2026-10-14):** the TTF is embedded in the page as a
+      data: URI (`scripts/build-quran-font.mts` → `lib/quran/font-data.ts`,
+      pinned by a test), the same on both platforms; no file access.
 - [ ] **Sajda note** (Mohamed, 2026-10-14): at an āyah of prostration during
       a time voluntary prayer is avoided (after Fajr to sunrise, zenith, after
       ʿAṣr to Maghrib), a gentle reminder under the āyah. Logic and tests
@@ -726,7 +732,7 @@ matters more than the feature.
 2. **Quran reader** — already specified as 1.1 above. Unchanged, still
    first in line.
 
-3. **Store review prompt.** `expo-store-review`, which wraps the OS-native
+3. **Store review prompt.** *Done 2026-10-14* (`lib/review-prompt.ts`, never over the wall display). `expo-store-review`, which wraps the OS-native
    sheets (SKStoreReviewController on iOS, In-App Review on Android). No
    custom "rate us" dialog; both stores' guidelines prefer the native one,
    and it needs no network of our own, so Data Safety stays "no data
@@ -756,7 +762,7 @@ matters more than the feature.
    through the same review file before it ships. Once the library is longer
    than a screen: pin favourites and search.
 
-6. **SVG navigation icons.** The tab bar draws Unicode glyphs today
+6. **SVG navigation icons.** *Done 2026-10-14* (`components/TabIcons.tsx`). The tab bar draws Unicode glyphs today
    (◔ ▦ ❈ ☉ ☰), which render differently from one device font to the next.
    Replace them with SVG icons via `react-native-svg`, already a
    dependency. Reference: Tellro's customer app "Tinte" tab bar —
@@ -778,6 +784,13 @@ matters more than the feature.
 
 Not from her, but belonging to the same release: the accessibility pass and
 the iOS widget listed under "Next".
+
+**Release 1.1.0 (vc5), built 2026-10-14:** Quran reader + tajweed, SVG tab
+icons, review prompt, accessibility labels on every control, error boundary
+per tab. Lint: 62 problems that predate this release (48 `react-hooks/refs`
+in display/qibla/tasbih/Ornament/PhotoOverlay, 2 `rules-of-hooks` in
+settings.tsx, unused vars); none new. CI does not run lint. Clear them in
+low-maintenance mode, `rules-of-hooks` first.
 
 **Order (agreed 2026-10-14):** 1.1 Quran reader first (started 2026-10-14),
 then the SVG tab icons, the review prompt, the adhkar growth (bound by the
@@ -806,7 +819,7 @@ resubmit, no features. Put it in the calendar.
 
 **Hardening, so it does not break in between**
 
-- [ ] **Error boundary per tab.** A crash in the month view or the qibla
+- [x] **Error boundary per tab.** (2026-10-14, `components/TabErrorBoundary.tsx`.) A crash in the month view or the qibla
       must never take the clock down; the tab shows a quiet "something went
       wrong" and the rest keeps working. The clock screen itself gets the
       most defensive treatment: every value has a fallback rendering.
