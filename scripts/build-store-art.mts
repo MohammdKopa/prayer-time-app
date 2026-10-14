@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { AMIRI_QURAN_TTF_BASE64 } from "../mobile/src/lib/quran/font-data.ts";
 import { pageContentHtml } from "../mobile/src/lib/quran/mushaf-html.ts";
 import { withChrome } from "./lib/render-chrome.mjs";
+import { stripAlpha } from "./lib/png-rgb.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fontB64 = (rel: string) =>
@@ -100,14 +101,23 @@ body{position:relative;background:radial-gradient(ellipse at 50% 42%,#123323 0%,
 }
 
 const HEADER: Layout = { width: 3840, height: 1646, archHeight: 1190, archTop: 90, pageFont: 54, tagFont: 84, tagTop: 1372 };
+// Both placements from one file: Apple's 16:9 option, PNG only.
+const UNIVERSAL: Layout = { width: 5244, height: 2950, archHeight: 2170, archTop: 170, pageFont: 98, tagFont: 136, tagTop: 2520 };
 const SEARCH: Layout = { width: 3840, height: 2560, archHeight: 1880, archTop: 150, pageFont: 86, tagFont: 118, tagTop: 2196 };
 
 const outDir = path.join(root, "mobile/assets/brand/store");
 await withChrome(async (render) => {
   for (const lang of Object.keys(TAGLINE)) {
-    for (const [name, l] of [["header", HEADER], ["search", SEARCH]] as const) {
-      const file = path.join(outDir, `${name}-${lang}.jpg`);
-      await render(html(l, lang), l.width, l.height, file, { format: "jpeg", settleMs: 900 });
+    for (const [name, l, format] of [
+      ["header", HEADER, "jpeg"],
+      ["search", SEARCH, "jpeg"],
+      ["universal", UNIVERSAL, "png"],
+    ] as const) {
+      const file = path.join(outDir, `${name}-${lang}.${format === "png" ? "png" : "jpg"}`);
+      await render(html(l, lang), l.width, l.height, file, { format, settleMs: 900 });
+      // Apple refuses any alpha channel, even a fully opaque one: PNGs from
+      // Chrome carry one, so it is stripped (JPEG has none to begin with).
+      if (format === "png") await stripAlpha(file);
       console.log(`${path.relative(root, file)}  ${l.width}×${l.height}`);
     }
   }
