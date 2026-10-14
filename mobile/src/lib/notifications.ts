@@ -33,6 +33,7 @@ import { planAlerts, type PrayerAlert } from "@/lib/prayer-prefs";
 import { adjustedDaysFor } from "@/lib/schedule";
 import { rescheduleSilence } from "@/lib/silence";
 import { pushWidgetSchedule, resolveWidgetLocale } from "@/lib/widget";
+import { ADHAN_URL } from "@/lib/notification-links";
 import type { Place } from "@/lib/location";
 import type { Strings, Translate } from "@/lib/i18n";
 
@@ -372,6 +373,7 @@ async function runReschedule(place: Place, t: Translate): Promise<number> {
           // Android 8+ takes the sound from the channel, older Android and
           // iOS from here; channelFor gives both for the same style + voice.
           sound: soundForOs(route.sound, Platform.OS),
+          data: { url: ADHAN_URL },
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,

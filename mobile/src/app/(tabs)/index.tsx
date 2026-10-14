@@ -6,6 +6,7 @@ import { PRAYER_ORDER, type PrayerName } from "@shared/prayer-engine";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
 import { reschedule } from "@/lib/notifications";
+import { anyEnabled, loadSettings, reschedule as rescheduleReminders } from "@/lib/dua/reminders";
 import { adjustedDay } from "@/lib/schedule";
 import { usePrefs } from "@/lib/use-prefs";
 import {
@@ -100,7 +101,15 @@ export default function ClockScreen() {
   // listing them adds no runs — it just keeps the closure honest.
   const scheduleKey = `${place.latitude},${place.longitude},${locale},${dayKey},${prefsKey}`;
   useEffect(() => {
-    const id = setTimeout(() => void reschedule(place, t), RESCHEDULE_DELAY_MS);
+    // The adhkar and Quran reminders keep a 7-day horizon too; refreshing them
+    // here (not only on the Adhkar screen) keeps them from running out for
+    // someone who never opens that screen. Separate ID prefixes: neither
+    // reschedule touches the other's notifications.
+    const id = setTimeout(async () => {
+      await reschedule(place, t);
+      const reminders = await loadSettings();
+      if (anyEnabled(reminders)) await rescheduleReminders(place, t);
+    }, RESCHEDULE_DELAY_MS);
     return () => clearTimeout(id);
   }, [scheduleKey, place, t]);
 

@@ -7,6 +7,7 @@ import type { Place } from "@/lib/location";
 import { loadJSON, loadSetting, saveJSON, saveSetting } from "@/lib/storage";
 import type { Occasion } from "./content";
 import type { StringKey, Translate } from "@/lib/i18n";
+import { urlForOccasion } from "@/lib/notification-links";
 
 // Adhkar reminders.
 //
@@ -372,6 +373,7 @@ export async function reschedule(
           title: t(TITLE_KEY[plan.occasion]),
           body: t(BODY_KEY[plan.occasion]),
           sound: true,
+          data: { url: urlForOccasion(plan.occasion) },
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.DATE,
