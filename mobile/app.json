@@ -2,7 +2,7 @@
   "expo": {
     "name": "Prayer Times",
     "slug": "prayer-times",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "prayer",
@@ -30,7 +30,7 @@
     },
     "android": {
       "package": "app.kametrix.prayer",
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "backgroundColor": "#05130D",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
