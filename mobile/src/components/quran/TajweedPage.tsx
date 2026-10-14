@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Platform, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { WebView, type WebViewMessageEvent } from "react-native-webview";
 
+import { AMIRI_QURAN_TTF_BASE64 } from "@/lib/quran/font-data";
 import {
   surahPageHtml,
   type PageAyah,
@@ -12,15 +13,10 @@ import { COLORS, TEXT } from "@/theme";
 
 // The tajweed view of one sūrah, drawn by the system browser engine (see
 // lib/quran/tajweed-html.ts for why). Offline: the page is a string built in
-// the app, and the font is the Amiri Quran file the app already ships — on
-// Android the expo-font config plugin puts it in assets/fonts/.
-
-// TODO(iOS): the font is embedded in the APK's assets on Android only. Before
-// the iOS build ships tajweed, point fontSrc at the bundled file there.
-const FONT_SRC =
-  Platform.OS === "android"
-    ? "url('file:///android_asset/fonts/AmiriQuran_400Regular.ttf')"
-    : "local('Amiri Quran'), local('AmiriQuran-Regular')";
+// the app, and the Amiri Quran font travels inside it as a data: URI (see
+// scripts/build-quran-font.mts), so Android and iOS load it the same way and
+// the WebView needs no file access.
+const FONT_SRC = `url(data:font/ttf;base64,${AMIRI_QURAN_TTF_BASE64}) format("truetype")`;
 
 interface Props {
   surahName: string;
@@ -103,11 +99,11 @@ export function TajweedPage(props: Props) {
     <WebView
       ref={ref}
       style={styles.web}
-      originWhitelist={["about:blank", "file://*"]}
-      source={{ html, baseUrl: Platform.OS === "android" ? "file:///android_asset/" : undefined }}
-      allowFileAccess
-      // The page needs nothing from the network; refuse any navigation.
-      onShouldStartLoadWithRequest={(r) => r.url === "about:blank" || r.url.startsWith("file:")}
+      originWhitelist={["about:blank"]}
+      source={{ html }}
+      // The page needs nothing from the network or the disk; refuse any
+      // navigation away from it.
+      onShouldStartLoadWithRequest={(r) => r.url === "about:blank"}
       onMessage={onMessage}
       javaScriptEnabled
       domStorageEnabled={false}

@@ -117,6 +117,18 @@ describe("tajweed page", () => {
   });
 });
 
+describe("tajweed font", () => {
+  it("embeds the installed Amiri Quran font byte for byte", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { AMIRI_QURAN_TTF_BASE64 } = await import("@/lib/quran/font-data");
+    const ttf = readFileSync(
+      "mobile/node_modules/@expo-google-fonts/amiri-quran/400Regular/AmiriQuran_400Regular.ttf",
+    );
+    // A mismatch means the font package changed: run scripts/build-quran-font.mts.
+    expect(AMIRI_QURAN_TTF_BASE64 === ttf.toString("base64")).toBe(true);
+  });
+});
+
 describe("tajweed segments", () => {
   it("re-join to the exact āyah text, for every āyah, with and without the basmala header", async () => {
     const { tajweedSegments } = await import("@/lib/quran/tajweed-colors");
