@@ -76,6 +76,7 @@
       [
         "expo-notifications",
         {
+          "icon": "./assets/images/notification-icon.png",
           "color": "#D9B871",
           "sounds": [
             "./assets/sounds/adhan_full.ogg",
