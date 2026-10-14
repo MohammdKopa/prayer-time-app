@@ -353,11 +353,13 @@ const styles = StyleSheet.create({
   hintAtTarget: { color: COLORS.gold, opacity: 0.9 },
 
   controls: { padding: 20, gap: 14, alignItems: "center" },
-  targets: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 10 },
+  // Four chips on one row in every language ("Nach dem Gebet", "Namazdan
+  // sonra" are the long ones); wrapping stays as the fallback for huge text.
+  targets: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8 },
   chip: {
-    minWidth: 64,
+    minWidth: 56,
     paddingVertical: 11,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: COLORS.line,
@@ -367,7 +369,7 @@ const styles = StyleSheet.create({
   chipText: {
     color: COLORS.bone,
     opacity: 0.55,
-    fontSize: 16,
+    fontSize: 15,
     fontVariant: ["tabular-nums"],
   },
   chipTextActive: { color: COLORS.gold, opacity: 1 },
