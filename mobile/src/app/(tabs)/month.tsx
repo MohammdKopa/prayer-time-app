@@ -459,3 +459,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.body,
   },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

@@ -75,7 +75,12 @@ export default function MosquesScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
+        <Pressable
+          onPress={() => router.back()}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("back")}
+        >
           <Text style={styles.back}>{t("back")}</Text>
         </Pressable>
         <Text style={styles.title}>{t("mosques")}</Text>

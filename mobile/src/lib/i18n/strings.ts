@@ -293,6 +293,9 @@ const ar = {
   silenceExplainBody:
     "يُفعّل وضع عدم الإزعاج في هاتفك لعدد الدقائق الذي تختاره بعد كل أذان، ثم يُعيده كما كان تمامًا. لا يغادر أي شيء جهازك.",
   silenceGrantAccess: "فتح إعدادات عدم الإزعاج",
+  errorTitle: "حدث خطأ ما",
+  errorBody: "لم نتمكن من عرض هذه الصفحة. بقية التطبيق يعمل كالمعتاد.",
+  errorRetry: "حاول مرة أخرى",
 
 } as const;
 
@@ -584,6 +587,9 @@ const de: Strings = {
   silenceExplainBody:
     "Schaltet für die gewählte Anzahl an Minuten nach jedem Adhan die Bitte-nicht-stören-Funktion deines Telefons ein und stellt sie danach genau wieder her. Es verlässt nichts dein Gerät.",
   silenceGrantAccess: "Bitte-nicht-stören-Einstellungen öffnen",
+  errorTitle: "Etwas ist schiefgelaufen",
+  errorBody: "Dieser Bereich konnte nicht angezeigt werden. Der Rest der App funktioniert weiter.",
+  errorRetry: "Erneut versuchen",
 
 };
 
@@ -869,6 +875,9 @@ const tr: Strings = {
   silenceExplainBody:
     "Her ezandan sonra seçtiğiniz süre boyunca telefonunuzun Rahatsız Etmeyin özelliğini açar, ardından tam olarak eski haline getirir. Hiçbir şey cihazınızdan dışarı çıkmaz.",
   silenceGrantAccess: "Rahatsız Etmeyin ayarlarını aç",
+  errorTitle: "Bir şeyler ters gitti",
+  errorBody: "Bu bölüm gösterilemedi. Uygulamanın geri kalanı çalışmaya devam ediyor.",
+  errorRetry: "Tekrar dene",
 
 };
 
@@ -1154,6 +1163,9 @@ const en: Strings = {
   silenceExplainBody:
     "Turns on your phone's Do Not Disturb for the chosen minutes after each adhan, then puts it back exactly as it was. Nothing leaves your device.",
   silenceGrantAccess: "Open Do Not Disturb settings",
+  errorTitle: "Something went wrong",
+  errorBody: "This section could not be shown. The rest of the app keeps working.",
+  errorRetry: "Try again",
 
 };
 

@@ -27,7 +27,12 @@ export function SkyBackground({
   const sky = useMemo(() => skyAt(now, times), [now, times]);
 
   return (
-    <View style={StyleSheet.absoluteFill} pointerEvents="none">
+    <View
+      style={StyleSheet.absoluteFill}
+      pointerEvents="none"
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       <LinearGradient
         colors={sky.colours}
         locations={[0, 0.55, 1]}

@@ -110,7 +110,12 @@ export default function CreditsScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
+        <Pressable
+          onPress={() => router.back()}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("back")}
+        >
           <Text style={styles.back}>{t("back")}</Text>
         </Pressable>
         <Text style={styles.title}>{t("credits")}</Text>
@@ -129,6 +134,7 @@ export default function CreditsScreen() {
                   key={item.title}
                   style={[styles.row, i > 0 && styles.rowBorder]}
                   disabled={!item.url}
+                  accessibilityRole={item.url ? "link" : undefined}
                   onPress={() => item.url && Linking.openURL(item.url).catch(() => {})}
                 >
                   <Text style={styles.itemTitle}>{item.title}</Text>

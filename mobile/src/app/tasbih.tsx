@@ -138,7 +138,12 @@ export default function TasbihScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} hitSlop={12}>
+        <Pressable
+          onPress={() => router.back()}
+          hitSlop={12}
+          accessibilityRole="button"
+          accessibilityLabel={t("back")}
+        >
           <Text style={styles.back}>{t("back")}</Text>
         </Pressable>
         <Text style={styles.title}>{t("tasbih")}</Text>
@@ -150,6 +155,7 @@ export default function TasbihScreen() {
         onPress={onTap}
         accessibilityRole="button"
         accessibilityLabel={t("tasbihHint")}
+        accessibilityValue={{ text: String(count) }}
       >
         <View style={[styles.column, !ready && styles.hidden]}>
           <Animated.View
@@ -199,6 +205,7 @@ export default function TasbihScreen() {
                 style={[styles.chip, active && styles.chipActive]}
                 onPress={() => onChooseTarget(value)}
                 accessibilityRole="button"
+                accessibilityState={{ selected: active }}
               >
                 <Text
                   style={[styles.chipText, active && styles.chipTextActive]}

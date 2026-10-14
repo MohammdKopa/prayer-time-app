@@ -33,11 +33,17 @@ export function ExactAlarmBanner() {
   if (!reason) return null;
 
   return (
-    <Pressable style={styles.banner} onPress={() => openFixFor(reason)}>
+    <Pressable
+      style={styles.banner}
+      onPress={() => openFixFor(reason)}
+      accessibilityRole="button"
+    >
       <Text style={styles.text}>
         {t(reason === "exact" ? "exactAlarmBanner" : "autostartBanner")}
       </Text>
-      <Text style={styles.chevron}>{"›"}</Text>
+      <Text style={styles.chevron} accessible={false}>
+        {"›"}
+      </Text>
     </Pressable>
   );
 }

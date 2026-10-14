@@ -43,6 +43,7 @@ import {
 import { hijriMonthName, toHijri } from "@/lib/hijri";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { restoreDefaultOrientation } from "@/lib/orientation";
+import { setDisplayActive } from "@/lib/review-prompt-run";
 import { usePlaceContext } from "@/lib/place-context";
 import { adjustedDay } from "@/lib/schedule";
 import {
@@ -107,12 +108,14 @@ export default function DisplayScreen() {
   // Landscape and truly full-screen: the status bar goes via <StatusBar hidden>,
   // the Android navigation bar here. Both come back when the screen unmounts.
   useEffect(() => {
+    setDisplayActive(true);
     void ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
     if (Platform.OS === "android") {
       // Immersive: a swipe from the edge brings the bar back briefly.
       void NavigationBar.setVisibilityAsync("hidden").catch(() => {});
     }
     return () => {
+      setDisplayActive(false);
       restoreDefaultOrientation();
       if (Platform.OS === "android") {
         void NavigationBar.setVisibilityAsync("visible").catch(() => {});
@@ -456,6 +459,7 @@ export default function DisplayScreen() {
             onPress={() => setSetupOpen(true)}
             focusable
             hasTVPreferredFocus
+            accessibilityRole="button"
           >
             <Text style={[styles.menuText, { fontSize: fs(3.2, 2.4) }]}>{t("displaySettings")}</Text>
           </Pressable>
@@ -463,6 +467,7 @@ export default function DisplayScreen() {
             style={[styles.menuButton, { paddingVertical: vh * 1.6, paddingHorizontal: vw * 2 }]}
             onPress={() => router.back()}
             focusable
+            accessibilityRole="button"
           >
             <Text style={[styles.menuText, { fontSize: fs(3.2, 2.4) }]}>{t("displayExit")}</Text>
           </Pressable>

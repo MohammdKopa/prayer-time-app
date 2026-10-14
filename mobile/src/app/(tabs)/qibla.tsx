@@ -365,3 +365,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

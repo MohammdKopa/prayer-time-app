@@ -64,7 +64,11 @@ export default function QuranIndexScreen() {
   const header = (
     <View style={styles.headerBlock}>
       {lastRead && !searching && (
-        <Pressable style={styles.continueCard} onPress={() => open(lastRead)}>
+        <Pressable
+          style={styles.continueCard}
+          onPress={() => open(lastRead)}
+          accessibilityRole="button"
+        >
           <Text style={[styles.continueLabel, align]}>{t("quranContinue")}</Text>
           <Text style={[styles.continueWhere, align]}>
             {t("quranContinueAt", {
@@ -88,11 +92,17 @@ export default function QuranIndexScreen() {
       />
 
       {jump && (
-        <Pressable style={[styles.jump, row]} onPress={() => open(jump)}>
+        <Pressable
+          style={[styles.jump, row]}
+          onPress={() => open(jump)}
+          accessibilityRole="button"
+        >
           <Text style={styles.jumpText}>
             {surahTitle(surahMeta(jump.surah), locale)} {jump.surah}:{jump.ayah}
           </Text>
-          <Text style={styles.chevron}>{isRTL ? "‹" : "›"}</Text>
+          <Text style={styles.chevron} accessible={false}>
+            {isRTL ? "‹" : "›"}
+          </Text>
         </Pressable>
       )}
 
@@ -105,6 +115,7 @@ export default function QuranIndexScreen() {
                 key={refKey(b)}
                 style={[styles.row, row, i === bookmarks.length - 1 && styles.rowLast]}
                 onPress={() => open(b)}
+                accessibilityRole="button"
               >
                 <Text style={[styles.rowTitle, align]}>
                   {surahTitle(surahMeta(b.surah), locale)}
@@ -125,6 +136,8 @@ export default function QuranIndexScreen() {
               key={k}
               style={[styles.tab, tab === k && styles.tabActive]}
               onPress={() => setTab(k)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: tab === k }}
             >
               <Text style={[styles.tabText, tab === k && styles.tabTextActive]}>
                 {t(k === "surahs" ? "quranSurahs" : "quranJuz")}
@@ -197,7 +210,11 @@ interface RowProps {
 
 function SurahRow({ surah, t, locale, row, align, onPress }: RowProps & { surah: SurahMeta }) {
   return (
-    <Pressable style={[styles.listRow, row]} onPress={onPress}>
+    <Pressable
+      style={[styles.listRow, row]}
+      onPress={onPress}
+      accessibilityRole="button"
+    >
       <View style={styles.number}>
         <Text style={styles.numberText}>{surah.index}</Text>
       </View>
@@ -227,7 +244,11 @@ function JuzRow({
   onPress,
 }: RowProps & { index: number; start: AyahRef }) {
   return (
-    <Pressable style={[styles.listRow, row]} onPress={onPress}>
+    <Pressable
+      style={[styles.listRow, row]}
+      onPress={onPress}
+      accessibilityRole="button"
+    >
       <View style={styles.number}>
         <Text style={styles.numberText}>{index}</Text>
       </View>
@@ -365,3 +386,5 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

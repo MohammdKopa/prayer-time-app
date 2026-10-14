@@ -78,7 +78,12 @@ export default function PrayerSettingsScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} hitSlop={12}>
+          <Pressable
+            onPress={() => router.back()}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel={t("back")}
+          >
             <Text style={styles.back}>{t("back")}</Text>
           </Pressable>
           <Text style={styles.title}>{t("prayerAdjustTitle")}</Text>
@@ -204,6 +209,8 @@ function CityPrefs() {
                   setOpenPrayer(open ? null : prayer);
                   setCustomText("");
                 }}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: open }}
               >
                 <Text
                   style={[styles.optionText, badge !== null && styles.selected]}
@@ -240,6 +247,7 @@ function CityPrefs() {
                         disabled={
                           shown.offsets[prayer] <= -OFFSET_LIMIT_MINUTES
                         }
+                        accessibilityRole="button"
                       >
                         <Text
                           style={[
@@ -265,6 +273,7 @@ function CityPrefs() {
                         disabled={
                           shown.offsets[prayer] >= OFFSET_LIMIT_MINUTES
                         }
+                        accessibilityRole="button"
                       >
                         <Text
                           style={[
@@ -299,6 +308,7 @@ function CityPrefs() {
                   <Pressable
                     style={styles.reset}
                     onPress={() => update(resetPrayer(shown, prayer))}
+                    accessibilityRole="button"
                   >
                     <Text style={styles.resetText}>{t("resetPrayer")}</Text>
                   </Pressable>
@@ -310,7 +320,11 @@ function CityPrefs() {
       )}
   
       {prefs !== null && !isDefaultPrefs(prefs) && (
-        <Pressable style={styles.resetAll} onPress={resetEverything}>
+        <Pressable
+          style={styles.resetAll}
+          onPress={resetEverything}
+          accessibilityRole="button"
+        >
           <Text style={styles.resetText}>
             {confirmReset ? t("resetAllConfirm") : t("resetAll")}
           </Text>
@@ -359,6 +373,8 @@ function PrayerAlerts({
               key={style}
               style={[styles.chip, active && styles.chipActive]}
               onPress={() => update(withNotify(prefs, prayer, style))}
+              accessibilityRole="button"
+              accessibilityState={{ selected: active }}
             >
               <Text style={[styles.chipText, active && styles.chipTextActive]}>
                 {t(STYLE_KEY[style])}
@@ -373,6 +389,8 @@ function PrayerAlerts({
         <Pressable
           style={[styles.chip, reminder === null && styles.chipActive]}
           onPress={() => update(withReminder(prefs, prayer, null))}
+          accessibilityRole="button"
+          accessibilityState={{ selected: reminder === null }}
         >
           <Text
             style={[
@@ -390,6 +408,8 @@ function PrayerAlerts({
               key={minutes}
               style={[styles.chip, active && styles.chipActive]}
               onPress={() => update(withReminder(prefs, prayer, minutes))}
+              accessibilityRole="button"
+              accessibilityState={{ selected: active }}
             >
               <Text style={[styles.chipText, active && styles.chipTextActive]}>
                 {t("reminderMinutes", { minutes })}

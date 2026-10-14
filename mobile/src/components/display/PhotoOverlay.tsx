@@ -44,7 +44,12 @@ export function PhotoOverlay({
   const sub = locale === "ar" ? null : photo.placeSub[locale];
 
   return (
-    <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { opacity }]}>
+    <Animated.View
+      pointerEvents="none"
+      style={[StyleSheet.absoluteFill, { opacity }]}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       <Image key={slot} source={photo.source} style={styles.img} contentFit="cover" />
       <View style={styles.wash} />
       <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">

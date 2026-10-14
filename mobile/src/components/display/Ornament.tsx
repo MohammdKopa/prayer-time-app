@@ -24,7 +24,12 @@ export const LEAF_BRIGHT = "#f6e4ac";
  *  composite one bitmap, not five overlapping views. */
 export function Atmosphere({ width, height }: { width: number; height: number }) {
   return (
-    <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View
+      pointerEvents="none"
+      style={StyleSheet.absoluteFill}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       <Svg width={width} height={height}>
         <Defs>
           <RadialGradient id="n1" cx="22%" cy="26%" r="42%">
@@ -84,7 +89,12 @@ export function Frame({ vh, vw }: { vh: number; vw: number }) {
   const inset = { top: vh * 1.6, bottom: vh * 1.6, left: vw * 1.4, right: vw * 1.4 };
   const size = vh * 5.2;
   return (
-    <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View
+      pointerEvents="none"
+      style={StyleSheet.absoluteFill}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       <View style={[styles.outer, inset, { borderRadius: vh * 1.4 }]}>
         <View style={[styles.inner, { margin: vh * 0.7, borderRadius: vh }]} />
       </View>
@@ -157,7 +167,12 @@ const DUST = [
 /** Gold dust drifting up the wall. Native-driver transforms only. */
 export function Dust({ width, height }: { width: number; height: number }) {
   return (
-    <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+    <View
+      pointerEvents="none"
+      style={StyleSheet.absoluteFill}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
       {DUST.map((d, i) => (
         <Mote key={i} {...d} width={width} height={height} />
       ))}

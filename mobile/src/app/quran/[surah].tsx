@@ -206,7 +206,13 @@ export default function QuranReaderScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={[styles.header, row]}>
-        <Pressable onPress={() => router.back()} hitSlop={12} style={styles.side}>
+        <Pressable
+          onPress={() => router.back()}
+          hitSlop={12}
+          style={styles.side}
+          accessibilityRole="button"
+          accessibilityLabel={t("back")}
+        >
           <Text style={styles.back}>{t("back")}</Text>
         </Pressable>
         <Text style={styles.title} numberOfLines={1}>
@@ -220,6 +226,7 @@ export default function QuranReaderScreen() {
           onPress={toggleTajweed}
           style={[styles.chip, tajweed.on && styles.chipOn]}
           accessibilityRole="switch"
+          accessibilityLabel={t("tajweed")}
           accessibilityState={{ checked: tajweed.on }}
         >
           <Text style={[styles.chipText, tajweed.on && styles.chipTextOn]}>
@@ -227,7 +234,12 @@ export default function QuranReaderScreen() {
           </Text>
         </Pressable>
         {tajweed.on && (
-          <Pressable onPress={() => setLegendOpen((v) => !v)} hitSlop={8}>
+          <Pressable
+            onPress={() => setLegendOpen((v) => !v)}
+            hitSlop={8}
+            accessibilityRole="button"
+            accessibilityState={{ expanded: legendOpen }}
+          >
             <Text style={styles.legendToggle}>{t("tajweedLegend")}</Text>
           </Pressable>
         )}
@@ -237,7 +249,9 @@ export default function QuranReaderScreen() {
             onPress={() => step(-1)}
             disabled={!canShrink}
             hitSlop={8}
+            accessibilityRole="button"
             accessibilityLabel={t("quranTextSmaller")}
+            accessibilityState={{ disabled: !canShrink }}
           >
             <Text style={[styles.sizeButton, !canShrink && styles.sizeDisabled]}>A−</Text>
           </Pressable>
@@ -245,7 +259,9 @@ export default function QuranReaderScreen() {
             onPress={() => step(1)}
             disabled={!canGrow}
             hitSlop={8}
+            accessibilityRole="button"
             accessibilityLabel={t("quranTextLarger")}
+            accessibilityState={{ disabled: !canGrow }}
           >
             <Text style={[styles.sizeButtonLarge, !canGrow && styles.sizeDisabled]}>A+</Text>
           </Pressable>
@@ -326,7 +342,11 @@ export default function QuranReaderScreen() {
           ListFooterComponent={
             <View style={[styles.footer, row]}>
               {surahNo > 1 ? (
-                <Pressable style={styles.navButton} onPress={() => goTo(surahNo - 1)}>
+                <Pressable
+                  style={styles.navButton}
+                  onPress={() => goTo(surahNo - 1)}
+                  accessibilityRole="button"
+                >
                   <Text style={styles.navLabel}>{t("quranPrevSurah")}</Text>
                   <Text style={styles.navName}>{surahTitle(SURAHS[surahNo - 2], locale)}</Text>
                 </Pressable>
@@ -334,7 +354,11 @@ export default function QuranReaderScreen() {
                 <View style={styles.navSpacer} />
               )}
               {surahNo < 114 ? (
-                <Pressable style={styles.navButton} onPress={() => goTo(surahNo + 1)}>
+                <Pressable
+                  style={styles.navButton}
+                  onPress={() => goTo(surahNo + 1)}
+                  accessibilityRole="button"
+                >
                   <Text style={styles.navLabel}>{t("quranNextSurah")}</Text>
                   <Text style={styles.navName}>{surahTitle(SURAHS[surahNo], locale)}</Text>
                 </Pressable>
@@ -503,3 +527,5 @@ const styles = StyleSheet.create({
   },
   toastText: { color: TEXT.full, fontSize: 14, fontFamily: FONTS.body },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

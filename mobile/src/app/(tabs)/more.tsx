@@ -47,10 +47,10 @@ export default function MoreScreen() {
         <View style={styles.card}>
           {ROWS.map((row) => (
             <Link key={row.href} href={row.href} asChild>
-              <Pressable style={styles.row}>
-                <Text style={styles.glyph}>{row.glyph}</Text>
+              <Pressable style={styles.row} accessibilityRole="button">
+                <Text style={styles.glyph} accessible={false}>{row.glyph}</Text>
                 <Text style={styles.label}>{t(row.key)}</Text>
-                <Text style={styles.chevron}>{"›"}</Text>
+                <Text style={styles.chevron} accessible={false}>{"›"}</Text>
               </Pressable>
             </Link>
           ))}
@@ -90,3 +90,5 @@ const styles = StyleSheet.create({
   label: { color: TEXT.full, fontSize: 17, fontFamily: FONTS.body, flex: 1 },
   chevron: { color: TEXT.faint, fontSize: 20 },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

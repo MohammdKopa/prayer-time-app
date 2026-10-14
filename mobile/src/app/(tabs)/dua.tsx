@@ -390,6 +390,7 @@ function ToggleRow({
       <Switch
         value={value}
         onValueChange={onChange}
+        accessibilityLabel={label}
         trackColor={{ true: COLORS.gold, false: "#333" }}
         thumbColor={COLORS.bone}
       />
@@ -475,6 +476,8 @@ function Pill({
     <Pressable
       style={[styles.pill, active && styles.pillActive]}
       onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
     >
       <Text style={[styles.pillText, active && styles.pillTextActive]}>
         {label}
@@ -507,7 +510,12 @@ function DuaRow({
 
   return (
     <View style={[styles.duaRow, !first && styles.divided]}>
-      <Pressable onPress={onPress} style={styles.duaHead}>
+      <Pressable
+        onPress={onPress}
+        style={styles.duaHead}
+        accessibilityRole="button"
+        accessibilityState={{ expanded }}
+      >
         <Text style={[styles.duaTitle, expanded && styles.selected]}>
           {item.title[locale as keyof typeof item.title] ?? item.title.en}
         </Text>
@@ -715,3 +723,5 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

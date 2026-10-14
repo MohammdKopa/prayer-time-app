@@ -68,13 +68,19 @@ export function DisplaySetup({
 
           <View style={styles.actions}>
             {onCancel && (
-              <Pressable style={styles.secondary} onPress={onCancel}>
+              <Pressable
+                style={styles.secondary}
+                onPress={onCancel}
+                accessibilityRole="button"
+              >
                 <Text style={styles.secondaryText}>{t("back")}</Text>
               </Pressable>
             )}
             <Pressable
               style={[styles.primary, jumuaBad && styles.disabled]}
               disabled={jumuaBad}
+              accessibilityRole="button"
+              accessibilityState={{ disabled: jumuaBad }}
               onPress={() =>
                 onDone({
                   mosqueName: name.trim(),

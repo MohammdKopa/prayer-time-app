@@ -419,3 +419,5 @@ const styles = StyleSheet.create({
   sunriseText: { color: TEXT.faint, fontSize: 17 },
   gold: { color: COLORS.gold },
 });
+
+export { TabErrorBoundary as ErrorBoundary } from "@/components/TabErrorBoundary";

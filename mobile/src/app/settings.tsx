@@ -209,7 +209,12 @@ export default function SettingsScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <Pressable onPress={() => router.back()} hitSlop={12}>
+          <Pressable
+            onPress={() => router.back()}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel={t("back")}
+          >
             <Text style={styles.back}>{t("back")}</Text>
           </Pressable>
           <Text style={styles.title}>{t("settings")}</Text>
@@ -223,6 +228,8 @@ export default function SettingsScreen() {
               key={l}
               style={styles.option}
               onPress={() => setLocale(l)}
+              accessibilityRole="button"
+              accessibilityState={{ selected: l === locale }}
             >
               <Text
                 style={[styles.optionText, l === locale && styles.selected]}
@@ -243,6 +250,7 @@ export default function SettingsScreen() {
             <Switch
               value={notify}
               onValueChange={toggleNotifications}
+              accessibilityLabel={t("notifications")}
               trackColor={{ true: COLORS.gold, false: "#333" }}
               thumbColor={COLORS.bone}
             />
@@ -258,6 +266,7 @@ export default function SettingsScreen() {
               <Pressable
                 style={styles.explainButton}
                 onPress={() => openExactAlarmSettings()}
+                accessibilityRole="button"
               >
                 <Text style={styles.explainButtonText}>
                   {t("exactAlarmGrant")}
@@ -273,6 +282,7 @@ export default function SettingsScreen() {
               <Pressable
                 style={styles.explainButton}
                 onPress={() => openAutostartSettings()}
+                accessibilityRole="button"
               >
                 <Text style={styles.explainButtonText}>
                   {t("autostartGrant")}
@@ -289,6 +299,8 @@ export default function SettingsScreen() {
                   refreshAlerts();
                   setShowAlerts((v) => !v);
                 }}
+                accessibilityRole="button"
+                accessibilityState={{ expanded: showAlerts }}
               >
                 <Text style={styles.label}>
                   {alerts.length === 0
@@ -328,6 +340,8 @@ export default function SettingsScreen() {
                 key={v}
                 style={styles.option}
                 onPress={() => void chooseVoice(v)}
+                accessibilityRole="button"
+                accessibilityState={{ selected: active }}
               >
                 <View style={styles.voiceText}>
                   <Text style={[styles.optionText, active && styles.selected]}>
@@ -346,6 +360,7 @@ export default function SettingsScreen() {
           <Pressable
             style={styles.explainButton}
             onPress={() => void previewVoice(voice, t)}
+            accessibilityRole="button"
           >
             <Text style={styles.explainButtonText}>{t("voicePreview")}</Text>
           </Pressable>
@@ -360,6 +375,7 @@ export default function SettingsScreen() {
             <Switch
               value={silenceOn}
               onValueChange={(on) => void toggleSilence(on)}
+              accessibilityLabel={t("silenceSection")}
               trackColor={{ true: COLORS.gold, false: "#333" }}
               thumbColor={COLORS.bone}
             />
@@ -376,6 +392,8 @@ export default function SettingsScreen() {
                       key={minutes}
                       style={[styles.chip, active && styles.chipActive]}
                       onPress={() => void chooseSilenceMinutes(minutes)}
+                      accessibilityRole="button"
+                      accessibilityState={{ selected: active }}
                     >
                       <Text
                         style={[
@@ -401,6 +419,7 @@ export default function SettingsScreen() {
                   <Pressable
                     style={styles.explainButton}
                     onPress={() => openPolicyAccessSettings()}
+                    accessibilityRole="button"
                   >
                     <Text style={styles.explainButtonText}>
                       {t("silenceGrantAccess")}
@@ -436,6 +455,7 @@ export default function SettingsScreen() {
             <Pressable
               style={styles.explainButton}
               onPress={() => router.push("/display")}
+              accessibilityRole="button"
             >
               <Text style={styles.explainButtonText}>{t("displayOpen")}</Text>
             </Pressable>
@@ -444,7 +464,12 @@ export default function SettingsScreen() {
 
         <Text style={styles.section}>{t("chooseCity")}</Text>
         <View style={styles.card}>
-          <Pressable style={styles.option} onPress={() => void useGps()}>
+          <Pressable
+            style={styles.option}
+            onPress={() => void useGps()}
+            accessibilityRole="button"
+            accessibilityState={{ selected: mode === "gps" }}
+          >
             <Text
               style={[styles.optionText, mode === "gps" && styles.selected]}
             >
@@ -476,6 +501,8 @@ export default function SettingsScreen() {
                 key={c.id}
                 style={styles.option}
                 onPress={() => void usePlace(placeFromCity(c))}
+                accessibilityRole="button"
+                accessibilityState={{ selected: active }}
               >
                 <Text style={[styles.optionText, active && styles.selected]}>
                   {c.name}
