@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { loadJSON, saveJSON } from "@/lib/storage";
 
 import { SURAHS, type AyahRef } from "./meta";
+import { PAGE_COUNT } from "./pages";
 
 // What the reader remembers: where you stopped, your bookmarks, your text
 // size. On this device only, like every other setting — no account, nothing
@@ -61,6 +62,39 @@ export function useBookmarks() {
   );
 
   return { bookmarks, toggle, reload };
+}
+
+const PAGE_BOOKMARKS = "quran.pageBookmarks";
+
+const validPage = (p: unknown): p is number =>
+  typeof p === "number" && Number.isInteger(p) && p >= 1 && p <= PAGE_COUNT;
+
+/** Page bookmarks (the ribbon in the reader), newest first. Kept apart from
+ *  āyah bookmarks: a ribbon marks where a page is, not a particular āyah. */
+export function usePageBookmarks() {
+  const [pages, setPages] = useState<number[]>([]);
+
+  const reload = useCallback(() => {
+    loadJSON<number[]>(PAGE_BOOKMARKS).then((list) => {
+      setPages(Array.isArray(list) ? list.filter(validPage) : []);
+    });
+  }, []);
+
+  useEffect(reload, [reload]);
+
+  /** Adds or removes; returns true when it added. */
+  const toggle = useCallback(
+    (page: number): boolean => {
+      const exists = pages.includes(page);
+      const next = exists ? pages.filter((p) => p !== page) : [page, ...pages];
+      setPages(next);
+      saveJSON(PAGE_BOOKMARKS, next);
+      return !exists;
+    },
+    [pages],
+  );
+
+  return { pages, toggle, reload };
 }
 
 /** Text size as an index into TEXT_SIZES, so it can only take sane values. */

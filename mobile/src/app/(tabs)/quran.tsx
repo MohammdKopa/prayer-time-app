@@ -9,26 +9,92 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Path } from "react-native-svg";
 
 import { useI18n, type Locale, type Translate } from "@/lib/i18n";
 import { JUZ_STARTS, type AyahRef, type SurahMeta } from "@/lib/quran/meta";
 import { surahTitle } from "@/lib/quran/names";
 import {
+  PAGE_COUNT,
+  pageInfo,
+  pageOf,
+  pageRange,
+  refOfIndex,
+} from "@/lib/quran/pages";
+import {
   loadLastRead,
   refKey,
   useBookmarks,
+  usePageBookmarks,
 } from "@/lib/quran/reading-state";
-import { parseAyahRef, searchSurahs, surahMeta } from "@/lib/quran/text-utils";
+import {
+  parseAyahRef,
+  parsePageQuery,
+  searchSurahs,
+  surahMeta,
+} from "@/lib/quran/text-utils";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
-// The Quran tab: sūrah and juzʾ index, search, where you left off, bookmarks.
+// The Quran tab: sūrah, juzʾ and page index, search, where you left off,
+// bookmarks (āyah and page).
 // Riwāyat Ḥafṣ ʿan ʿĀṣim, the Madani mushaf text from Tanzil.
 //
 // Only this screen and the reader import the text modules, and expo-router
 // loads a route's module when it is first opened, so the 1.4 MB of text never
 // sits on the clock's cold start.
 
-type Tab = "surahs" | "juz";
+type Tab = "surahs" | "juz" | "pages";
+
+const TABS: { key: Tab; label: "quranSurahs" | "quranJuz" | "quranIndexPages" }[] = [
+  { key: "surahs", label: "quranSurahs" },
+  { key: "juz", label: "quranJuz" },
+  { key: "pages", label: "quranIndexPages" },
+];
+
+const BOOKMARKS_SHOWN = 5;
+
+/** Each juzʾ with the page it opens on and the last page before the next. */
+const JUZ_PAGES = JUZ_STARTS.map((j, i) => {
+  const from = pageOf(j);
+  const next = JUZ_STARTS[i + 1];
+  return { ...j, from, to: next ? Math.max(from, pageOf(next) - 1) : PAGE_COUNT };
+});
+
+/** The first āyah on a page, for the reader's { surah, ayah, page } params. */
+function firstOnPage(page: number): AyahRef {
+  return refOfIndex(pageRange(page).start);
+}
+
+function BookIcon({ color, size = 22 }: { color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessible={false}>
+      <Path
+        d="M12 6.5C10.5 5 8 4.5 4 4.5v13c4 0 6.5.5 8 2 1.5-1.5 4-2 8-2v-13c-4 0-6.5.5-8 2zM12 6.5v13"
+        stroke={color}
+        strokeWidth={1.7}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </Svg>
+  );
+}
+
+function RibbonIcon({ color, size = 20 }: { color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessible={false}>
+      <Path
+        d="M7 3.5h10v17l-5-4-5 4z"
+        stroke={color}
+        strokeWidth={1.7}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill={color}
+        fillOpacity={0.25}
+      />
+    </Svg>
+  );
+}
 
 export default function QuranIndexScreen() {
   const router = useRouter();
@@ -36,14 +102,19 @@ export default function QuranIndexScreen() {
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<Tab>("surahs");
   const [lastRead, setLastRead] = useState<AyahRef | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const [pageText, setPageText] = useState("");
+  const [pageTouched, setPageTouched] = useState(false);
   const { bookmarks, reload } = useBookmarks();
+  const { pages: pageMarks, reload: reloadPages } = usePageBookmarks();
 
-  // Both change while the reader is open, so re-read them on every return.
+  // These change while the reader is open, so re-read them on every return.
   useFocusEffect(
     useCallback(() => {
       loadLastRead().then(setLastRead);
       reload();
-    }, [reload]),
+      reloadPages();
+    }, [reload, reloadPages]),
   );
 
   const open = useCallback(
@@ -55,27 +126,76 @@ export default function QuranIndexScreen() {
     [router],
   );
 
+  const openPage = useCallback(
+    (page: number) => {
+      const ref = firstOnPage(page);
+      router.push({
+        pathname: "/quran/[surah]",
+        params: {
+          surah: String(ref.surah),
+          ayah: String(ref.ayah),
+          page: String(page),
+        },
+      });
+    },
+    [router],
+  );
+
   const results = useMemo(() => searchSurahs(query), [query]);
   const jump = useMemo(() => parseAyahRef(query), [query]);
+  const pageJump = useMemo(() => parsePageQuery(query), [query]);
+  const typedPage = useMemo(() => parsePageQuery(`p ${pageText}`), [pageText]);
   const row = isRTL ? styles.rtl : styles.ltr;
   const align = isRTL ? styles.alignRight : styles.alignLeft;
   const searching = query.trim() !== "";
+
+  const surahName = (n: number) => surahTitle(surahMeta(n), locale);
+  const goToTypedPage = () => {
+    setPageTouched(true);
+    if (typedPage) openPage(typedPage);
+  };
+
+  const marks = useMemo(
+    () => [
+      ...bookmarks.map((b) => ({ kind: "ayah" as const, ref: b })),
+      ...pageMarks.map((p) => ({ kind: "page" as const, page: p })),
+    ],
+    [bookmarks, pageMarks],
+  );
+  const shownMarks = showAll ? marks : marks.slice(0, BOOKMARKS_SHOWN);
+
+  const lastPage = lastRead ? pageOf(lastRead) : 0;
+  const lastWhere = lastRead
+    ? t("quranContinueAt", { surah: surahName(lastRead.surah), ayah: lastRead.ayah })
+    : "";
+  const lastPageText = lastRead
+    ? t("quranIndexContinuePage", { page: lastPage, juz: pageInfo(lastPage).juz })
+    : "";
+
+  const chevron = (
+    <Text style={styles.chevron} accessible={false}>
+      {isRTL ? "‹" : "›"}
+    </Text>
+  );
 
   const header = (
     <View style={styles.headerBlock}>
       {lastRead && !searching && (
         <Pressable
-          style={styles.continueCard}
+          style={[styles.continueCard, row]}
           onPress={() => open(lastRead)}
           accessibilityRole="button"
+          accessibilityLabel={`${t("quranContinue")}. ${lastWhere}. ${lastPageText}`}
         >
-          <Text style={[styles.continueLabel, align]}>{t("quranContinue")}</Text>
-          <Text style={[styles.continueWhere, align]}>
-            {t("quranContinueAt", {
-              surah: surahTitle(surahMeta(lastRead.surah), locale),
-              ayah: lastRead.ayah,
-            })}
-          </Text>
+          <View style={styles.continueIcon}>
+            <BookIcon color={TEXT.gold} />
+          </View>
+          <View style={styles.continueMain}>
+            <Text style={[styles.continueLabel, align]}>{t("quranContinue")}</Text>
+            <Text style={[styles.continueWhere, align]}>{lastWhere}</Text>
+            <Text style={[styles.rowSub, align]}>{lastPageText}</Text>
+          </View>
+          {chevron}
         </Pressable>
       )}
 
@@ -85,10 +205,14 @@ export default function QuranIndexScreen() {
         onChangeText={setQuery}
         placeholder={t("quranSearch")}
         placeholderTextColor={TEXT.faint}
+        accessibilityLabel={t("quranSearch")}
         autoCorrect={false}
         autoCapitalize="none"
         returnKeyType="search"
-        onSubmitEditing={() => jump && open(jump)}
+        onSubmitEditing={() => {
+          if (jump) open(jump);
+          else if (pageJump) openPage(pageJump);
+        }}
       />
 
       {jump && (
@@ -98,52 +222,148 @@ export default function QuranIndexScreen() {
           accessibilityRole="button"
         >
           <Text style={styles.jumpText}>
-            {surahTitle(surahMeta(jump.surah), locale)} {jump.surah}:{jump.ayah}
+            {surahName(jump.surah)} {jump.surah}:{jump.ayah}
           </Text>
-          <Text style={styles.chevron} accessible={false}>
-            {isRTL ? "‹" : "›"}
-          </Text>
+          {chevron}
         </Pressable>
       )}
 
-      {!searching && bookmarks.length > 0 && (
+      {pageJump && (
+        <Pressable
+          style={[styles.jump, row]}
+          onPress={() => openPage(pageJump)}
+          accessibilityRole="button"
+          accessibilityLabel={t("quranIndexOpenPage", { page: pageJump })}
+        >
+          <Text style={styles.jumpText}>
+            {t("quranIndexPageLabel", { page: pageJump })}
+          </Text>
+          {chevron}
+        </Pressable>
+      )}
+
+      {!searching && (
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, align]}>{t("quranBookmarks")}</Text>
-          <View style={styles.card}>
-            {bookmarks.map((b, i) => (
-              <Pressable
-                key={refKey(b)}
-                style={[styles.row, row, i === bookmarks.length - 1 && styles.rowLast]}
-                onPress={() => open(b)}
-                accessibilityRole="button"
-              >
-                <Text style={[styles.rowTitle, align]}>
-                  {surahTitle(surahMeta(b.surah), locale)}
-                </Text>
-                <Text style={styles.rowMeta}>
-                  {b.surah}:{b.ayah}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
+          <Text style={[styles.sectionTitle, align]} accessibilityRole="header">
+            {t("quranBookmarks")}
+          </Text>
+          {marks.length === 0 ? (
+            <Text style={[styles.hint, align]}>{t("quranIndexBookmarksEmpty")}</Text>
+          ) : (
+            <View style={styles.card}>
+              {shownMarks.map((m, i) => {
+                const last = i === shownMarks.length - 1 && marks.length <= BOOKMARKS_SHOWN;
+                if (m.kind === "ayah") {
+                  const page = pageOf(m.ref);
+                  const title = surahName(m.ref.surah);
+                  return (
+                    <Pressable
+                      key={`a${refKey(m.ref)}`}
+                      style={[styles.row, row, last && styles.rowLast]}
+                      onPress={() => open(m.ref)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${title} ${m.ref.surah}:${m.ref.ayah}, ${t(
+                        "quranIndexPageLabel",
+                        { page },
+                      )}`}
+                    >
+                      <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
+                      <Text style={styles.rowMeta}>
+                        {m.ref.surah}:{m.ref.ayah} · {t("quranIndexPageShort", { page })}
+                      </Text>
+                    </Pressable>
+                  );
+                }
+                const title = surahName(pageInfo(m.page).surahs[0]);
+                return (
+                  <Pressable
+                    key={`p${m.page}`}
+                    style={[styles.row, row, last && styles.rowLast]}
+                    onPress={() => openPage(m.page)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${t("quranIndexPageLabel", { page: m.page })}, ${title}`}
+                  >
+                    <View style={[styles.markMain, row]}>
+                      <RibbonIcon color={TEXT.gold} />
+                      <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
+                    </View>
+                    <Text style={styles.rowMeta}>
+                      {t("quranIndexPageLabel", { page: m.page })}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+              {marks.length > BOOKMARKS_SHOWN && (
+                <Pressable
+                  style={styles.more}
+                  onPress={() => setShowAll((v) => !v)}
+                  accessibilityRole="button"
+                  accessibilityState={{ expanded: showAll }}
+                >
+                  <Text style={styles.moreText}>
+                    {showAll
+                      ? t("quranIndexShowLess")
+                      : t("quranIndexShowAll", { count: marks.length })}
+                  </Text>
+                </Pressable>
+              )}
+            </View>
+          )}
         </View>
       )}
 
       {!searching && (
-        <View style={[styles.tabs, row]}>
-          {(["surahs", "juz"] as const).map((k) => (
+        <View style={[styles.tabs, row]} accessibilityRole="tablist">
+          {TABS.map((k) => (
             <Pressable
-              key={k}
-              style={[styles.tab, tab === k && styles.tabActive]}
-              onPress={() => setTab(k)}
+              key={k.key}
+              style={[styles.tab, tab === k.key && styles.tabActive]}
+              onPress={() => setTab(k.key)}
               accessibilityRole="tab"
-              accessibilityState={{ selected: tab === k }}
+              accessibilityState={{ selected: tab === k.key }}
             >
-              <Text style={[styles.tabText, tab === k && styles.tabTextActive]}>
-                {t(k === "surahs" ? "quranSurahs" : "quranJuz")}
+              <Text style={[styles.tabText, tab === k.key && styles.tabTextActive]}>
+                {t(k.label)}
               </Text>
             </Pressable>
           ))}
+        </View>
+      )}
+
+      {!searching && tab === "pages" && (
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, align]}>{t("quranIndexGoToPage")}</Text>
+          <View style={[styles.goRow, row]}>
+            <TextInput
+              style={[styles.search, styles.goInput, align]}
+              value={pageText}
+              onChangeText={(v) => {
+                setPageText(v);
+                setPageTouched(false);
+              }}
+              placeholder={t("quranIndexPageInput")}
+              placeholderTextColor={TEXT.faint}
+              accessibilityLabel={t("quranIndexGoToPage")}
+              keyboardType="number-pad"
+              maxLength={3}
+              returnKeyType="go"
+              onSubmitEditing={goToTypedPage}
+            />
+            <Pressable
+              style={[styles.goButton, !typedPage && styles.goButtonOff]}
+              onPress={goToTypedPage}
+              accessibilityRole="button"
+              accessibilityLabel={t("quranIndexGo")}
+              accessibilityState={{ disabled: !typedPage }}
+            >
+              <Text style={styles.goText}>{t("quranIndexGo")}</Text>
+            </Pressable>
+          </View>
+          {pageTouched && !typedPage && (
+            <Text style={[styles.invalid, align]} accessibilityLiveRegion="polite">
+              {t("quranIndexPageInvalid")}
+            </Text>
+          )}
         </View>
       )}
     </View>
@@ -156,21 +376,22 @@ export default function QuranIndexScreen() {
         <Text style={styles.riwaya}>{t("quranRiwaya")}</Text>
       </View>
 
-      {tab === "juz" && !searching ? (
+      {(tab === "juz" || tab === "pages") && !searching ? (
         <FlatList
-          data={JUZ_STARTS}
+          data={JUZ_PAGES}
           keyExtractor={(j) => String(j.index)}
           ListHeaderComponent={header}
           contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
           renderItem={({ item }) => (
             <JuzRow
-              index={item.index}
-              start={item}
+              item={item}
+              byPage={tab === "pages"}
               t={t}
               locale={locale}
               row={row}
               align={align}
-              onPress={() => open(item)}
+              onPress={() => (tab === "pages" ? openPage(item.from) : open(item))}
             />
           )}
         />
@@ -180,7 +401,9 @@ export default function QuranIndexScreen() {
           keyExtractor={(s) => String(s.index)}
           ListHeaderComponent={header}
           ListEmptyComponent={
-            <Text style={styles.empty}>{t("quranNoResults")}</Text>
+            jump || pageJump ? null : (
+              <Text style={styles.empty}>{t("quranNoResults")}</Text>
+            )
           }
           contentContainerStyle={styles.content}
           keyboardShouldPersistTaps="handled"
@@ -209,6 +432,7 @@ interface RowProps {
 }
 
 function SurahRow({ surah, t, locale, row, align, onPress }: RowProps & { surah: SurahMeta }) {
+  const page = pageOf({ surah: surah.index, ayah: 1 });
   return (
     <Pressable
       style={[styles.listRow, row]}
@@ -222,7 +446,8 @@ function SurahRow({ surah, t, locale, row, align, onPress }: RowProps & { surah:
         <Text style={[styles.rowTitle, align]}>{surahTitle(surah, locale)}</Text>
         <Text style={[styles.rowSub, align]}>
           {t(surah.revelation === "Meccan" ? "quranMeccan" : "quranMedinan")} ·{" "}
-          {t("quranAyahCount", { count: surah.ayahs })}
+          {t("quranAyahCount", { count: surah.ayahs })} ·{" "}
+          {t("quranIndexPageShort", { page })}
         </Text>
       </View>
       {locale !== "ar" && (
@@ -235,29 +460,41 @@ function SurahRow({ surah, t, locale, row, align, onPress }: RowProps & { surah:
 }
 
 function JuzRow({
-  index,
-  start,
+  item,
+  byPage,
   t,
   locale,
   row,
   align,
   onPress,
-}: RowProps & { index: number; start: AyahRef }) {
+}: RowProps & { item: (typeof JUZ_PAGES)[number]; byPage: boolean }) {
+  const range = t("quranIndexPageRange", { from: item.from, to: item.to });
   return (
     <Pressable
       style={[styles.listRow, row]}
       onPress={onPress}
       accessibilityRole="button"
+      accessibilityLabel={
+        byPage
+          ? t("quranIndexOpenJuz", { n: item.index, range })
+          : `${t("quranJuzLabel", { n: item.index })}, ${surahTitle(
+              surahMeta(item.surah),
+              locale,
+            )} ${item.surah}:${item.ayah}, ${t("quranIndexPageShort", { page: item.from })}`
+      }
     >
       <View style={styles.number}>
-        <Text style={styles.numberText}>{index}</Text>
+        <Text style={styles.numberText}>{item.index}</Text>
       </View>
       <View style={styles.rowMain}>
-        <Text style={[styles.rowTitle, align]}>{t("quranJuzLabel", { n: index })}</Text>
+        <Text style={[styles.rowTitle, align]}>{t("quranJuzLabel", { n: item.index })}</Text>
         <Text style={[styles.rowSub, align]}>
-          {surahTitle(surahMeta(start.surah), locale)} {start.surah}:{start.ayah}
+          {surahTitle(surahMeta(item.surah), locale)} {item.surah}:{item.ayah}
         </Text>
       </View>
+      <Text style={styles.pageTag}>
+        {byPage ? range : t("quranIndexPageShort", { page: item.from })}
+      </Text>
     </Pressable>
   );
 }
@@ -275,13 +512,23 @@ const styles = StyleSheet.create({
 
   headerBlock: { gap: 14, marginBottom: 6 },
   continueCard: {
+    alignItems: "center",
+    gap: 14,
     backgroundColor: COLORS.raised,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: COLORS.goldEdge,
     borderRadius: 14,
     padding: 16,
-    gap: 4,
   },
+  continueIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.goldWash,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  continueMain: { flex: 1, gap: 3 },
   continueLabel: { color: TEXT.gold, fontSize: 13, fontFamily: FONTS.body },
   continueWhere: { color: TEXT.full, fontSize: 17, fontFamily: FONTS.bodyMedium },
   search: {
@@ -323,6 +570,30 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.line,
   },
   rowLast: { borderBottomWidth: 0 },
+  markMain: { flex: 1, alignItems: "center", gap: 10 },
+  markTitle: { flexShrink: 1 },
+  hint: { color: TEXT.faint, fontSize: 13, fontFamily: FONTS.body, lineHeight: 20 },
+  more: { alignItems: "center", paddingVertical: 12 },
+  moreText: { color: TEXT.gold, fontSize: 14, fontFamily: FONTS.body },
+  goRow: { gap: 8, alignItems: "center" },
+  goInput: { flex: 1 },
+  goButton: {
+    paddingHorizontal: 22,
+    paddingVertical: 11,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.goldEdge,
+    backgroundColor: COLORS.goldWash,
+  },
+  goButtonOff: { opacity: 0.5 },
+  goText: { color: TEXT.gold, fontSize: 15, fontFamily: FONTS.bodyMedium },
+  invalid: { color: TEXT.soft, fontSize: 13, fontFamily: FONTS.body },
+  pageTag: {
+    color: TEXT.soft,
+    fontSize: 13,
+    fontFamily: FONTS.body,
+    fontVariant: ["tabular-nums"],
+  },
 
   tabs: { gap: 8 },
   tab: {

@@ -130,3 +130,22 @@ export function parseAyahRef(query: string): AyahRef | null {
   if (!meta || ayah < 1 || ayah > meta.ayahs) return null;
   return { surah, ayah };
 }
+
+const PAGE_PREFIX = /^(?:page|seite|sayfa|صفحة|صفحه|ص|p|s)\s*\.?\s*(.+)$/i;
+
+/**
+ * A page query: "p 411", "page 411", "s. 411", "ص 411", "صفحة 411",
+ * "Seite 411", "sayfa 411", Arabic-Indic digits too. The prefix is required,
+ * so a bare "411" stays a sūrah search. Returns the page (1–604) or null.
+ */
+export function parsePageQuery(query: string): number | null {
+  const m = query.trim().match(PAGE_PREFIX);
+  if (!m) return null;
+  const digits = m[1]
+    .trim()
+    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
+    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0));
+  if (!/^\d{1,3}$/.test(digits)) return null;
+  const page = Number(digits);
+  return page >= 1 && page <= 604 ? page : null;
+}

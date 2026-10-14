@@ -1,135 +1,84 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewToken,
-} from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Svg, { Path } from "react-native-svg";
 
+import { AyahActions } from "@/components/quran/AyahActions";
+import { MushafPager } from "@/components/quran/MushafPager";
+import { ReaderSettings } from "@/components/quran/ReaderSettings";
 import { useI18n } from "@/lib/i18n";
-import { SURAHS } from "@/lib/quran/meta";
+import type { AyahRef } from "@/lib/quran/meta";
 import { surahTitle } from "@/lib/quran/names";
+import { PAGE_COUNT, pageInfo, pageOf, pageRange, refOfIndex } from "@/lib/quran/pages";
 import {
   refKey,
   saveLastRead,
   useBookmarks,
+  usePageBookmarks,
   useTajweedSetting,
   useTextSize,
 } from "@/lib/quran/reading-state";
-import { TajweedPage } from "@/components/quran/TajweedPage";
-import { FAMILY_COLOR, LEGEND } from "@/lib/quran/tajweed-colors";
-import type { PageAyah } from "@/lib/quran/tajweed-html";
-import { AYAT } from "@/lib/quran/text";
-import { splitBasmala, surahMeta } from "@/lib/quran/text-utils";
+import { surahMeta } from "@/lib/quran/text-utils";
 import { COLORS, FONTS, TEXT } from "@/theme";
 
-// The reading screen: one sūrah, one āyah per block, as the text stands.
+// The reader: the mushaf page by page, swiped right to left like the printed
+// Madani mushaf (604 pages, the same page numbers). The text is drawn by
+// components/quran/MushafPager; this screen holds the chrome around it.
 //
-// What is drawn is AYAT verbatim. The only layout decision is the basmala,
-// set on its own line above the sūrah the way a printed mushaf does it
-// (`splitBasmala`, tested to re-join to the original line). Āyah numbers sit
-// in ornate brackets after each āyah, in 0–9 like the rest of the app.
+// Tap an āyah for bookmark / copy / share. The ribbon in the header marks the
+// page, like a ribbon left in a printed mushaf. "Aa" holds text size and
+// tajweed.
 //
-// Arabic is drawn in full-opacity colours only (see TEXT in theme.ts): dimmed
-// Arabic on Android shows seams where letters join, and in the Quran that
-// would read as a flaw in the text.
-
-interface AyahItem {
-  ayah: number;
-  /** Index into AYAT, for the tajweed spans. */
-  index: number;
-  /** The āyah as shown: AYAT[index] from `from` on. */
-  text: string;
-  /** Characters skipped at the start (the basmala lifted into the header). */
-  from: number;
-}
+// Opened as /quran/<surah>?ayah=<n> (the page holding that āyah) or with
+// &page=<n> to open a page directly.
 
 export default function QuranReaderScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ surah: string; ayah?: string }>();
+  const params = useLocalSearchParams<{ surah: string; ayah?: string; page?: string }>();
   const { t, locale, isRTL } = useI18n();
-  const { size, canGrow, canShrink, step } = useTextSize();
-  const { bookmarks, toggle } = useBookmarks();
+  const textSize = useTextSize();
   const tajweed = useTajweedSetting();
-  const [legendOpen, setLegendOpen] = useState(false);
-  const [toast, setToast] = useState<string | null>(null);
+  const { bookmarks, toggle: toggleAyah } = useBookmarks();
+  const { pages: pageMarks, toggle: togglePage } = usePageBookmarks();
 
-  const surahNo = clamp(Number(params.surah) || 1, 1, 114);
-  const meta = surahMeta(surahNo);
-  const startAyah = clamp(Number(params.ayah) || 1, 1, meta.ayahs);
-
-  const { basmala, items } = useMemo(() => {
-    const list: AyahItem[] = [];
-    let opening: string | null = null;
-    for (let a = 1; a <= meta.ayahs; a++) {
-      const index = meta.start + a - 1;
-      const raw = AYAT[index];
-      if (a === 1) {
-        const split = splitBasmala(surahNo, 1, raw);
-        opening = split.basmala;
-        list.push({ ayah: 1, index, text: split.text, from: raw.length - split.text.length });
-      } else {
-        list.push({ ayah: a, index, text: raw, from: 0 });
-      }
+  const target = useMemo<{ page: number; ref: AyahRef }>(() => {
+    const surah = clamp(Number(params.surah) || 1, 1, 114);
+    const ayah = clamp(Number(params.ayah) || 1, 1, surahMeta(surah).ayahs);
+    const asked = Number(params.page);
+    if (Number.isInteger(asked) && asked >= 1 && asked <= PAGE_COUNT) {
+      return { page: asked, ref: refOfIndex(pageRange(asked).start) };
     }
-    return { basmala: opening, items: list };
-  }, [meta, surahNo]);
+    return { page: pageOf({ surah, ayah }), ref: { surah, ayah } };
+  }, [params.surah, params.ayah, params.page]);
 
-  const marked = useMemo(
-    () => new Set(bookmarks.filter((b) => b.surah === surahNo).map(refKey)),
-    [bookmarks, surahNo],
-  );
-
-  // -------------------------------------------------- opening position --
-  const listRef = useRef<FlatList<AyahItem>>(null);
-  const scrolledTo = useRef(false);
-  const scrollToStart = useCallback(() => {
-    if (scrolledTo.current || startAyah <= 1) return;
-    scrolledTo.current = true;
-    listRef.current?.scrollToIndex({ index: startAyah - 1, animated: false });
-  }, [startAyah]);
-  // A link to another āyah while this screen is already open changes the
-  // params without a new layout pass, so the jump cannot wait for onLayout.
-  useEffect(() => {
-    scrolledTo.current = false;
-    const id = setTimeout(scrollToStart, 50);
-    return () => clearTimeout(id);
-  }, [surahNo, startAyah, scrollToStart]);
+  const [page, setPage] = useState(target.page);
+  // A new link while the screen is open (a bookmark, a search) turns the page.
+  const [linked, setLinked] = useState(target.page);
+  if (linked !== target.page) {
+    setLinked(target.page);
+    setPage(target.page);
+  }
 
   // ------------------------------------------------------- last read --
-  // Saved a moment after scrolling settles, not on every frame.
-  const surahNoRef = useRef(surahNo);
-  useEffect(() => {
-    surahNoRef.current = surahNo;
-  }, [surahNo]);
+  // The āyah the reader was sent to, then the first āyah of each page turned
+  // to; saved a moment after the page settles.
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  // Stable for the screen's life: FlatList does not allow swapping this
-  // handler after mount.
-  const visibleAyah = useRef(startAyah);
-  const noteVisible = useCallback((ayah: number) => {
-    visibleAyah.current = ayah;
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(
-      () => saveLastRead({ surah: surahNoRef.current, ayah }),
-      800,
-    );
-  }, []);
-  const onViewable = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken<AyahItem>[] }) => {
-      const first = viewableItems.find((v) => v.isViewable)?.item;
-      if (first) noteVisible(first.ayah);
+  const onPage = useCallback(
+    (p: number) => {
+      setPage(p);
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+      const ref = p === target.page ? target.ref : refOfIndex(pageRange(p).start);
+      saveTimer.current = setTimeout(() => saveLastRead(ref), 600);
     },
-    [noteVisible],
+    [target],
   );
   useEffect(() => () => {
     if (saveTimer.current) clearTimeout(saveTimer.current);
   }, []);
 
   // ---------------------------------------------------------- toast --
+  const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flash = useCallback((msg: string) => {
     setToast(msg);
@@ -137,74 +86,19 @@ export default function QuranReaderScreen() {
     toastTimer.current = setTimeout(() => setToast(null), 1600);
   }, []);
 
-  const goTo = useCallback(
-    (n: number) =>
-      router.replace({ pathname: "/quran/[surah]", params: { surah: String(n), ayah: "1" } }),
-    [router],
-  );
+  // ------------------------------------------------- āyah and ribbon --
+  const [selected, setSelected] = useState<AyahRef | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const marked = useMemo(() => bookmarks.map(refKey), [bookmarks]);
+  const selectedMarked = selected ? marked.includes(refKey(selected)) : false;
+  const pageMarked = pageMarks.includes(page);
 
-  // ------------------------------------------------------- tajweed --
-  // The tajweed view is a different renderer (components/quran/TajweedPage),
-  // so switching hands over the āyah being read: the page opens there, and
-  // the list scrolls back to it when switching off.
-  // The āyah handed over when tajweed was switched on, valid only for the
-  // link it was switched on under; a new link opens at its own āyah.
-  const [handoff, setHandoff] = useState<{ surah: number; link: number; ayah: number } | null>(
-    null,
-  );
-  const pageStart =
-    handoff && handoff.surah === surahNo && handoff.link === startAyah ? handoff.ayah : startAyah;
-  const toggleTajweed = useCallback(() => {
-    const keep = visibleAyah.current;
-    if (!tajweed.on) setHandoff({ surah: surahNo, link: startAyah, ayah: keep });
-    tajweed.toggle();
-    if (tajweed.on) {
-      setTimeout(() => {
-        listRef.current?.scrollToIndex({ index: keep - 1, animated: false });
-      }, 80);
-    }
-  }, [tajweed, surahNo, startAyah]);
-
-  const pageAyat = useMemo<PageAyah[]>(
-    () => items.map((it) => ({ ayah: it.ayah, index: it.index, from: it.from, raw: AYAT[it.index] })),
-    [items],
-  );
-  const pageBookmarks = useMemo(
-    () => bookmarks.filter((b) => b.surah === surahNo).map((b) => b.ayah),
-    [bookmarks, surahNo],
-  );
-  const subtitle = `${t(meta.revelation === "Meccan" ? "quranMeccan" : "quranMedinan")} · ${t(
-    "quranAyahCount",
-    { count: meta.ayahs },
-  )}`;
-  const prevNav = useMemo(
-    () =>
-      surahNo > 1
-        ? { label: t("quranPrevSurah"), name: surahTitle(SURAHS[surahNo - 2], locale), surah: surahNo - 1 }
-        : null,
-    [surahNo, t, locale],
-  );
-  const nextNav = useMemo(
-    () =>
-      surahNo < 114
-        ? { label: t("quranNextSurah"), name: surahTitle(SURAHS[surahNo], locale), surah: surahNo + 1 }
-        : null,
-    [surahNo, t, locale],
-  );
-
-  const onLongPressAyah = useCallback(
-    (ayah: number) =>
-      flash(
-        t(toggle({ surah: surahNo, ayah }) ? "quranBookmarkAdded" : "quranBookmarkRemoved"),
-      ),
-    [flash, t, toggle, surahNo],
-  );
-
+  const info = pageInfo(page);
+  const title = surahTitle(surahMeta(info.surahs[0]), locale);
   const row = isRTL ? styles.rtl : styles.ltr;
-  const lineHeight = Math.round(size * 1.9);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={[styles.header, row]}>
         <Pressable
           onPress={() => router.back()}
@@ -213,203 +107,88 @@ export default function QuranReaderScreen() {
           accessibilityRole="button"
           accessibilityLabel={t("back")}
         >
-          <Text style={styles.back}>{t("back")}</Text>
+          <Text style={[styles.back, { textAlign: isRTL ? "right" : "left" }]}>{t("back")}</Text>
         </Pressable>
-        <Text style={styles.title} numberOfLines={1}>
-          {surahTitle(meta, locale)}
-        </Text>
-        <View style={styles.side} />
-      </View>
 
-      <View style={[styles.toolbar, row]}>
-        <Pressable
-          onPress={toggleTajweed}
-          style={[styles.chip, tajweed.on && styles.chipOn]}
-          accessibilityRole="switch"
-          accessibilityLabel={t("tajweed")}
-          accessibilityState={{ checked: tajweed.on }}
-        >
-          <Text style={[styles.chipText, tajweed.on && styles.chipTextOn]}>
-            {t("tajweed")}
+        <View style={styles.titleBlock} accessible accessibilityRole="header">
+          <Text style={styles.title} numberOfLines={1}>
+            {title}
           </Text>
-        </Pressable>
-        {tajweed.on && (
+          <Text style={styles.subtitle} numberOfLines={1}>
+            {t("quranReaderWhere", { page, juz: info.juz })}
+          </Text>
+        </View>
+
+        <View style={[styles.side, styles.actions, row]}>
           <Pressable
-            onPress={() => setLegendOpen((v) => !v)}
-            hitSlop={8}
+            onPress={() => flash(t(togglePage(page) ? "quranReaderPageMarked" : "quranReaderPageUnmarked"))}
+            hitSlop={10}
             accessibilityRole="button"
-            accessibilityState={{ expanded: legendOpen }}
+            accessibilityLabel={t(pageMarked ? "quranReaderUnmarkPage" : "quranReaderMarkPage")}
+            accessibilityState={{ selected: pageMarked }}
           >
-            <Text style={styles.legendToggle}>{t("tajweedLegend")}</Text>
-          </Pressable>
-        )}
-        <View style={styles.toolbarSpacer} />
-        <View style={[styles.sizeButtons, row]}>
-          <Pressable
-            onPress={() => step(-1)}
-            disabled={!canShrink}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel={t("quranTextSmaller")}
-            accessibilityState={{ disabled: !canShrink }}
-          >
-            <Text style={[styles.sizeButton, !canShrink && styles.sizeDisabled]}>A−</Text>
+            <Ribbon filled={pageMarked} />
           </Pressable>
           <Pressable
-            onPress={() => step(1)}
-            disabled={!canGrow}
-            hitSlop={8}
+            onPress={() => setSettingsOpen(true)}
+            hitSlop={10}
             accessibilityRole="button"
-            accessibilityLabel={t("quranTextLarger")}
-            accessibilityState={{ disabled: !canGrow }}
+            accessibilityLabel={t("quranReaderSettings")}
           >
-            <Text style={[styles.sizeButtonLarge, !canGrow && styles.sizeDisabled]}>A+</Text>
+            <Text style={styles.aa}>Aa</Text>
           </Pressable>
         </View>
       </View>
 
-      {tajweed.on && legendOpen && (
-        <View style={styles.legend}>
-          {LEGEND.map(({ family, label }) => (
-            <View key={family} style={[styles.legendRow, row]}>
-              <View style={[styles.legendSwatch, { backgroundColor: FAMILY_COLOR[family] }]} />
-              <Text style={[styles.legendLabel, { textAlign: isRTL ? "right" : "left" }]}>
-                {t(label)}
-              </Text>
-            </View>
-          ))}
-          <Text style={[styles.legendNote, { textAlign: isRTL ? "right" : "left" }]}>
-            {t("tajweedSource")}
-          </Text>
-        </View>
-      )}
-
-      {tajweed.on ? (
-        <TajweedPage
-          key={surahNo}
-          surahName={meta.name}
-          subtitle={subtitle}
-          basmala={basmala}
-          ayat={pageAyat}
-          fontSize={size}
-          startAyah={pageStart}
-          bookmarked={pageBookmarks}
-          prev={prevNav}
-          next={nextNav}
-          onVisibleAyah={noteVisible}
-          onLongPressAyah={onLongPressAyah}
-          onNavigate={goTo}
-        />
-      ) : (
-        <FlatList
-          ref={listRef}
-          data={items}
-          keyExtractor={(i) => String(i.ayah)}
-          contentContainerStyle={styles.content}
-          onLayout={scrollToStart}
-          onScrollToIndexFailed={({ averageItemLength, index }) => {
-            // Āyāt differ wildly in length, so the list cannot know an unseen
-            // row's offset. Jump near it, let rows render, then land exactly.
-            listRef.current?.scrollToOffset({ offset: averageItemLength * index, animated: false });
-            setTimeout(() => listRef.current?.scrollToIndex({ index, animated: false }), 120);
-          }}
-          onViewableItemsChanged={onViewable}
-          viewabilityConfig={VIEWABILITY}
-          initialNumToRender={10}
-          maxToRenderPerBatch={6}
-          windowSize={7}
-          ListHeaderComponent={
-            <View style={styles.opening}>
-              <Text style={styles.surahName}>{meta.name}</Text>
-              <Text style={styles.surahSub}>
-                {t(meta.revelation === "Meccan" ? "quranMeccan" : "quranMedinan")} ·{" "}
-                {t("quranAyahCount", { count: meta.ayahs })}
-              </Text>
-              {basmala && (
-                <Text style={[styles.basmala, { fontSize: size, lineHeight }]}>{basmala}</Text>
-              )}
-            </View>
-          }
-          renderItem={({ item }) => (
-            <AyahRow
-              item={item}
-              size={size}
-              lineHeight={lineHeight}
-              marked={marked.has(refKey({ surah: surahNo, ayah: item.ayah }))}
-              onLongPress={onLongPressAyah}
-            />
-          )}
-          ListFooterComponent={
-            <View style={[styles.footer, row]}>
-              {surahNo > 1 ? (
-                <Pressable
-                  style={styles.navButton}
-                  onPress={() => goTo(surahNo - 1)}
-                  accessibilityRole="button"
-                >
-                  <Text style={styles.navLabel}>{t("quranPrevSurah")}</Text>
-                  <Text style={styles.navName}>{surahTitle(SURAHS[surahNo - 2], locale)}</Text>
-                </Pressable>
-              ) : (
-                <View style={styles.navSpacer} />
-              )}
-              {surahNo < 114 ? (
-                <Pressable
-                  style={styles.navButton}
-                  onPress={() => goTo(surahNo + 1)}
-                  accessibilityRole="button"
-                >
-                  <Text style={styles.navLabel}>{t("quranNextSurah")}</Text>
-                  <Text style={styles.navName}>{surahTitle(SURAHS[surahNo], locale)}</Text>
-                </Pressable>
-              ) : (
-                <View style={styles.navSpacer} />
-              )}
-            </View>
-          }
-        />
-      )}
+      <MushafPager
+        page={page}
+        tajweed={tajweed.on}
+        fontSize={textSize.size}
+        marked={marked}
+        selected={selected}
+        onPage={onPage}
+        onAyah={setSelected}
+      />
 
       {toast && (
         <View style={styles.toast} pointerEvents="none">
           <Text style={styles.toastText}>{toast}</Text>
         </View>
       )}
+
+      <AyahActions
+        ayah={selected}
+        bookmarked={selectedMarked}
+        onToggleBookmark={() => {
+          if (!selected) return;
+          flash(t(toggleAyah(selected) ? "quranBookmarkAdded" : "quranBookmarkRemoved"));
+        }}
+        onClose={() => setSelected(null)}
+      />
+      <ReaderSettings
+        visible={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        tajweed={tajweed}
+        size={textSize}
+      />
     </SafeAreaView>
   );
 }
 
-interface AyahRowProps {
-  item: AyahItem;
-  size: number;
-  lineHeight: number;
-  marked: boolean;
-  onLongPress: (ayah: number) => void;
-}
-
-/** One āyah. Memoised: scrolling and bookmarking re-render only what changed. */
-const AyahRow = memo(function AyahRow({
-  item,
-  size,
-  lineHeight,
-  marked,
-  onLongPress,
-}: AyahRowProps) {
+/** The page ribbon: a bookmark ribbon, filled gold when the page is marked. */
+function Ribbon({ filled }: { filled: boolean }) {
   return (
-    <Pressable
-      onLongPress={() => onLongPress(item.ayah)}
-      delayLongPress={350}
-      style={[styles.ayah, marked && styles.ayahMarked]}
-    >
-      <Text style={[styles.ayahText, { fontSize: size, lineHeight }]}>
-        {item.text}
-        <Text style={styles.ayahNumber}>{` ﴿${item.ayah}﴾`}</Text>
-      </Text>
-    </Pressable>
+    <Svg width={22} height={22} viewBox="0 0 24 24" accessible={false}>
+      <Path
+        d="M6.5 3.5h11v17l-5.5-4-5.5 4z"
+        stroke={TEXT.gold}
+        strokeWidth={1.7}
+        strokeLinejoin="round"
+        fill={filled ? TEXT.gold : "none"}
+      />
+    </Svg>
   );
-});
-
-const VIEWABILITY = { itemVisiblePercentThreshold: 60, minimumViewTime: 300 };
+}
 
 function clamp(n: number, lo: number, hi: number) {
   return Math.min(hi, Math.max(lo, Math.round(n)));
@@ -422,101 +201,22 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: COLORS.line,
   },
-  side: { width: 72 },
+  side: { width: 76 },
+  actions: { alignItems: "center", justifyContent: "flex-end", gap: 18 },
   back: { color: COLORS.gold, fontSize: 16, fontFamily: FONTS.body },
-  title: {
-    flex: 1,
-    textAlign: "center",
-    color: TEXT.full,
-    fontSize: 18,
-    fontFamily: FONTS.display,
-  },
-  toolbar: {
-    alignItems: "center",
-    gap: 14,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.line,
-  },
-  toolbarSpacer: { flex: 1 },
-  chip: {
-    borderWidth: 1,
-    borderColor: COLORS.line,
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-  },
-  chipOn: { borderColor: COLORS.goldEdge, backgroundColor: COLORS.goldWash },
-  chipText: { color: TEXT.soft, fontSize: 14, fontFamily: FONTS.body },
-  chipTextOn: { color: TEXT.gold },
-  legendToggle: { color: TEXT.gold, fontSize: 13, fontFamily: FONTS.body },
-  legend: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    gap: 7,
-    backgroundColor: COLORS.raised,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.line,
-  },
-  legendRow: { alignItems: "center", gap: 10 },
-  legendSwatch: { width: 14, height: 14, borderRadius: 4 },
-  legendLabel: { flex: 1, color: TEXT.full, fontSize: 14, fontFamily: FONTS.body },
-  legendNote: { color: TEXT.soft, fontSize: 12, fontFamily: FONTS.body, marginTop: 4 },
-  sizeButtons: { alignItems: "center", gap: 16 },
-  sizeButton: { color: TEXT.gold, fontSize: 14, fontFamily: FONTS.body },
-  sizeButtonLarge: { color: TEXT.gold, fontSize: 19, fontFamily: FONTS.body },
-  sizeDisabled: { color: TEXT.faint },
-
-  content: { paddingHorizontal: 18, paddingBottom: 40 },
-  opening: { alignItems: "center", paddingTop: 22, paddingBottom: 10, gap: 4 },
-  surahName: { color: TEXT.gold, fontSize: 30, fontFamily: FONTS.quran },
-  surahSub: { color: TEXT.soft, fontSize: 13, fontFamily: FONTS.body },
-  basmala: {
-    color: TEXT.full,
-    fontFamily: FONTS.mushaf,
-    textAlign: "center",
-    writingDirection: "rtl",
-    marginTop: 14,
-  },
-
-  ayah: {
-    paddingVertical: 10,
-    paddingHorizontal: 6,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: COLORS.line,
-  },
-  ayahMarked: { backgroundColor: COLORS.goldWash, borderRadius: 10 },
-  ayahText: {
-    color: TEXT.full,
-    fontFamily: FONTS.mushaf,
-    textAlign: "right",
-    writingDirection: "rtl",
-  },
-  ayahNumber: { color: TEXT.gold },
-
-  footer: { justifyContent: "space-between", gap: 12, paddingTop: 24 },
-  navButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: COLORS.line,
-    borderRadius: 12,
-    padding: 12,
-    gap: 2,
-    alignItems: "center",
-  },
-  navSpacer: { flex: 1 },
-  navLabel: { color: TEXT.soft, fontSize: 12, fontFamily: FONTS.body },
-  navName: { color: TEXT.full, fontSize: 15, fontFamily: FONTS.body },
+  titleBlock: { flex: 1, alignItems: "center", gap: 1 },
+  title: { color: TEXT.full, fontSize: 17, fontFamily: FONTS.display },
+  subtitle: { color: TEXT.soft, fontSize: 12, fontFamily: FONTS.body, fontVariant: ["tabular-nums"] },
+  aa: { color: TEXT.gold, fontSize: 18, fontFamily: FONTS.body },
 
   toast: {
     position: "absolute",
-    bottom: 40,
+    bottom: 48,
     alignSelf: "center",
     backgroundColor: COLORS.raised,
     borderWidth: 1,

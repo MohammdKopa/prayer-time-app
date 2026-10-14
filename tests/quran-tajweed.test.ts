@@ -93,30 +93,6 @@ const SURAHS_START: Record<number, number> = Object.fromEntries(
   SURAH_TABLE.map((s) => [s.index, s.start]),
 );
 
-describe("tajweed page", () => {
-  it("shows every āyah verbatim: strip the markup and the text is AYAT exactly", async () => {
-    const { ayahHtml } = await import("@/lib/quran/tajweed-html");
-    const unescape = (h: string) =>
-      h.replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
-    AYAT.forEach((raw, index) => {
-      expect(unescape(ayahHtml({ ayah: 0, index, from: 0, raw }))).toBe(raw);
-    });
-  });
-
-  it("is a page that loads nothing from the network", async () => {
-    const { surahPageHtml } = await import("@/lib/quran/tajweed-html");
-    const html = surahPageHtml({
-      surahName: "الفاتحة", subtitle: "", basmala: null, fontSize: 26, startAyah: 1, bookmarked: [],
-      ayat: [{ ayah: 1, index: 0, from: 0, raw: AYAT[0] }],
-      fontSrc: "url('file:///android_asset/fonts/AmiriQuran_400Regular.ttf')",
-      colors: { bg: "#000", text: "#fff", gold: "#d9b871", soft: "#888", line: "#222", wash: "#111" },
-      prev: null, next: null,
-    });
-    expect(html).not.toMatch(/https?:\/\//);
-    expect(html).not.toMatch(/<(img|link|iframe)/);
-  });
-});
-
 describe("tajweed font", () => {
   it("embeds the installed Amiri Quran font byte for byte", async () => {
     const { readFileSync } = await import("node:fs");
