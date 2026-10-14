@@ -161,7 +161,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:${c.bg};color:${c.text
   var slot=function(n){return document.getElementById("p"+n);};
   var cur=${p.startPage},marked={},sel=null;
   ${JSON.stringify(p.marked)}.forEach(function(k){marked[k]=1;});
-  var goto=function(n){var s=slot(n);if(!s)return;pager.style.scrollSnapType="none";s.scrollIntoView({block:"nearest",inline:"start"});pager.style.scrollSnapType="";};
+  // Positions are computed, not scrolled into view: in a right-to-left
+  // scroller page 1 sits at scrollLeft 0 and page n at -(n-1) widths. While
+  // the app is moving the page (first layout, a resize, a jump), scroll
+  // events are not the reader turning pages and are ignored.
+  var W=function(){return pager.clientWidth;},lock=0;
+  var goto=function(n){if(!W())return;lock++;pager.style.scrollSnapType="none";pager.scrollLeft=-(n-1)*W();pager.style.scrollSnapType="";setTimeout(function(){lock--;},200);};
+  var pageAt=function(){return Math.min(N,Math.max(1,Math.round(Math.abs(pager.scrollLeft)/W())+1));};
   // Ask for the neighbours that are empty, drop the far ones.
   var settle=function(){
     var need=[];
@@ -170,10 +176,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:${c.bg};color:${c.text
     var filled=pager.querySelectorAll(".pg[data-f]");
     for(var i=0;i<filled.length;i++){var q=+filled[i].dataset.p;if(Math.abs(q-cur)>4){filled[i].innerHTML="";delete filled[i].dataset.f;}}
   };
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){if(e.isIntersecting&&e.intersectionRatio>=.6){var n=+e.target.dataset.p;if(n!==cur){cur=n;post({type:"page",page:n});settle();}}});
-  },{root:pager,threshold:[.6]});
-  pager.querySelectorAll(".pg").forEach(function(s){io.observe(s);});
+  var st=null;
+  pager.addEventListener("scroll",function(){
+    clearTimeout(st);
+    st=setTimeout(function(){if(lock||!W())return;var n=pageAt();if(n!==cur){cur=n;post({type:"page",page:n});settle();}},120);
+  },{passive:true});
+  window.addEventListener("resize",function(){goto(cur);});
   var mark=function(root){
     root.querySelectorAll(".a").forEach(function(a){a.classList.toggle("m",!!marked[a.dataset.k]);a.classList.toggle("sel",a.dataset.k===sel);});
   };
