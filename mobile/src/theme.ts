@@ -28,6 +28,9 @@ export const FONTS = {
   bodyMedium: "NotoNaskhArabic_500Medium",
   /** Amiri — the muṣḥaf face. Only for āyāt and adhkār on the mosque display. */
   quran: "Amiri_400Regular",
+  /** Amiri Quran — drawn for the Uthmani mushaf text: room for the stacked
+   *  marks, small letters and pause signs. The Quran reader only. */
+  mushaf: "AmiriQuran_400Regular",
 } as const;
 
 /**

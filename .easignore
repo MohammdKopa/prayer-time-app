@@ -29,6 +29,9 @@ certificates/
 /mobile/ios/
 /mobile/.expo/
 /mobile/build-out/
+# Quran source files: build inputs for text.ts / tajweed.ts and the tests,
+# never imported by the app.
+/mobile/src/lib/quran/source/
 /mobile/modules/*/android/build/
 /mobile/modules/*/android/.gradle/
 /mobile/modules/*/android/.cxx/

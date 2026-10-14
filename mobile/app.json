@@ -100,7 +100,8 @@
             "./node_modules/@expo-google-fonts/reem-kufi/600SemiBold/ReemKufi_600SemiBold.ttf",
             "./node_modules/@expo-google-fonts/noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf",
             "./node_modules/@expo-google-fonts/noto-naskh-arabic/500Medium/NotoNaskhArabic_500Medium.ttf",
-            "./node_modules/@expo-google-fonts/amiri/400Regular/Amiri_400Regular.ttf"
+            "./node_modules/@expo-google-fonts/amiri/400Regular/Amiri_400Regular.ttf",
+            "./node_modules/@expo-google-fonts/amiri-quran/400Regular/AmiriQuran_400Regular.ttf"
           ]
         }
       ],

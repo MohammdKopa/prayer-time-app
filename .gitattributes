@@ -1,0 +1,3 @@
+# Tanzil sources are pinned by SHA-256 in tests/quran.test.ts; line-ending
+# conversion on checkout would change the bytes and fail that check.
+mobile/src/lib/quran/source/* -text

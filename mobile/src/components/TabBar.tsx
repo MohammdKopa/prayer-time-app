@@ -16,6 +16,7 @@ import { COLORS, FONTS, TEXT } from "@/theme";
 const META: Record<string, { glyph: string; key: keyof Strings }> = {
   index: { glyph: "◔", key: "times" },
   month: { glyph: "▦", key: "navMonth" },
+  quran: { glyph: "۞", key: "navQuran" },
   dua: { glyph: "❈", key: "navDua" },
   qibla: { glyph: "☉", key: "qibla" },
   more: { glyph: "☰", key: "navMore" },

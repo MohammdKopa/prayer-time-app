@@ -25,6 +25,23 @@ interface Section {
 
 const SECTIONS: Section[] = [
   {
+    // Tanzil's terms: verbatim copies only, the source clearly indicated, and
+    // a link to tanzil.net so readers can follow corrections.
+    key: "creditsQuran",
+    items: [
+      {
+        title: "Tanzil Quran Text (Uthmani, version 1.1)",
+        detail: "Copyright (C) 2007-2026 Tanzil Project. Creative Commons Attribution 3.0. Reproduced verbatim, without any change.",
+        url: "https://tanzil.net",
+      },
+      {
+        title: "quran-tajweed — tajweed annotations (riwayat Hafs)",
+        detail: "By Collin Fair. Creative Commons Attribution 4.0. Remapped to the current Tanzil text; colours chosen for this app.",
+        url: "https://github.com/cpfair/quran-tajweed",
+      },
+    ],
+  },
+  {
     key: "creditsPhotos",
     items: [
       {
@@ -78,7 +95,7 @@ const SECTIONS: Section[] = [
     key: "creditsFonts",
     items: [
       {
-        title: "Reem Kufi, Noto Naskh Arabic, Amiri",
+        title: "Reem Kufi, Noto Naskh Arabic, Amiri, Amiri Quran",
         detail: "Google Fonts. SIL Open Font License 1.1.",
         url: "https://fonts.google.com",
       },

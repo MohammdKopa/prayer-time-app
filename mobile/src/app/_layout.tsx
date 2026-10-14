@@ -1,4 +1,5 @@
 import { Amiri_400Regular } from "@expo-google-fonts/amiri";
+import { AmiriQuran_400Regular } from "@expo-google-fonts/amiri-quran";
 import {
   NotoNaskhArabic_400Regular,
   NotoNaskhArabic_500Medium,
@@ -22,7 +23,7 @@ import { COLORS } from "@/theme";
 SplashScreen.preventAutoHideAsync();
 restoreDefaultOrientation();
 
-// On Android the five faces are compiled into the APK by the expo-font config
+// On Android the six faces are compiled into the APK by the expo-font config
 // plugin (see app.json) under these same family names, so they are usable
 // before any JS runs and the splash never waits on them. iOS has no such
 // entry yet and still loads them here; an empty map resolves at once.
@@ -35,6 +36,7 @@ const RUNTIME_FONTS: Record<string, FontSource> =
         NotoNaskhArabic_400Regular,
         NotoNaskhArabic_500Medium,
         Amiri_400Regular,
+        AmiriQuran_400Regular,
       };
 
 function Navigator() {

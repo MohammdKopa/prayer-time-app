@@ -5,6 +5,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo-google-fonts/amiri": "^0.4.1",
+    "@expo-google-fonts/amiri-quran": "^0.4.1",
     "@expo-google-fonts/noto-naskh-arabic": "^0.4.5",
     "@expo-google-fonts/reem-kufi": "^0.4.2",
     "@expo/ui": "~57.0.18",
@@ -44,6 +45,7 @@
     "react-native-svg": "15.15.4",
     "react-native-view-shot": "5.1.0",
     "react-native-web": "~0.21.0",
+    "react-native-webview": "13.16.1",
     "react-native-worklets": "0.10.1"
   },
   "devDependencies": {

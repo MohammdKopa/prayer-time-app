@@ -7,7 +7,7 @@ import { COLORS } from "@/theme";
 //
 // These were Stack routes before, which meant every destination was somewhere
 // you went *into* and had to come back *out* of — with a back button and a
-// growing history. Tabs are five places you switch between, each keeping its
+// growing history. Tabs are six places you switch between, each keeping its
 // own state. Leaving the month view and returning should not reset it to
 // today, and nothing here should ever stack on top of itself.
 
@@ -22,6 +22,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="index" />
       <Tabs.Screen name="month" />
+      <Tabs.Screen name="quran" />
       <Tabs.Screen name="dua" />
       <Tabs.Screen name="qibla" />
       <Tabs.Screen name="more" />
