@@ -1,5 +1,5 @@
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   FlatList,
   Pressable,
@@ -52,6 +52,9 @@ const TABS: { key: Tab; label: "quranSurahs" | "quranJuz" | "quranIndexPages" }[
 ];
 
 const BOOKMARKS_SHOWN = 5;
+const UNDO_MS = 4000;
+
+type Removed = { kind: "ayah"; ref: AyahRef } | { kind: "page"; page: number };
 
 /** Each juzʾ with the page it opens on and the last page before the next. */
 const JUZ_PAGES = JUZ_STARTS.map((j, i) => {
@@ -74,6 +77,20 @@ function BookIcon({ color, size = 22 }: { color: string; size?: number }) {
         strokeWidth={1.7}
         strokeLinecap="round"
         strokeLinejoin="round"
+        fill="none"
+      />
+    </Svg>
+  );
+}
+
+function CloseIcon({ color, size = 18 }: { color: string; size?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" accessible={false}>
+      <Path
+        d="M6 6l12 12M18 6L6 18"
+        stroke={color}
+        strokeWidth={1.8}
+        strokeLinecap="round"
         fill="none"
       />
     </Svg>
@@ -105,8 +122,32 @@ export default function QuranIndexScreen() {
   const [showAll, setShowAll] = useState(false);
   const [pageText, setPageText] = useState("");
   const [pageTouched, setPageTouched] = useState(false);
-  const { bookmarks, reload } = useBookmarks();
-  const { pages: pageMarks, reload: reloadPages } = usePageBookmarks();
+  const { bookmarks, toggle: toggleAyah, reload } = useBookmarks();
+  const { pages: pageMarks, toggle: togglePage, reload: reloadPages } = usePageBookmarks();
+  const [removed, setRemoved] = useState<Removed | null>(null);
+  const undoTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(
+    () => () => {
+      if (undoTimer.current) clearTimeout(undoTimer.current);
+    },
+    [],
+  );
+
+  const removeMark = (m: Removed) => {
+    if (m.kind === "ayah") toggleAyah(m.ref);
+    else togglePage(m.page);
+    setRemoved(m);
+    if (undoTimer.current) clearTimeout(undoTimer.current);
+    undoTimer.current = setTimeout(() => setRemoved(null), UNDO_MS);
+  };
+  const undoRemove = () => {
+    if (!removed) return;
+    if (undoTimer.current) clearTimeout(undoTimer.current);
+    if (removed.kind === "ayah") toggleAyah(removed.ref);
+    else togglePage(removed.page);
+    setRemoved(null);
+  };
 
   // These change while the reader is open, so re-read them on every return.
   useFocusEffect(
@@ -257,40 +298,53 @@ export default function QuranIndexScreen() {
                   const page = pageOf(m.ref);
                   const title = surahName(m.ref.surah);
                   return (
-                    <Pressable
+                    <View
                       key={`a${refKey(m.ref)}`}
-                      style={[styles.row, row, last && styles.rowLast]}
-                      onPress={() => open(m.ref)}
-                      accessibilityRole="button"
-                      accessibilityLabel={`${title} ${m.ref.surah}:${m.ref.ayah}, ${t(
-                        "quranIndexPageLabel",
-                        { page },
-                      )}`}
+                      style={[styles.markRow, row, last && styles.rowLast]}
                     >
-                      <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
-                      <Text style={styles.rowMeta}>
-                        {m.ref.surah}:{m.ref.ayah} · {t("quranIndexPageShort", { page })}
-                      </Text>
-                    </Pressable>
+                      <Pressable
+                        style={[styles.markOpen, row]}
+                        onPress={() => open(m.ref)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${title} ${m.ref.surah}:${m.ref.ayah}, ${t(
+                          "quranIndexPageLabel",
+                          { page },
+                        )}`}
+                      >
+                        <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
+                        <Text style={styles.rowMeta}>
+                          {m.ref.surah}:{m.ref.ayah} · {t("quranIndexPageShort", { page })}
+                        </Text>
+                      </Pressable>
+                      <RemoveButton
+                        label={t("quranBookmarkRemoveLabel")}
+                        onPress={() => removeMark({ kind: "ayah", ref: m.ref })}
+                      />
+                    </View>
                   );
                 }
                 const title = surahName(pageInfo(m.page).surahs[0]);
                 return (
-                  <Pressable
-                    key={`p${m.page}`}
-                    style={[styles.row, row, last && styles.rowLast]}
-                    onPress={() => openPage(m.page)}
-                    accessibilityRole="button"
-                    accessibilityLabel={`${t("quranIndexPageLabel", { page: m.page })}, ${title}`}
-                  >
-                    <View style={[styles.markMain, row]}>
-                      <RibbonIcon color={TEXT.gold} />
-                      <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
-                    </View>
-                    <Text style={styles.rowMeta}>
-                      {t("quranIndexPageLabel", { page: m.page })}
-                    </Text>
-                  </Pressable>
+                  <View key={`p${m.page}`} style={[styles.markRow, row, last && styles.rowLast]}>
+                    <Pressable
+                      style={[styles.markOpen, row]}
+                      onPress={() => openPage(m.page)}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${t("quranIndexPageLabel", { page: m.page })}, ${title}`}
+                    >
+                      <View style={[styles.markMain, row]}>
+                        <RibbonIcon color={TEXT.gold} />
+                        <Text style={[styles.rowTitle, styles.markTitle, align]}>{title}</Text>
+                      </View>
+                      <Text style={styles.rowMeta}>
+                        {t("quranIndexPageLabel", { page: m.page })}
+                      </Text>
+                    </Pressable>
+                    <RemoveButton
+                      label={t("quranBookmarkRemoveLabel")}
+                      onPress={() => removeMark({ kind: "page", page: m.page })}
+                    />
+                  </View>
                 );
               })}
               {marks.length > BOOKMARKS_SHOWN && (
@@ -419,7 +473,34 @@ export default function QuranIndexScreen() {
           )}
         />
       )}
+
+      {removed && (
+        <View style={[styles.toast, row]} accessibilityLiveRegion="polite">
+          <Text style={[styles.toastText, align]}>{t("quranBookmarkRemoved")}</Text>
+          <Pressable
+            style={styles.toastAction}
+            onPress={undoRemove}
+            accessibilityRole="button"
+            accessibilityLabel={t("quranBookmarkRemoveUndo")}
+          >
+            <Text style={styles.toastActionText}>{t("quranBookmarkRemoveUndo")}</Text>
+          </Pressable>
+        </View>
+      )}
     </SafeAreaView>
+  );
+}
+
+function RemoveButton({ label, onPress }: { label: string; onPress: () => void }) {
+  return (
+    <Pressable
+      style={styles.remove}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+    >
+      <CloseIcon color={TEXT.soft} />
+    </Pressable>
   );
 }
 
@@ -570,6 +651,36 @@ const styles = StyleSheet.create({
     borderBottomColor: COLORS.line,
   },
   rowLast: { borderBottomWidth: 0 },
+  markRow: {
+    alignItems: "center",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: COLORS.line,
+  },
+  markOpen: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+  },
+  remove: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
+  toast: {
+    position: "absolute",
+    start: 20,
+    end: 20,
+    bottom: 24,
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: COLORS.raised,
+    borderWidth: 1,
+    borderColor: COLORS.goldEdge,
+    borderRadius: 14,
+    paddingStart: 16,
+    paddingEnd: 4,
+  },
+  toastText: { flex: 1, color: TEXT.full, fontSize: 14, fontFamily: FONTS.body },
+  toastAction: { minHeight: 44, paddingHorizontal: 14, justifyContent: "center" },
+  toastActionText: { color: TEXT.gold, fontSize: 14, fontFamily: FONTS.bodyMedium },
   markMain: { flex: 1, alignItems: "center", gap: 10 },
   markTitle: { flexShrink: 1 },
   hint: { color: TEXT.faint, fontSize: 13, fontFamily: FONTS.body, lineHeight: 20 },
