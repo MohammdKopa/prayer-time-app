@@ -38,10 +38,13 @@ export const FAMILY_OF: Record<TajweedRule, TajweedFamily | null> = {
   idghaam_mutaqaribayn: "silent",
 };
 
+// The madd reds follow the muṣḥaf's gradient: the longer the madd, the
+// deeper the red (salmon 2/4/6 → crimson 4–5 → wine 6), lifted enough to
+// stay legible on the dark page (contrast ≈ 7.6 / 5.2 / 3.9 against bg).
 export const FAMILY_COLOR: Record<TajweedFamily, string> = {
-  maddLong: "#EE8F3F",
-  maddRequired: "#F0604D",
-  maddNecessary: "#FF3D6E",
+  maddLong: "#F7866E",
+  maddRequired: "#F2485B",
+  maddNecessary: "#C93A72",
   ghunna: "#4CC879",
   qalqala: "#55B4F2",
   silent: "#7D847E",
@@ -151,6 +154,17 @@ export function tajweedSegments(ayahIndex: number, ayahText: string, from = 0): 
       : clusterEnd(ayahText, row[k + 2]);
     if (end <= start) continue; // inside the skipped prefix, or overlapped
     push(start, null);
+    if (rule === "idghaam_ghunnah") {
+      // As in the muṣḥaf: the merged nūn is not pronounced (grey); the
+      // ghunna sits on the letter it merges into (green), as in مَن يَشۡتَرِي.
+      push(end, "silent");
+      const spanEnd = clusterEnd(ayahText, row[k + 2]);
+      const target = nextLetter(ayahText, at, spanEnd);
+      if (target === -1) continue;
+      push(target, null);
+      push(clusterEnd(ayahText, target + 1), "ghunna");
+      continue;
+    }
     push(end, family);
   }
   push(ayahText.length, null);

@@ -148,6 +148,19 @@ describe("tajweed segments", () => {
     expect(yunfiqun?.text).toBe("ن");
   });
 
+  it("greys the merged nūn of an idghām with ghunna and greens the letter it merges into", async () => {
+    const { tajweedSegments } = await import("@/lib/quran/tajweed-colors");
+    // 31:6 وَمِنَ ٱلنَّاسِ مَن يَشۡتَرِي — checked against the Dar al-Maʿrifa print.
+    const i = SURAHS_START[31] + 5;
+    const segs = tajweedSegments(i, AYAT[i]);
+    const at = segs.findIndex((s) => s.family === "silent" && s.text === "ن");
+    expect(at).toBeGreaterThan(0);
+    expect(segs[at - 1].text.endsWith("مَ")).toBe(true);
+    expect(segs[at + 1]).toEqual({ text: " ", family: null });
+    expect(segs[at + 2].family).toBe("ghunna");
+    expect(segs[at + 2].text.startsWith("ي")).toBe(true);
+  });
+
   it("colours the small wāw/yāʾ of a madd alone, not the hāʾ before it", async () => {
     const { tajweedSegments } = await import("@/lib/quran/tajweed-colors");
     // 2:255 … عِندَهُۥٓ إِلَّا: madd munfaṣil on the small wāw.
