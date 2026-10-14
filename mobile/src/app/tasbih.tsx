@@ -178,7 +178,10 @@ export default function TasbihScreen() {
         <View style={[styles.column, !ready && styles.hidden]}>
           {afterPrayer && (
             <View style={styles.phraseBlock}>
-              <Text style={styles.phrase}>
+              {/* Keyed by stage: changing the text in place, Android kept the
+                  previous phrase's line metrics and drew اللهُ أَكْبَرُ sunk
+                  and clipped. A fresh Text per phrase measures itself. */}
+              <Text key={afterPrayer.stage} style={styles.phrase}>
                 {AFTER_PRAYER_STAGES[afterPrayer.stage].arabic}
               </Text>
               <View style={styles.stages}>
@@ -301,7 +304,14 @@ const styles = StyleSheet.create({
   circleAtTarget: { borderColor: COLORS.gold },
   // Opaque gold, never dimmed: dimmed Arabic on Android shows seams at joins.
   phraseBlock: { alignItems: "center", gap: 10 },
-  phrase: { color: COLORS.gold, fontSize: 34, fontFamily: FONTS.quran, textAlign: "center" },
+  phrase: {
+    color: COLORS.gold,
+    fontSize: 34,
+    lineHeight: 64,
+    paddingHorizontal: 12,
+    fontFamily: FONTS.quran,
+    textAlign: "center",
+  },
   stages: { flexDirection: "row", gap: 8 },
   stageDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: COLORS.line },
   stageDotOn: { backgroundColor: COLORS.gold },
