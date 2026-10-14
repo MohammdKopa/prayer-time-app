@@ -30,11 +30,11 @@ cap("home")
 for r in ["qibla", "month", "dua", "mosques", "settings", "tasbih"]:
     sh("adb", "shell", "am", "start", "-W", "-a", "android.intent.action.VIEW", "-d", f"prayer://{r}", PKG); time.sleep(5)
     cap(r)
-# 1.1: the Quran tab, a mushaf page (Ya-Sin opens p. 440; Luqman p. 411 has
+# 1.1: the Quran tab, a mushaf page (al-Mulk opens p. 562; Luqman p. 411 has
 # more tajweed), and the guided tasbih after prayer.
 for name, link, wait in [
     ("quran", "prayer://quran", 5),
-    ("quran_page", "prayer://quran/36?ayah=1", 7),
+    ("quran_page", "prayer://quran/67?ayah=1", 7),
     ("quran_tajweed", "prayer://quran/31?ayah=6", 7),
     ("tasbih_after_prayer", "prayer://tasbih?mode=afterPrayer", 5),
 ]:
@@ -44,4 +44,5 @@ sh("adb", "shell", "am", "start", "-W", "-a", "android.intent.action.VIEW", "-d"
 cap("display_wall")
 for n in ["home", "qibla", "month", "dua", "mosques", "settings", "tasbih", "quran", "quran_page",
           "quran_tajweed", "tasbih_after_prayer", "display_wall"]:
-    scrub(n); shutil.copy(clean / f"{prefix}_{n}.png", pub / f"{prefix}_{n}.png"); print("ok", n)
+    # Arabic is the app's base language: its shots carry no prefix in the editor.
+    scrub(n); shutil.copy(clean / f"{prefix}_{n}.png", pub / (f"{n}.png" if prefix == "ar" else f"{prefix}_{n}.png")); print("ok", n)

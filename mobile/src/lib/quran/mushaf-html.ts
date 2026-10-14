@@ -100,7 +100,9 @@ export function pageContentHtml(page: number, opts: MushafOptions): string {
     body +=
       `<span class="a${opts.marked.has(key) ? " m" : ""}" data-k="${key}">` +
       `${ayahText(i, raw, from, opts.tajweed)}</span>` +
-      `<span class="n"> <b>﴿${ayah}﴾</b> </span>`;
+      // A no-break space: the end marker stays with the āyah's last word,
+      // as in a printed mushaf, never opening the next line on its own.
+      `<span class="n">&nbsp;<b>﴿${ayah}﴾</b> </span>`;
   }
   closePara();
 
