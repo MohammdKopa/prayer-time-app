@@ -786,7 +786,7 @@ matters more than the feature.
    its labels (the bar is labelled on purpose; see the comment in
    `components/TabBar.tsx`).
 
-7. **New app icon.** The current icon is a sun on its arc, which runs
+7. **New app icon.** *Done 2026-10-14: logo #4, "Mihrab + star", chosen by Mohamed after the poll. Master `mobile/assets/brand/mihrab-star.svg`, every size from `node scripts/build-icons.mjs` (headless Chrome); small cut for ≤48 px and a white notification icon; store icons in `mobile/assets/brand/store/` (upload by hand); web icons regenerated (live after the next web deploy).* The current icon is a sun on its arc, which runs
    into the same concern as item 4. Explored 2026-10-14 with the
    logo-design skill: rounds of symbols, letterforms and architecture, then
    an Islamic-geometry family that Mohamed chose as the direction. Twelve
