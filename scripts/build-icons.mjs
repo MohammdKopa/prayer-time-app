@@ -20,16 +20,15 @@
 //            where the lattice turns to grey noise (favicon, notification)
 //
 // Rendering goes through headless Chrome (the same engine as the WebView), so
-// the output matches what a browser draws. Set CHROME if it is elsewhere.
+// the output matches what a browser draws (scripts/lib/render-chrome.mjs).
 
-import { spawn } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { withChrome } from "./lib/render-chrome.mjs";
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const CHROME = process.env.CHROME ?? "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const master = readFileSync(path.join(root, "mobile/assets/brand/mihrab-star.svg"), "utf8");
 
 // ---------------------------------------------------------------- parts --
@@ -146,58 +145,11 @@ const OUT = [
 ];
 
 // ----------------------------------------------------------------- render --
-const prof = mkdtempSync(path.join(tmpdir(), "icons-"));
-const chrome = spawn(CHROME, [
-  "--headless=new",
-  "--remote-debugging-port=9335",
-  `--user-data-dir=${prof}`,
-  "--no-first-run",
-  "about:blank",
-]);
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-try {
-  for (let i = 0; i < 60; i++) {
-    await sleep(250);
-    try {
-      await fetch("http://127.0.0.1:9335/json/version");
-      break;
-    } catch {}
-  }
-  const tab = await (await fetch("http://127.0.0.1:9335/json/new?about:blank", { method: "PUT" })).json();
-  const ws = new WebSocket(tab.webSocketDebuggerUrl);
-  await new Promise((r) => (ws.onopen = r));
-  let id = 0;
-  const pending = new Map();
-  ws.onmessage = (e) => {
-    const m = JSON.parse(e.data);
-    if (m.id && pending.has(m.id)) {
-      pending.get(m.id)(m);
-      pending.delete(m.id);
-    }
-  };
-  const send = (method, params = {}) =>
-    new Promise((r) => {
-      const i = ++id;
-      pending.set(i, r);
-      ws.send(JSON.stringify({ id: i, method, params }));
-    });
-
-  await send("Emulation.setDefaultBackgroundColorOverride", { color: { r: 0, g: 0, b: 0, a: 0 } });
+await withChrome(async (render) => {
   for (const [file, variant, size] of OUT) {
     const src = `data:image/svg+xml;base64,${Buffer.from(variants[variant]).toString("base64")}`;
     const html = `<html><body style="margin:0;background:transparent"><img src="${src}" width="${size}" height="${size}" style="display:block"></body></html>`;
-    await send("Emulation.setDeviceMetricsOverride", { width: size, height: size, deviceScaleFactor: 1, mobile: false });
-    await send("Page.navigate", { url: `data:text/html;base64,${Buffer.from(html).toString("base64")}` });
-    await sleep(400);
-    const shot = await send("Page.captureScreenshot", { format: "png", clip: { x: 0, y: 0, width: size, height: size, scale: 1 } });
-    writeFileSync(path.join(root, file), Buffer.from(shot.result.data, "base64"));
+    await render(html, size, size, path.join(root, file));
     console.log(`${file}  ${variant}  ${size}px`);
   }
-  ws.close();
-} finally {
-  chrome.kill();
-  await sleep(300);
-  try {
-    rmSync(prof, { recursive: true, force: true });
-  } catch {}
-}
+});
