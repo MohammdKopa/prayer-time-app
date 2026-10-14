@@ -59,13 +59,24 @@ are unreviewed.
 These were considered and dropped rather than approximated — a short certain
 list beats a long doubtful one:
 
-- **`بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا` (Sahih al-Bukhari 6324)** — the bedtime dhikr. Found
-  in the sunnah.com-derived mirror only; hadeethenc has no entry for it, so
-  the Arabic would have rested on a single unconfirmed source. Add it once a
-  reviewer can confirm it against sunnah.com.
-- **`أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ`** — verified Arabic available, but hadeethenc
-  publishes no German, Turkish or English translation for that entry, which
-  would have meant three implementer-written translations for one item.
+- **The 33 / 33 / 33-or-34 tasbih (after prayer and before sleep; Muslim 596-597, Bukhari 5361)** —
+  the narrations give the counts but, in the Arabic hadeethenc carries, only
+  as verbs and counted nouns (`سبح ... ثلاثا وثلاثين`), never as the recited
+  phrases `سبحان الله` / `الحمد لله` / `الله أكبر`. Building those
+  phrases from other hadiths would be composing, not slicing.
+- **`أصبحنا على فطرة الإسلام`, `يا حي يا قيوم برحمتك أستغيث`,
+  `اللهم عافني في بدني`, `حسبي الله لا إله إلا هو` (7×)** — none of
+  the four is in hadeethenc (searched all 3,574 entries) or in the six-book
+  mirror at a number that could be checked. Add only from a source a reviewer can open.
+- **`أمسينا وأمسى الملك لله ... رب أسألك خير ما في هذه الليلة` and the
+  morning `أصبحنا وأصبح الملك لله`** (Muslim, hadeethenc 3008) —
+  the morning wording exists only as the narrator's `وإذا أصبح قال ذلك أيضا`, not as text to slice.
+- **`سبحان الله العظيم وبحمده`, `سبحان الله العظيم، سبحان الله وبحمده`,
+  `أستغفر الله الذي لا إله إلا هو الحي القيوم`, the `اللهم رب ... فاطر`-type
+  variants** — real and authentic, but with no time the narrations tie them
+  to, so they have no place in a list organised by occasion.
+- **`الحمد لله الذي أطعمنا وسقانا` (before sleep, Muslim)** — hadeethenc's Arabic
+  is only partly vowelled and the mirror's Muslim numbering is unreliable (see below).
 - **`رَضِينَا بِاللَّهِ رَبًّا` in the Abu Dawud 5072 wording** — graded *da'if* by al-Albani,
   and the widespread wording (`رَضِيتُ`) is a different narration. The
   `رَضِيتُ` form from Abu Dawud 1529, graded *sahih*, is included instead.
@@ -74,6 +85,8 @@ list beats a long doubtful one:
   alongside a collection whose numbering was confirmed.
 
 ## The texts
+
+**After prayer (added alongside the new adhkar).** Ayat al-Kursi (Nasa'i, *al-Sunan al-Kubra* 9848 — hadeethenc 10950) and the two Mu'awwidhatayn, Al-Falaq and An-Nas (Abu Dawud / Tirmidhi, 'Uqbah ibn 'Amir — hadeethenc 65103) are narrated for after every obligatory prayer, so they now also appear in the "After prayer" section. Their Arabic did not change; only the `afterPrayer` flag was added. Al-Ikhlas is not flagged: those narrations name the Mu'awwidhatayn only.
 
 ### 1. Surah al-Fatihah
 
@@ -106,7 +119,7 @@ list beats a long doubtful one:
 - **id** `ayat-al-kursi`
 - **Reference to check** Qur'an 2:255
 - **Fetched from** <https://api.quran.com/api/v4/quran/verses/uthmani?verse_key=2:255>
-- **Shown under** morning, evening, quran
+- **Shown under** morning, evening, quran, after prayer (no reminder)
 
 ```
 ٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ
@@ -159,7 +172,7 @@ list beats a long doubtful one:
 - **id** `al-falaq`
 - **Reference to check** Qur'an 113:1-5
 - **Fetched from** <https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=113>
-- **Shown under** morning, evening, sleep
+- **Shown under** morning, evening, sleep, after prayer (no reminder)
 - **Note** said 3×
 
 ```
@@ -186,7 +199,7 @@ list beats a long doubtful one:
 - **id** `an-nas`
 - **Reference to check** Qur'an 114:1-6
 - **Fetched from** <https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=114>
-- **Shown under** morning, evening, sleep
+- **Shown under** morning, evening, sleep, after prayer (no reminder)
 - **Note** said 3×
 
 ```
@@ -466,6 +479,342 @@ list beats a long doubtful one:
 | **DE** ⚠ | O Allah, ich habe mein Angesicht Dir zugewandt, meine Angelegenheit Dir anvertraut und meinen Rücken an Dich gelehnt, aus Hoffnung auf Dich und aus Furcht vor Dir. Es gibt keine Zuflucht und keine Rettung vor Dir außer bei Dir. O Allah, ich glaube an Dein Buch, das Du herabgesandt hast, und an Deinen Propheten, den Du entsandt hast. |
 | **TR** ⚠ | Allah'ım! Yüzümü Sana çevirdim, işimi Sana havale ettim, sırtımı Sana dayadım; Senden umarak ve Senden korkarak. Senden kaçıp sığınılacak ve kurtulunacak yer yine ancak Sensin. Allah'ım! İndirdiğin Kitab'a ve gönderdiğin Peygamber'e iman ettim. |
 | **EN** ⚠ | O Allah, I have submitted my face to You, and entrusted my affair to You, and turned my back to You for refuge, out of hope in You and fear of You. There is no refuge and no escape from You except to You. O Allah, I believe in Your Book which You sent down, and in Your Prophet whom You sent. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 16. Supplication for well-being
+
+- **id** `afiyah-dunya-akhira`
+- **Reference to check** Sunan Abi Dawud 5074; Sunan an-Nasa'i 5529; Sunan Ibn Majah 3871
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5485>
+- **Shown under** morning, evening
+- **Note** **translation unreviewed (de)**
+- **Provenance** Cut from the first two sentences of the narration; the third sentence (`اللَّهُمَّ اسْتُرْ عَوْرَتِي -أَو: عَوْرَاتِي- ...`) carries a narrator's either/or aside inside the wording and was left out rather than cut mid-sentence. German written by the implementer because hadeethenc's German for this narration is missing a clause ("ich bitte Dich um und meiner Familie"). EN/TR are hadeethenc's.
+
+```
+اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي
+```
+
+*Transliteration (implementer-written):* Allahumma inni as'aluka l-'afiyata fi d-dunya wa-l-akhirah. Allahumma inni as'aluka l-'afwa wa-l-'afiyata fi dini wa-dunyaya wa-ahli wa-mali.
+
+| | |
+|---|---|
+| **DE** ⚠ | O Allah, ich bitte Dich um Wohlbefinden im Diesseits und im Jenseits. O Allah, ich bitte Dich um Verzeihung und Wohlbefinden in meiner Religion, meinem Diesseits, meiner Familie und meinem Besitz. |
+| **TR** | Allah'ım! Senden dünya ve ahirette afiyet diliyorum. Allah'ım! Dinim, dünyam, ehlim ve malım hakkında senden af ve afiyet isterim. |
+| **EN** | O Allah, I ask You for well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion, my worldly life, my family, and my wealth. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 17. Supplication for protection on all sides
+
+- **id** `ihfazni-min-bayni-yadayya`
+- **Reference to check** Sunan Abi Dawud 5074; Sunan an-Nasa'i 5529; Sunan Ibn Majah 3871
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5485>
+- **Shown under** morning, evening
+- **Note** **translation unreviewed (de)**
+- **Provenance** Second half of the same narration as `afiyah-dunya-akhira` (hadeethenc 5485). DE written by the implementer (hadeethenc's German merges this with the sentence left out; see above). EN/TR are hadeethenc's.
+
+```
+اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي
+```
+
+*Transliteration (implementer-written):* Allahumma-hfazni min bayni yadayya wa-min khalfi, wa-'an yamini wa-'an shimali, wa-min fawqi, wa-a'udhu bi-'azamatika an ughtala min tahti.
+
+| | |
+|---|---|
+| **DE** ⚠ | O Allah, beschütze mich vor dem, was vor mir ist, und was hinter mir ist, und was zu meiner Rechten ist, und was zu meiner Linken ist, und was über mir ist. Und ich suche Zuflucht bei Deiner Größe davor, dass ich von unten (her) getötet werde. |
+| **TR** | Allah'ım! Önümden, arkamdan, sağımdan, solumdan ve üstümden (gelecek belalardan) beni koru. Altımdan gelecek ani afet ve beladan senin azametine sığınırım. |
+| **EN** | O Allah, protect me from before me, from behind me, from my right, from my left, and from above me, and I seek refuge with Your greatness from being suddenly killed from beneath me. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 18. Glorification by the number of His creation
+
+- **id** `subhanallah-adada-khalqihi`
+- **Reference to check** Sahih Muslim 2726
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5508>
+- **Shown under** morning
+- **Note** said 3×
+- **Note** **translation unreviewed (de)**
+- **Provenance** Said after the Fajr prayer in the narration (Juwayriyah); the Prophet said it 3×. hadeethenc publishes no German for this entry; DE written by the implementer. EN/TR are hadeethenc's.
+
+```
+سُبْحَانَ اللهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ وَرِضَا نَفْسِهِ وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ
+```
+
+*Transliteration (implementer-written):* Subhana llahi wa-bi-hamdihi, 'adada khalqihi wa-rida nafsihi wa-zinata 'arshihi wa-midada kalimatih.
+
+| | |
+|---|---|
+| **DE** ⚠ | Gepriesen sei Allah und Ihm gebührt das Lob, nach der Zahl Seiner Schöpfung, nach Seinem Wohlgefallen, nach dem Gewicht Seines Thrones und nach der Tinte Seiner Worte. |
+| **TR** | Allah’ı; yarattıklarının sayısı, kendisinin hoşnutluğu, Arş’ının ağırlığı ve kelimelerinin mürekkebi miktarınca hamd ile tenzih ederim (tesbih ederim) |
+| **EN** | Glory be to Allah and all praise is due to Him by the number of His creation, by His own pleasure, by the weight of His Throne, and by the ink of His words. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 19. Refuge in the perfect words of Allah
+
+- **id** `a-udhu-bi-kalimat-allah`
+- **Reference to check** Jami' at-Tirmidhi 3604
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=66086>
+- **Shown under** evening
+- **Note** said 3×
+- **Provenance** Arabic and the 3×-in-the-evening instruction come from hadeethenc 66086 (Tirmidhi), which has no translations. The EN/DE/TR are hadeethenc's published translations of the same sentence in the *alighting* narration (Muslim, hadeethenc 5932): <https://hadeethenc.com/api/v1/hadeeths/one/?language=en&id=5932> (also `de`, `tr`). Same words; a reviewer should confirm that reuse is acceptable.
+
+```
+أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ
+```
+
+*Transliteration (implementer-written):* A'udhu bi-kalimati llahi t-tammati min sharri ma khalaq.
+
+| | |
+|---|---|
+| **DE** | Ich suche Zuflucht bei den vollkommenen Worten Allahs vor dem Schlechten, das Er erschuf. |
+| **TR** | Allah’ın yarattığı mahlukatın şerrinden, Allah’ın eksiksiz tam kelimelerine sığınırım. |
+| **EN** | I seek refuge in the perfect words of Allah from the evil of what He has created |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 20. Refuge from the evil of oneself and of Satan
+
+- **id** `fatir-as-samawat`
+- **Reference to check** Sunan Abi Dawud 5067 (also Jami' at-Tirmidhi 3392)
+- **Fetched from** <https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-abudawud/5067.json>
+- **Shown under** morning, evening, sleep
+- **Note** **translation unreviewed (de, en)**
+- **Provenance** hadeethenc's own Arabic for this narration (id 3006) is only partly vowelled, so the Arabic is taken from the fully vowelled Abu Dawud 5067 in the sunnah.com-derived mirror (same mirror as `amsayna-wa-amsa-l-mulk`). TR is hadeethenc's (id 3006, Turkish parenthetical); EN and DE written by the implementer (hadeethenc's English adds a clause that Abu Dawud 5067 does not have; no German published). Said morning, evening and on going to bed.
+
+```
+اللَّهُمَّ فَاطِرَ السَّمَوَاتِ وَالأَرْضِ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ رَبَّ كُلِّ شَىْءٍ وَمَلِيكَهُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ
+```
+
+*Transliteration (implementer-written):* Allahumma fatira s-samawati wa-l-ard, 'alima l-ghaybi wa-sh-shahadah, rabba kulli shay'in wa-malikah. Ashhadu an la ilaha illa anta. A'udhu bika min sharri nafsi wa-sharri sh-shaytani wa-shirkih.
+
+| | |
+|---|---|
+| **DE** ⚠ | O Allah, Schöpfer der Himmel und der Erde, Kenner des Verborgenen und des Offenbaren, Herr und Herrscher über alle Dinge: Ich bezeuge, dass es keinen Gott außer Dir gibt. Ich suche Zuflucht bei Dir vor dem Übel meiner Seele und vor dem Übel des Satans und seiner Beigesellung. |
+| **TR** | Ey göklerin ve yerin yaratıcısı! Gizliyi ve açığı bilen! Her şeyin Rabbi ve meliki olan Allah’ım! Senden başka hakkı ile ibadet olunan hiç bir ilah olmadığına şahidlik ederim. Nefsimin şerrinden, şeytanın şerrinden ve şirkinden sana sığınırım! |
+| **EN** ⚠ | O Allah, Creator of the heavens and the earth, Knower of the unseen and the seen, Lord and Sovereign of everything: I bear witness that there is no god but You. I seek refuge in You from the evil of my own soul, and from the evil of Satan and his polytheism. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 21. Seeking forgiveness
+
+- **id** `after-prayer-istighfar`
+- **Reference to check** Sahih Muslim 591
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=10947>
+- **Shown under** after prayer (no reminder)
+- **Note** said 3×
+- **Provenance** Cut from al-Awza'i's explanation of the istighfar inside the narration (`تَقُولُ: أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ`); the 3× comes from `اسْتَغْفَرَ ثَلَاثًا` in the same hadith. Please confirm that this is the right text to show for the 3×.
+
+```
+أَسْتَغْفِرُ اللهَ
+```
+
+*Transliteration (implementer-written):* Astaghfiru llah.
+
+| | |
+|---|---|
+| **DE** | Ich bitte Allah um Vergebung |
+| **TR** | Allah'tan mağfiret dilerim |
+| **EN** | I seek forgiveness from Allah |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 22. You are As-Salam
+
+- **id** `allahumma-anta-s-salam`
+- **Reference to check** Sahih Muslim 591
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=10947>
+- **Shown under** after prayer (no reminder)
+- **Provenance** Same hadith as `after-prayer-istighfar`.
+
+```
+اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ ذَا الْجَلَالِ وَالْإِكْرَامِ
+```
+
+*Transliteration (implementer-written):* Allahumma anta s-salam, wa-minka s-salam, tabarakta dha l-jalali wa-l-ikram.
+
+| | |
+|---|---|
+| **DE** | O Allah, Du bist der Friede, und von Dir kommt der Friede. Gepriesen seist Du, o Besitzer der Majestät und der Ehre |
+| **TR** | Allah'ım! Sen Selam'sın. Selamet de sendendir. Ey celâl ve ikram sahibi! Sen münezzehsin, sen yücesin. |
+| **EN** | O Allah, You are As-Salām (peace, perfection), and as-salām comes from You. Blessed are You, O Possessor of Glory and Honor |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 23. Tahlil after the obligatory prayer
+
+- **id** `la-mani-a-lima-a-tayt`
+- **Reference to check** Sahih al-Bukhari 844; Sahih Muslim 593
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=65102>
+- **Shown under** after prayer (no reminder)
+- **Note** **translation unreviewed (tr)**
+- **Provenance** Said after every obligatory prayer. hadeethenc's Turkish for this entry is a transliteration only; TR written by the implementer. EN/DE are hadeethenc's. Reference numbers are as printed in hadeethenc's `reference` field.
+
+```
+لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ
+```
+
+*Transliteration (implementer-written):* La ilaha illa llahu wahdahu la sharika lah, lahu l-mulku wa-lahu l-hamd, wa-huwa 'ala kulli shay'in qadir. Allahumma la mani'a lima a'tayt, wa-la mu'tiya lima mana't, wa-la yanfa'u dha l-jaddi minka l-jadd.
+
+| | |
+|---|---|
+| **DE** | Es gibt keinen anbetungswürdigen Gott außer Allah, dem Einzigen, ohne Partner. Ihm gehört das Königreich und Ihm gebührt das Lob, und Er hat Macht über alles. O Allah, niemand kann das verhindern, was Du gibst, und niemand kann geben, was Du zurückhältst, und Reichtum nützt dem Reichen vor Dir nichts. |
+| **TR** ⚠ | Allah'tan başka hak ilâh yoktur. O, tektir ve hiçbir ortağı yoktur. Mülk O'nundur ve hamt O'nadır. O'nun her şeye gücü yeter. Allah'ım! Senin verdiğini engelleyecek, engellediğini verecek yoktur. Servet sahibine serveti, Sana karşı fayda vermez. |
+| **EN** | There is no god but Allah, alone, with no partner with Him. To Him belongs the dominion and to Him praise is due, and He is Able to do all things. O Allah, none can withhold what You give and none can give what You withhold, and riches cannot avail a wealthy person against You |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 24. Help in remembrance, thanks and worship
+
+- **id** `a-inni-ala-dhikrik`
+- **Reference to check** Sunan Abi Dawud 1522; Sunan an-Nasa'i 1303
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=3518>
+- **Shown under** after prayer (no reminder)
+- **Provenance** Said after every prayer (the Prophet's advice to Mu'adh). All three translations are hadeethenc's.
+
+```
+اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ
+```
+
+*Transliteration (implementer-written):* Allahumma a'inni 'ala dhikrika wa-shukrika wa-husni 'ibadatik.
+
+| | |
+|---|---|
+| **DE** | O Allah, verhilf mir dazu, Dir zu gedenken, Dir zu danken und Dich auf beste Weise anzubeten. |
+| **TR** | Allah’ım! Seni anmak, sana şükretmek ve sana güzelce kulluk etmekte bana yardım et. |
+| **EN** | O Allah, help me remember You, thank You, and excellently worship You |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 25. In Your name I die and I live
+
+- **id** `bismika-amutu-wa-ahya`
+- **Reference to check** Sahih al-Bukhari 6324
+- **Fetched from** <https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=65913>
+- **Shown under** sleep
+- **Note** **translation unreviewed (de, tr, en)**
+- **Provenance** Moved here from "Deliberately left out": hadeethenc has the narration (id 65913) and the mirror's Bukhari 6324 carries the same wording, so there are now two sources. hadeethenc has no translations for it; all three written by the implementer.
+
+```
+بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا
+```
+
+*Transliteration (implementer-written):* Bismika llahumma amutu wa-ahya.
+
+| | |
+|---|---|
+| **DE** ⚠ | In Deinem Namen, o Allah, sterbe ich und lebe ich. |
+| **TR** ⚠ | Allah'ım! Senin adınla ölür ve dirilirim. |
+| **EN** ⚠ | In Your name, O Allah, I die and I live. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 26. Supplication for protection from punishment
+
+- **id** `qini-adhabaka`
+- **Reference to check** Sunan Abi Dawud 5045
+- **Fetched from** <https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-abudawud/5045.json>
+- **Shown under** sleep
+- **Note** said 3×
+- **Note** **translation unreviewed (de, tr, en)**
+- **Provenance** Taken from the mirror's Abu Dawud 5045 (Hafsah): the clean wording `يَوْمَ تَبْعَثُ عِبَادَكَ`, said three times. (The Tirmidhi/Muslim wordings carry a narrator's `أَوْ تَجْمَعُ` doubt, so they were not used.) All three translations written by the implementer.
+
+```
+اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ
+```
+
+*Transliteration (implementer-written):* Allahumma qini 'adhabaka yawma tab'athu 'ibadak.
+
+| | |
+|---|---|
+| **DE** ⚠ | O Allah, bewahre mich vor Deiner Strafe an dem Tag, an dem Du Deine Diener auferweckst. |
+| **TR** ⚠ | Allah'ım! Kullarını diriltip kaldıracağın gün beni azabından koru. |
+| **EN** ⚠ | O Allah, protect me from Your punishment on the Day You resurrect Your servants. |
+
+- [ ] Arabic verified against the reference
+- [ ] Reference itself verified
+- [ ] Translations verified
+- [ ] Transliteration verified
+
+---
+
+### 27. On lying down
+
+- **id** `bismika-rabbi-wada-tu-janbi`
+- **Reference to check** Sahih al-Bukhari 6320
+- **Fetched from** <https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari/6320.json>
+- **Shown under** sleep
+- **Note** **translation unreviewed (de)**
+- **Provenance** hadeethenc's Arabic (id 6034) is unvowelled, so the Arabic is taken from the fully vowelled Bukhari 6320 in the mirror. EN/TR are hadeethenc's (id 6034); DE written by the implementer. Said on lying down; the narration first says to dust the bed.
+
+```
+بِاسْمِكَ رَبِّ وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، إِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ
+```
+
+*Transliteration (implementer-written):* Bismika rabbi wada'tu janbi, wa-bika arfa'uh. In amsakta nafsi fa-rhamha, wa-in arsaltaha fa-hfazha bi-ma tahfazu bihi 'ibadaka s-salihin.
+
+| | |
+|---|---|
+| **DE** ⚠ | In Deinem Namen, mein Herr, lege ich mich nieder, und durch Dich stehe ich wieder auf. Wenn Du meine Seele festhältst, so erbarme Dich ihrer, und wenn Du sie freilässt, so beschütze sie, wie Du Deine rechtschaffenen Diener beschützt. |
+| **TR** | Rabbim senin adınla yatağıma yattım, yine senin isminle yatağımdan kalkarım. Eğer uykuda canımı alırsan, ona merhamet et! Şayet hayatta bırakırsan, salih kullarını koruduğun gibi, onu da kötülüklerden koru! |
+| **EN** | In Your Name, O my Lord, I place my side (on the bed), and by You I will lift it. If You take my soul, then have mercy on it, and if You send it, then protect it as You protect Your righteous slaves. |
 
 - [ ] Arabic verified against the reference
 - [ ] Reference itself verified

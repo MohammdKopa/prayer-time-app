@@ -61,6 +61,10 @@ export interface DuaItem {
   /** Which reminders this text belongs to; several, for texts said more than
    *  once a day. */
   occasions: readonly Occasion[];
+  /** Said after the obligatory prayers. Not a reminder: it needs no Occasion,
+   *  so the notification scheduler never sees it; the screen lists these
+   *  under their own section. */
+  afterPrayer?: true;
   /** VERIFIED. Never edit by hand - see the header. */
   arabic: string;
   /** Implementer-written pronunciation aid. */
@@ -107,6 +111,7 @@ export const DUAS: readonly DuaItem[] = [
   {
     id: "ayat-al-kursi",
     occasions: ["morning", "evening", "quran"],
+    afterPrayer: true,
     arabic:
       "ٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
     transliteration:
@@ -158,6 +163,7 @@ export const DUAS: readonly DuaItem[] = [
   {
     id: "al-falaq",
     occasions: ["morning", "evening", "sleep"],
+    afterPrayer: true,
     arabic:
       "قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَـٰتِ فِى ٱلْعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ",
     transliteration:
@@ -184,6 +190,7 @@ export const DUAS: readonly DuaItem[] = [
   {
     id: "an-nas",
     occasions: ["morning", "evening", "sleep"],
+    afterPrayer: true,
     arabic:
       "قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَـٰهِ ٱلنَّاسِ مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ",
     transliteration:
@@ -230,7 +237,7 @@ export const DUAS: readonly DuaItem[] = [
     },
     source: "Qur'an 2:285-286",
     verifiedAt:
-      "https://api.quran.com/api/v4/quran/verses/uthmani?verse_key=2:285",
+      "https://api.quran.com/api/v4/quran/verses/uthmani?chapter_number=2" /* verses 285-286, joined with a space */,
   },
   {
     id: "sayyid-al-istighfar",
@@ -464,10 +471,331 @@ export const DUAS: readonly DuaItem[] = [
       "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=65911",
     needsReview: ["de", "tr", "en"],
   },
+  {
+    id: "afiyah-dunya-akhira",
+    occasions: ["morning", "evening"],
+    arabic:
+      "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ، اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي دِينِي وَدُنْيَايَ وَأَهْلِي وَمَالِي",
+    transliteration:
+      "Allahumma inni as'aluka l-'afiyata fi d-dunya wa-l-akhirah. Allahumma inni as'aluka l-'afwa wa-l-'afiyata fi dini wa-dunyaya wa-ahli wa-mali.",
+    title: {
+      ar: "اللهم إني أسألك العافية في الدنيا والآخرة",
+      de: "Bitte um Wohlbefinden",
+      tr: "Afiyet duası",
+      en: "Supplication for well-being",
+    },
+    translation: {
+      de:
+        "O Allah, ich bitte Dich um Wohlbefinden im Diesseits und im Jenseits. O Allah, ich bitte Dich um Verzeihung und Wohlbefinden in meiner Religion, meinem Diesseits, meiner Familie und meinem Besitz.",
+      tr:
+        "Allah'ım! Senden dünya ve ahirette afiyet diliyorum. Allah'ım! Dinim, dünyam, ehlim ve malım hakkında senden af ve afiyet isterim.",
+      en:
+        "O Allah, I ask You for well-being in this world and the Hereafter. O Allah, I ask You for pardon and well-being in my religion, my worldly life, my family, and my wealth.",
+    },
+    source: "Sunan Abi Dawud 5074; Sunan an-Nasa'i 5529; Sunan Ibn Majah 3871",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5485",
+    needsReview: ["de"],
+  },
+  {
+    id: "ihfazni-min-bayni-yadayya",
+    occasions: ["morning", "evening"],
+    arabic:
+      "اللَّهُمَّ احْفَظْنِي مِنْ بَيْنِ يَدَيَّ، وَمِنْ خَلْفِي، وَعَنْ يَمِينِي، وَعَنْ شِمَالِي، وَمِنْ فَوْقِي، وَأَعُوذُ بِعَظَمَتِكَ أَنْ أُغْتَالَ مِنْ تَحْتِي",
+    transliteration:
+      "Allahumma-hfazni min bayni yadayya wa-min khalfi, wa-'an yamini wa-'an shimali, wa-min fawqi, wa-a'udhu bi-'azamatika an ughtala min tahti.",
+    title: {
+      ar: "اللهم احفظني من بين يدي",
+      de: "Bitte um Schutz von allen Seiten",
+      tr: "Her yönden korunma duası",
+      en: "Supplication for protection on all sides",
+    },
+    translation: {
+      de:
+        "O Allah, beschütze mich vor dem, was vor mir ist, und was hinter mir ist, und was zu meiner Rechten ist, und was zu meiner Linken ist, und was über mir ist. Und ich suche Zuflucht bei Deiner Größe davor, dass ich von unten (her) getötet werde.",
+      tr:
+        "Allah'ım! Önümden, arkamdan, sağımdan, solumdan ve üstümden (gelecek belalardan) beni koru. Altımdan gelecek ani afet ve beladan senin azametine sığınırım.",
+      en:
+        "O Allah, protect me from before me, from behind me, from my right, from my left, and from above me, and I seek refuge with Your greatness from being suddenly killed from beneath me.",
+    },
+    source: "Sunan Abi Dawud 5074; Sunan an-Nasa'i 5529; Sunan Ibn Majah 3871",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5485",
+    needsReview: ["de"],
+  },
+  {
+    id: "subhanallah-adada-khalqihi",
+    occasions: ["morning"],
+    arabic:
+      "سُبْحَانَ اللهِ وَبِحَمْدِهِ، عَدَدَ خَلْقِهِ وَرِضَا نَفْسِهِ وَزِنَةَ عَرْشِهِ وَمِدَادَ كَلِمَاتِهِ",
+    transliteration:
+      "Subhana llahi wa-bi-hamdihi, 'adada khalqihi wa-rida nafsihi wa-zinata 'arshihi wa-midada kalimatih.",
+    title: {
+      ar: "سبحان الله وبحمده عدد خلقه",
+      de: "Lobpreisung nach der Zahl der Schöpfung",
+      tr: "Yaratılmışların sayısınca tesbih",
+      en: "Glorification by the number of His creation",
+    },
+    translation: {
+      de:
+        "Gepriesen sei Allah und Ihm gebührt das Lob, nach der Zahl Seiner Schöpfung, nach Seinem Wohlgefallen, nach dem Gewicht Seines Thrones und nach der Tinte Seiner Worte.",
+      tr:
+        "Allah’ı; yarattıklarının sayısı, kendisinin hoşnutluğu, Arş’ının ağırlığı ve kelimelerinin mürekkebi miktarınca hamd ile tenzih ederim (tesbih ederim)",
+      en:
+        "Glory be to Allah and all praise is due to Him by the number of His creation, by His own pleasure, by the weight of His Throne, and by the ink of His words.",
+    },
+    source: "Sahih Muslim 2726",
+    repeat: 3,
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=5508",
+    needsReview: ["de"],
+  },
+  {
+    id: "a-udhu-bi-kalimat-allah",
+    occasions: ["evening"],
+    arabic:
+      "أَعُوذُ بِكَلِمَاتِ اللهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    transliteration:
+      "A'udhu bi-kalimati llahi t-tammati min sharri ma khalaq.",
+    title: {
+      ar: "أعوذ بكلمات الله التامات من شر ما خلق",
+      de: "Zuflucht bei den vollkommenen Worten Allahs",
+      tr: "Allah'ın tam kelimelerine sığınma",
+      en: "Refuge in the perfect words of Allah",
+    },
+    translation: {
+      de:
+        "Ich suche Zuflucht bei den vollkommenen Worten Allahs vor dem Schlechten, das Er erschuf.",
+      tr:
+        "Allah’ın yarattığı mahlukatın şerrinden, Allah’ın eksiksiz tam kelimelerine sığınırım.",
+      en:
+        "I seek refuge in the perfect words of Allah from the evil of what He has created",
+    },
+    source: "Jami' at-Tirmidhi 3604",
+    repeat: 3,
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=66086",
+  },
+  {
+    id: "fatir-as-samawat",
+    occasions: ["morning", "evening", "sleep"],
+    arabic:
+      "اللَّهُمَّ فَاطِرَ السَّمَوَاتِ وَالأَرْضِ عَالِمَ الْغَيْبِ وَالشَّهَادَةِ رَبَّ كُلِّ شَىْءٍ وَمَلِيكَهُ أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ أَعُوذُ بِكَ مِنْ شَرِّ نَفْسِي وَشَرِّ الشَّيْطَانِ وَشِرْكِهِ",
+    transliteration:
+      "Allahumma fatira s-samawati wa-l-ard, 'alima l-ghaybi wa-sh-shahadah, rabba kulli shay'in wa-malikah. Ashhadu an la ilaha illa anta. A'udhu bika min sharri nafsi wa-sharri sh-shaytani wa-shirkih.",
+    title: {
+      ar: "اللهم فاطر السموات والأرض",
+      de: "Zuflucht vor dem Bösen der eigenen Seele",
+      tr: "Nefsin ve şeytanın şerrinden sığınma",
+      en: "Refuge from the evil of oneself and of Satan",
+    },
+    translation: {
+      de:
+        "O Allah, Schöpfer der Himmel und der Erde, Kenner des Verborgenen und des Offenbaren, Herr und Herrscher über alle Dinge: Ich bezeuge, dass es keinen Gott außer Dir gibt. Ich suche Zuflucht bei Dir vor dem Übel meiner Seele und vor dem Übel des Satans und seiner Beigesellung.",
+      tr:
+        "Ey göklerin ve yerin yaratıcısı! Gizliyi ve açığı bilen! Her şeyin Rabbi ve meliki olan Allah’ım! Senden başka hakkı ile ibadet olunan hiç bir ilah olmadığına şahidlik ederim. Nefsimin şerrinden, şeytanın şerrinden ve şirkinden sana sığınırım!",
+      en:
+        "O Allah, Creator of the heavens and the earth, Knower of the unseen and the seen, Lord and Sovereign of everything: I bear witness that there is no god but You. I seek refuge in You from the evil of my own soul, and from the evil of Satan and his polytheism.",
+    },
+    source: "Sunan Abi Dawud 5067 (also Jami' at-Tirmidhi 3392)",
+    verifiedAt:
+      "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-abudawud/5067.json",
+    needsReview: ["de", "en"],
+  },
+  {
+    id: "after-prayer-istighfar",
+    occasions: [],
+    afterPrayer: true,
+    arabic:
+      "أَسْتَغْفِرُ اللهَ",
+    transliteration:
+      "Astaghfiru llah.",
+    title: {
+      ar: "أستغفر الله",
+      de: "Um Vergebung bitten",
+      tr: "İstiğfar",
+      en: "Seeking forgiveness",
+    },
+    translation: {
+      de:
+        "Ich bitte Allah um Vergebung",
+      tr:
+        "Allah'tan mağfiret dilerim",
+      en:
+        "I seek forgiveness from Allah",
+    },
+    source: "Sahih Muslim 591",
+    repeat: 3,
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=10947",
+  },
+  {
+    id: "allahumma-anta-s-salam",
+    occasions: [],
+    afterPrayer: true,
+    arabic:
+      "اللَّهُمَّ أَنْتَ السَّلَامُ، وَمِنْكَ السَّلَامُ، تَبَارَكْتَ ذَا الْجَلَالِ وَالْإِكْرَامِ",
+    transliteration:
+      "Allahumma anta s-salam, wa-minka s-salam, tabarakta dha l-jalali wa-l-ikram.",
+    title: {
+      ar: "اللهم أنت السلام ومنك السلام",
+      de: "Du bist der Friede",
+      tr: "Sen Selam'sın",
+      en: "You are As-Salam",
+    },
+    translation: {
+      de:
+        "O Allah, Du bist der Friede, und von Dir kommt der Friede. Gepriesen seist Du, o Besitzer der Majestät und der Ehre",
+      tr:
+        "Allah'ım! Sen Selam'sın. Selamet de sendendir. Ey celâl ve ikram sahibi! Sen münezzehsin, sen yücesin.",
+      en:
+        "O Allah, You are As-Salām (peace, perfection), and as-salām comes from You. Blessed are You, O Possessor of Glory and Honor",
+    },
+    source: "Sahih Muslim 591",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=10947",
+  },
+  {
+    id: "la-mani-a-lima-a-tayt",
+    occasions: [],
+    afterPrayer: true,
+    arabic:
+      "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+    transliteration:
+      "La ilaha illa llahu wahdahu la sharika lah, lahu l-mulku wa-lahu l-hamd, wa-huwa 'ala kulli shay'in qadir. Allahumma la mani'a lima a'tayt, wa-la mu'tiya lima mana't, wa-la yanfa'u dha l-jaddi minka l-jadd.",
+    title: {
+      ar: "اللهم لا مانع لما أعطيت",
+      de: "Tahlīl nach dem Pflichtgebet",
+      tr: "Farz namazdan sonra tehlîl",
+      en: "Tahlil after the obligatory prayer",
+    },
+    translation: {
+      de:
+        "Es gibt keinen anbetungswürdigen Gott außer Allah, dem Einzigen, ohne Partner. Ihm gehört das Königreich und Ihm gebührt das Lob, und Er hat Macht über alles. O Allah, niemand kann das verhindern, was Du gibst, und niemand kann geben, was Du zurückhältst, und Reichtum nützt dem Reichen vor Dir nichts.",
+      tr:
+        "Allah'tan başka hak ilâh yoktur. O, tektir ve hiçbir ortağı yoktur. Mülk O'nundur ve hamt O'nadır. O'nun her şeye gücü yeter. Allah'ım! Senin verdiğini engelleyecek, engellediğini verecek yoktur. Servet sahibine serveti, Sana karşı fayda vermez.",
+      en:
+        "There is no god but Allah, alone, with no partner with Him. To Him belongs the dominion and to Him praise is due, and He is Able to do all things. O Allah, none can withhold what You give and none can give what You withhold, and riches cannot avail a wealthy person against You",
+    },
+    source: "Sahih al-Bukhari 844; Sahih Muslim 593",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=65102",
+    needsReview: ["tr"],
+  },
+  {
+    id: "a-inni-ala-dhikrik",
+    occasions: [],
+    afterPrayer: true,
+    arabic:
+      "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+    transliteration:
+      "Allahumma a'inni 'ala dhikrika wa-shukrika wa-husni 'ibadatik.",
+    title: {
+      ar: "اللهم أعني على ذكرك وشكرك وحسن عبادتك",
+      de: "Bitte um Hilfe beim Gedenken, Danken und Dienen",
+      tr: "Zikir, şükür ve güzel ibadet duası",
+      en: "Help in remembrance, thanks and worship",
+    },
+    translation: {
+      de:
+        "O Allah, verhilf mir dazu, Dir zu gedenken, Dir zu danken und Dich auf beste Weise anzubeten.",
+      tr:
+        "Allah’ım! Seni anmak, sana şükretmek ve sana güzelce kulluk etmekte bana yardım et.",
+      en:
+        "O Allah, help me remember You, thank You, and excellently worship You",
+    },
+    source: "Sunan Abi Dawud 1522; Sunan an-Nasa'i 1303",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=3518",
+  },
+  {
+    id: "bismika-amutu-wa-ahya",
+    occasions: ["sleep"],
+    arabic:
+      "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    transliteration:
+      "Bismika llahumma amutu wa-ahya.",
+    title: {
+      ar: "باسمك اللهم أموت وأحيا",
+      de: "In Deinem Namen sterbe und lebe ich",
+      tr: "Senin adınla ölür ve dirilirim",
+      en: "In Your name I die and I live",
+    },
+    translation: {
+      de:
+        "In Deinem Namen, o Allah, sterbe ich und lebe ich.",
+      tr:
+        "Allah'ım! Senin adınla ölür ve dirilirim.",
+      en:
+        "In Your name, O Allah, I die and I live.",
+    },
+    source: "Sahih al-Bukhari 6324",
+    verifiedAt:
+      "https://hadeethenc.com/api/v1/hadeeths/one/?language=ar&id=65913",
+    needsReview: ["de", "tr", "en"],
+  },
+  {
+    id: "qini-adhabaka",
+    occasions: ["sleep"],
+    arabic:
+      "اللَّهُمَّ قِنِي عَذَابَكَ يَوْمَ تَبْعَثُ عِبَادَكَ",
+    transliteration:
+      "Allahumma qini 'adhabaka yawma tab'athu 'ibadak.",
+    title: {
+      ar: "اللهم قني عذابك يوم تبعث عبادك",
+      de: "Bitte um Bewahrung vor der Strafe",
+      tr: "Azaptan korunma duası",
+      en: "Supplication for protection from punishment",
+    },
+    translation: {
+      de:
+        "O Allah, bewahre mich vor Deiner Strafe an dem Tag, an dem Du Deine Diener auferweckst.",
+      tr:
+        "Allah'ım! Kullarını diriltip kaldıracağın gün beni azabından koru.",
+      en:
+        "O Allah, protect me from Your punishment on the Day You resurrect Your servants.",
+    },
+    source: "Sunan Abi Dawud 5045",
+    repeat: 3,
+    verifiedAt:
+      "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-abudawud/5045.json",
+    needsReview: ["de", "tr", "en"],
+  },
+  {
+    id: "bismika-rabbi-wada-tu-janbi",
+    occasions: ["sleep"],
+    arabic:
+      "بِاسْمِكَ رَبِّ وَضَعْتُ جَنْبِي، وَبِكَ أَرْفَعُهُ، إِنْ أَمْسَكْتَ نَفْسِي فَارْحَمْهَا، وَإِنْ أَرْسَلْتَهَا فَاحْفَظْهَا بِمَا تَحْفَظُ بِهِ عِبَادَكَ الصَّالِحِينَ",
+    transliteration:
+      "Bismika rabbi wada'tu janbi, wa-bika arfa'uh. In amsakta nafsi fa-rhamha, wa-in arsaltaha fa-hfazha bi-ma tahfazu bihi 'ibadaka s-salihin.",
+    title: {
+      ar: "باسمك رب وضعت جنبي",
+      de: "Beim Hinlegen",
+      tr: "Yatağa yatarken",
+      en: "On lying down",
+    },
+    translation: {
+      de:
+        "In Deinem Namen, mein Herr, lege ich mich nieder, und durch Dich stehe ich wieder auf. Wenn Du meine Seele festhältst, so erbarme Dich ihrer, und wenn Du sie freilässt, so beschütze sie, wie Du Deine rechtschaffenen Diener beschützt.",
+      tr:
+        "Rabbim senin adınla yatağıma yattım, yine senin isminle yatağımdan kalkarım. Eğer uykuda canımı alırsan, ona merhamet et! Şayet hayatta bırakırsan, salih kullarını koruduğun gibi, onu da kötülüklerden koru!",
+      en:
+        "In Your Name, O my Lord, I place my side (on the bed), and by You I will lift it. If You take my soul, then have mercy on it, and if You send it, then protect it as You protect Your righteous slaves.",
+    },
+    source: "Sahih al-Bukhari 6320",
+    verifiedAt:
+      "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-bukhari/6320.json",
+    needsReview: ["de"],
+  },
 ];
 
 export function duasFor(occasion: Occasion): DuaItem[] {
   return DUAS.filter((d) => d.occasions.includes(occasion));
+}
+
+/** Texts the narrations place after the obligatory prayer, in file order. */
+export function afterPrayerDuas(): DuaItem[] {
+  return DUAS.filter((d) => d.afterPrayer);
 }
 
 export function duaById(id: string): DuaItem | undefined {

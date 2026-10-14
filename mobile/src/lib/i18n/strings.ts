@@ -115,6 +115,7 @@ const ar = {
   sectionSleep: "قبل النوم",
   sectionSalawat: "الصلاة على النبي ﷺ",
   sectionQuran: "ورد القرآن",
+  duaGroupAfterPrayer: "بعد الصلاة",
   notifyMorningTitle: "أذكار الصباح",
   notifyMorningBody: "دقيقة لذكر الله",
   notifyEveningTitle: "أذكار المساء",
@@ -327,6 +328,8 @@ const ar = {
   quranReaderPageMarked: "وُضعت علامة على الصفحة",
   quranReaderPageUnmarked: "أُزيلت علامة الصفحة",
   quranReaderSettings: "حجم الخط والتجويد",
+  quranBookmarkRemoveLabel: "إزالة العلامة",
+  quranBookmarkRemoveUndo: "تراجع",
 } as const;
 
 /** Keys come from the Arabic table, values are plain strings. Adding a key to
@@ -439,6 +442,7 @@ const de: Strings = {
   sectionSleep: "Vor dem Schlafen",
   sectionSalawat: "Segensgruß auf den Propheten ﷺ",
   sectionQuran: "Täglicher Qur'ān-Abschnitt",
+  duaGroupAfterPrayer: "Nach dem Gebet",
   notifyMorningTitle: "Adhkār des Morgens",
   notifyMorningBody: "Eine Minute für das Gedenken Allahs",
   notifyEveningTitle: "Adhkār des Abends",
@@ -651,6 +655,8 @@ const de: Strings = {
   quranReaderPageMarked: "Seite markiert",
   quranReaderPageUnmarked: "Markierung entfernt",
   quranReaderSettings: "Schriftgröße und Tajwid",
+  quranBookmarkRemoveLabel: "Lesezeichen entfernen",
+  quranBookmarkRemoveUndo: "Rückgängig",
 };
 
 const tr: Strings = {
@@ -757,6 +763,7 @@ const tr: Strings = {
   sectionSleep: "Uyumadan önce",
   sectionSalawat: "Peygamber'e salavat ﷺ",
   sectionQuran: "Günlük Kur'an bölümü",
+  duaGroupAfterPrayer: "Namazdan sonra",
   notifyMorningTitle: "Sabah zikirleri",
   notifyMorningBody: "Zikir için bir dakika",
   notifyEveningTitle: "Akşam zikirleri",
@@ -969,6 +976,8 @@ const tr: Strings = {
   quranReaderPageMarked: "Sayfa işaretlendi",
   quranReaderPageUnmarked: "İşaret kaldırıldı",
   quranReaderSettings: "Yazı boyutu ve tecvid",
+  quranBookmarkRemoveLabel: "Yer imini kaldır",
+  quranBookmarkRemoveUndo: "Geri al",
 };
 
 const en: Strings = {
@@ -1075,6 +1084,7 @@ const en: Strings = {
   sectionSleep: "Before sleep",
   sectionSalawat: "Salawat on the Prophet ﷺ",
   sectionQuran: "Daily Qur'an portion",
+  duaGroupAfterPrayer: "After prayer",
   notifyMorningTitle: "Morning adhkar",
   notifyMorningBody: "A minute for the remembrance of Allah",
   notifyEveningTitle: "Evening adhkar",
@@ -1287,6 +1297,8 @@ const en: Strings = {
   quranReaderPageMarked: "Page marked",
   quranReaderPageUnmarked: "Mark removed",
   quranReaderSettings: "Text size and tajweed",
+  quranBookmarkRemoveLabel: "Remove bookmark",
+  quranBookmarkRemoveUndo: "Undo",
 };
 
 export const TRANSLATIONS: Record<Locale, Strings> = { ar, de, tr, en };

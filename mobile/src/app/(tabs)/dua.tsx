@@ -20,6 +20,7 @@ import {
   DUAS,
   HAS_UNREVIEWED_TRANSLATIONS,
   OCCASIONS,
+  afterPrayerDuas,
   duasFor,
   type DuaItem,
   type Occasion,
@@ -364,6 +365,34 @@ export default function DuaScreen() {
             </View>
           );
         })}
+
+        {/* Not a reminder, so not an Occasion: these have nothing to schedule. */}
+        <View>
+          <Text style={[styles.subsection, { textAlign: align }]}>
+            {d("duaGroupAfterPrayer")}
+          </Text>
+          <View style={styles.card}>
+            {afterPrayerDuas().map((item, i) => (
+              <DuaRow
+                key={`afterPrayer-${item.id}`}
+                item={item}
+                first={i === 0}
+                expanded={open === `afterPrayer-${item.id}`}
+                onPress={() => {
+                  LayoutAnimation.easeInEaseOut();
+                  setOpen((cur) =>
+                    cur === `afterPrayer-${item.id}`
+                      ? null
+                      : `afterPrayer-${item.id}`,
+                  );
+                }}
+                locale={locale}
+                align={align}
+                d={d}
+              />
+            ))}
+          </View>
+        </View>
 
         <Text style={[styles.footnote, { textAlign: align }]}>
           {String(DUAS.length)}
