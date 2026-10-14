@@ -372,11 +372,25 @@ export default function DuaScreen() {
             {d("duaGroupAfterPrayer")}
           </Text>
           <View style={styles.card}>
+            {/* The 33 · 33 · 34 is counted, not read: it opens the counter. */}
+            <Pressable
+              style={styles.tasbihLink}
+              onPress={() => router.push({ pathname: "/tasbih", params: { mode: "afterPrayer" } })}
+              accessibilityRole="button"
+              accessibilityLabel={`${d("duaAfterPrayerTasbih")}, ${d("duaAfterPrayerTasbihSub")}`}
+            >
+              <Text style={[styles.tasbihLinkTitle, { textAlign: align }]}>
+                {d("duaAfterPrayerTasbih")}
+              </Text>
+              <Text style={[styles.tasbihLinkSub, { textAlign: align }]}>
+                {d("duaAfterPrayerTasbihSub")}
+              </Text>
+            </Pressable>
             {afterPrayerDuas().map((item, i) => (
               <DuaRow
                 key={`afterPrayer-${item.id}`}
                 item={item}
-                first={i === 0}
+                first={false}
                 expanded={open === `afterPrayer-${item.id}`}
                 onPress={() => {
                   LayoutAnimation.easeInEaseOut();
@@ -625,6 +639,15 @@ const styles = StyleSheet.create({
   inCard: { paddingHorizontal: 15, paddingBottom: 12 },
   footnote: { color: TEXT.faint, fontSize: 12, marginTop: 18 },
 
+  tasbihLink: {
+    paddingVertical: 13,
+    paddingHorizontal: 15,
+    minHeight: 56,
+    gap: 3,
+    backgroundColor: COLORS.goldWash,
+  },
+  tasbihLinkTitle: { color: TEXT.gold, fontFamily: FONTS.bodyMedium, fontSize: 16 },
+  tasbihLinkSub: { color: TEXT.soft, fontFamily: FONTS.body, fontSize: 13 },
   card: {
     borderWidth: 1,
     borderColor: COLORS.line,

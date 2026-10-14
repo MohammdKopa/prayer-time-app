@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -12,6 +12,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useI18n } from "@/lib/i18n";
 import {
+  AFTER_PRAYER,
+  AFTER_PRAYER_STAGES,
   FREE_TARGET,
   TASBIH_TARGETS,
   hapticReset,
@@ -21,7 +23,7 @@ import {
   useTasbih,
   type TasbihTarget,
 } from "@/lib/tasbih";
-import { COLORS } from "@/theme";
+import { COLORS, FONTS } from "@/theme";
 
 // Tasbih.
 //
@@ -34,6 +36,11 @@ import { COLORS } from "@/theme";
 // strip at the bottom, outside the tap area, so those taps can never be
 // mistaken for a count.
 //
+// "After prayer" is the guided set, 33 · 33 · 34: the phrase to say sits above
+// the count and changes by itself, with the round-complete buzz at each change,
+// so it can be followed eyes closed. The Adhkar tab opens it directly
+// (/tasbih?mode=afterPrayer).
+//
 // Reset asks twice. A session can be hundreds long; one stray thumb must not
 // be able to end it. The confirmation is inline and expires on its own rather
 // than a modal, which would interrupt more than it protects.
@@ -43,6 +50,7 @@ const CONFIRM_TIMEOUT_MS = 4000;
 
 export default function TasbihScreen() {
   const router = useRouter();
+  const { mode } = useLocalSearchParams<{ mode?: string }>();
   const { t, locale } = useI18n();
   const {
     ready,
@@ -55,7 +63,17 @@ export default function TasbihScreen() {
     increment,
     reset,
     chooseTarget,
+    afterPrayer,
   } = useTasbih();
+
+  // Opened from the after-prayer section: switch to the guided set once the
+  // stored session has loaded (switching resets it to the first phrase).
+  const modeApplied = useRef(false);
+  useEffect(() => {
+    if (!ready || modeApplied.current) return;
+    modeApplied.current = true;
+    if (mode === "afterPrayer" && target !== AFTER_PRAYER) chooseTarget(AFTER_PRAYER);
+  }, [ready, mode, target, chooseTarget]);
 
   const [confirming, setConfirming] = useState(false);
   const confirmTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -158,6 +176,21 @@ export default function TasbihScreen() {
         accessibilityValue={{ text: String(count) }}
       >
         <View style={[styles.column, !ready && styles.hidden]}>
+          {afterPrayer && (
+            <View style={styles.phraseBlock}>
+              <Text style={styles.phrase}>
+                {AFTER_PRAYER_STAGES[afterPrayer.stage].arabic}
+              </Text>
+              <View style={styles.stages}>
+                {AFTER_PRAYER_STAGES.map((_, i) => (
+                  <View
+                    key={i}
+                    style={[styles.stageDot, i <= afterPrayer.stage && styles.stageDotOn]}
+                  />
+                ))}
+              </View>
+            </View>
+          )}
           <Animated.View
             style={[
               styles.circle,
@@ -176,21 +209,26 @@ export default function TasbihScreen() {
                 />
               </View>
               <Text style={styles.progress}>
-                {t("tasbihProgress", { count: inRound, target })}
+                {t("tasbihProgress", {
+                  count: inRound,
+                  target: afterPrayer ? afterPrayer.stageCount : target,
+                })}
               </Text>
             </>
           )}
 
-          {counting && rounds > 0 && (
+          {counting && !afterPrayer && rounds > 0 && (
             <Text style={styles.rounds}>
               {t("tasbihRounds", { rounds })}
             </Text>
           )}
 
           <Text style={[styles.hint, atTarget && styles.hintAtTarget]}>
-            {atTarget
-              ? t("tasbihComplete")
-              : t("tasbihHint")}
+            {afterPrayer?.done
+              ? t("tasbihAfterPrayerDone")
+              : atTarget && !afterPrayer
+                ? t("tasbihComplete")
+                : t("tasbihHint")}
           </Text>
         </View>
       </Pressable>
@@ -212,7 +250,9 @@ export default function TasbihScreen() {
                 >
                   {value === FREE_TARGET
                     ? t("tasbihFree")
-                    : String(value)}
+                    : value === AFTER_PRAYER
+                      ? t("tasbihAfterPrayer")
+                      : String(value)}
                 </Text>
               </Pressable>
             );
@@ -259,6 +299,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   circleAtTarget: { borderColor: COLORS.gold },
+  // Opaque gold, never dimmed: dimmed Arabic on Android shows seams at joins.
+  phraseBlock: { alignItems: "center", gap: 10 },
+  phrase: { color: COLORS.gold, fontSize: 34, fontFamily: FONTS.quran, textAlign: "center" },
+  stages: { flexDirection: "row", gap: 8 },
+  stageDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: COLORS.line },
+  stageDotOn: { backgroundColor: COLORS.gold },
   count: {
     color: COLORS.bone,
     fontSize: 88,
@@ -297,9 +343,9 @@ const styles = StyleSheet.create({
   hintAtTarget: { color: COLORS.gold, opacity: 0.9 },
 
   controls: { padding: 20, gap: 14, alignItems: "center" },
-  targets: { flexDirection: "row", gap: 10 },
+  targets: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 10 },
   chip: {
-    minWidth: 72,
+    minWidth: 64,
     paddingVertical: 11,
     paddingHorizontal: 16,
     borderRadius: 12,

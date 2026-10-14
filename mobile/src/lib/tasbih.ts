@@ -14,14 +14,25 @@ import { Platform } from "react-native";
 
 import { loadJSON, saveJSON } from "@/lib/storage";
 
+import {
+  AFTER_PRAYER,
+  AFTER_PRAYER_TOTAL,
+  afterPrayerBoundary,
+  afterPrayerStage,
+  type AfterPrayerStage,
+} from "./tasbih-after-prayer";
+
+export { AFTER_PRAYER, AFTER_PRAYER_STAGES, afterPrayerStage } from "./tasbih-after-prayer";
+
 const STORAGE_KEY = "tasbih";
 const SAVE_DELAY_MS = 400;
 
 /** Free counting is target 0 — one shape for "no target" instead of null. */
 export const FREE_TARGET = 0;
 
-/** 33 after each prayer, 99 for a full round of the names; free for the rest. */
-export const TASBIH_TARGETS = [33, 99, FREE_TARGET] as const;
+/** 33 after each prayer, 99 for a full round of the names, the guided set
+ *  after prayer; free for the rest. */
+export const TASBIH_TARGETS = [33, 99, AFTER_PRAYER, FREE_TARGET] as const;
 
 export type TasbihTarget = (typeof TASBIH_TARGETS)[number];
 
@@ -107,6 +118,8 @@ export interface TasbihSession {
   progress: number;
   /** True on the tap that completes a round, until the next tap. */
   atTarget: boolean;
+  /** The phrase and its count in the set after prayer; null otherwise. */
+  afterPrayer: AfterPrayerStage | null;
   /** Returns true when this tap completed a round, so the caller can give it
    *  a different haptic. */
   increment: () => boolean;
@@ -177,6 +190,7 @@ export function useTasbih(): TasbihSession {
     countRef.current = next;
     setCount(next);
     save({ count: next, target: at });
+    if (at === AFTER_PRAYER) return afterPrayerBoundary(next);
     return at !== FREE_TARGET && next % at === 0;
   }, [save]);
 
@@ -188,14 +202,37 @@ export function useTasbih(): TasbihSession {
 
   const chooseTarget = useCallback(
     (t: TasbihTarget) => {
+      // The count is deliberately kept: switching 33 → 99 mid-session should
+      // not throw away what has already been said. The set after prayer is
+      // the exception both ways: its phrase is read from the count, so it
+      // starts from zero, and a 47 carried out of it would mean nothing.
+      if (t === AFTER_PRAYER || targetRef.current === AFTER_PRAYER) {
+        countRef.current = 0;
+        setCount(0);
+      }
       targetRef.current = t;
       setTarget(t);
-      // The count is deliberately kept: switching 33 → 99 mid-session should
-      // not throw away what has already been said.
       save({ count: countRef.current, target: t });
     },
     [save],
   );
+
+  if (target === AFTER_PRAYER) {
+    const s = afterPrayerStage(count);
+    return {
+      ready,
+      count,
+      target,
+      inRound: s.inStage,
+      rounds: Math.floor(count / AFTER_PRAYER_TOTAL),
+      progress: s.inStage / s.stageCount,
+      atTarget: afterPrayerBoundary(count),
+      afterPrayer: s,
+      increment,
+      reset,
+      chooseTarget,
+    };
+  }
 
   const counting = target !== FREE_TARGET;
   const inRound = !counting || count === 0 ? 0 : ((count - 1) % target) + 1;
@@ -208,6 +245,7 @@ export function useTasbih(): TasbihSession {
     rounds: counting ? Math.floor(count / target) : 0,
     progress: counting && count > 0 ? inRound / target : 0,
     atTarget: counting && count > 0 && count % target === 0,
+    afterPrayer: null,
     increment,
     reset,
     chooseTarget,

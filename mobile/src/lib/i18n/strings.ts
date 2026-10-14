@@ -330,6 +330,11 @@ const ar = {
   quranReaderSettings: "حجم الخط والتجويد",
   quranBookmarkRemoveLabel: "إزالة العلامة",
   quranBookmarkRemoveUndo: "تراجع",
+  // Tasbih after prayer
+  tasbihAfterPrayer: "بعد الصلاة",
+  tasbihAfterPrayerDone: "اكتمل تسبيح ما بعد الصلاة",
+  duaAfterPrayerTasbih: "تسبيح ما بعد الصلاة",
+  duaAfterPrayerTasbihSub: "33 · 33 · 34 — عدّاد يرشدك",
 } as const;
 
 /** Keys come from the Arabic table, values are plain strings. Adding a key to
@@ -657,6 +662,11 @@ const de: Strings = {
   quranReaderSettings: "Schriftgröße und Tajwid",
   quranBookmarkRemoveLabel: "Lesezeichen entfernen",
   quranBookmarkRemoveUndo: "Rückgängig",
+  // Tasbih after prayer
+  tasbihAfterPrayer: "Nach dem Gebet",
+  tasbihAfterPrayerDone: "Tasbīḥ nach dem Gebet vollständig",
+  duaAfterPrayerTasbih: "Tasbīḥ nach dem Gebet",
+  duaAfterPrayerTasbihSub: "33 · 33 · 34 — der Zähler führt dich",
 };
 
 const tr: Strings = {
@@ -978,6 +988,11 @@ const tr: Strings = {
   quranReaderSettings: "Yazı boyutu ve tecvid",
   quranBookmarkRemoveLabel: "Yer imini kaldır",
   quranBookmarkRemoveUndo: "Geri al",
+  // Tasbih after prayer
+  tasbihAfterPrayer: "Namazdan sonra",
+  tasbihAfterPrayerDone: "Namaz sonrası tesbihat tamamlandı",
+  duaAfterPrayerTasbih: "Namaz sonrası tesbihat",
+  duaAfterPrayerTasbihSub: "33 · 33 · 34 — sayaç sana eşlik eder",
 };
 
 const en: Strings = {
@@ -1299,6 +1314,11 @@ const en: Strings = {
   quranReaderSettings: "Text size and tajweed",
   quranBookmarkRemoveLabel: "Remove bookmark",
   quranBookmarkRemoveUndo: "Undo",
+  // Tasbih after prayer
+  tasbihAfterPrayer: "After prayer",
+  tasbihAfterPrayerDone: "Tasbih after prayer complete",
+  duaAfterPrayerTasbih: "Tasbih after prayer",
+  duaAfterPrayerTasbihSub: "33 · 33 · 34 — the counter guides you",
 };
 
 export const TRANSLATIONS: Record<Locale, Strings> = { ar, de, tr, en };
