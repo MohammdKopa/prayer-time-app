@@ -611,7 +611,56 @@ worshipper who wants to read a juzʾ shouldn't have to switch apps.
 **Scope for 1.1** (about 1–1.5 weeks)
 - [ ] Licence check for the three translations; record the result in a
       `CREDITS`/`LICENSES` file like the photos and sounds.
-- [ ] Bundle the Tanzil Uthmani text, plus the checksum test.
+- [x] Bundle the Tanzil Uthmani text, plus the checksum test (2026-10-14).
+      `mobile/src/lib/quran/source/` holds the two Tanzil files byte-for-byte
+      (`.gitattributes` keeps git from converting their line endings);
+      `scripts/build-quran.mts` generates `text.ts` + `meta.ts`;
+      `tests/quran.test.ts` pins both SHA-256s and re-parses the source.
+      Tanzil puts the basmala inside the first āyah of 112 sūrahs, and in 95
+      and 97 with a shadda on the bāʾ; `splitBasmala` shows it as a header in
+      whichever form that sūrah's text has, and the test proves header + rest
+      re-joins to the original line.
+- [x] **Reader screens** (2026-10-14): the Quran is its own tab (Mohamed:
+      "on the main nav"), between Month and Adhkar; reading screen at
+      `/quran/[surah]` with basmala header, ﴿n﴾ markers in 0–9, five text
+      sizes, long-press bookmarks, last position, previous/next sūrah. Juzʾ
+      index; search by name, number or `2:255`. Font: Amiri Quran (drawn for
+      the Uthmani text). Riwāyat Ḥafṣ ʿan ʿĀṣim, said on the tab.
+- [x] **Tajweed colours** (Mohamed, 2026-10-14, he practises tajweed with
+      the app; confirmed correct on his phone the same evening). Data:
+      quran-tajweed by Collin Fair (CC BY 4.0, credited), computed on a 2017
+      Tanzil copy and remapped onto ours by `scripts/build-tajweed.py`, which
+      aligns the two texts and refuses any span whose letters differ (Tanzil
+      changed only encoding since: tatweel before superscript alif, spaced
+      pause/sajda marks, hamza on tatweel, U+06E6→U+06E7, the alif-maqsura
+      seat in 12:39/12:41). `tests/quran-tajweed.test.ts` checks every span
+      sits on its rule's letters (qalqala on ق ط ب ج د, ghunna on ن/م, …).
+      **Rendering — read before touching it.** React Native `Text` on Android
+      cannot colour part of an Arabic word: every coloured run is laid out on
+      its own, so joins break, and a mark cut from its letter drifts. Three
+      rounds of workarounds (ZWJ at cuts, letter snapping, ligatures off) each
+      moved the artefact elsewhere. Settled: tajweed mode draws the sūrah in a
+      WebView (`components/quran/TajweedPage.tsx`, page built by
+      `lib/quran/tajweed-html.ts` from AYAT verbatim, test strips the markup
+      and compares all 6,236 āyāt; no network, font from
+      `file:///android_asset/fonts/`). Plain mode stays native.
+      Colouring rules (Mohamed's corrections): colour the source letter only
+      where two letters meet (ikhfāʾ/idghām/iqlāb never run into the next
+      letter or word); a madd starts on the madd letter, not the letter whose
+      vowel precedes it; the small wāw/yāʾ of the ṣila (ۥ ۦ, U+06E5–06E7) are
+      letters and take their own colour; natural madd (2) is left plain, as
+      in printed tajweed mushafs. Known limit: Android WebView paints a
+      tanwīn/ḥaraka in its letter's colour. Six colour families
+      (Dar al-Maʿrifa style), off by default, legend in the reader.
+      **Open:** match Mohamed's own mushaf's colour scheme (asked which one);
+      **iOS:** `TajweedPage` FONT_SRC points at Android assets only — fix
+      before the iOS build ships tajweed; a qāriʾ should look it over.
+- [ ] **Sajda note** (Mohamed, 2026-10-14): at an āyah of prostration during
+      a time voluntary prayer is avoided (after Fajr to sunrise, zenith, after
+      ʿAṣr to Maghrib), a gentle reminder under the āyah. Logic and tests
+      done (`lib/quran/sajda-time.ts`); off until Sheikh Ayman answers the
+      questions in `docs/dua-content-review.md`, since the madhhabs differ on
+      sajdat al-tilāwa in these times.
 - [ ] Quran font: *Amiri Quran* (OFL; Amiri is already bundled) or the
       KFGQPC Uthmanic Hafs font. Test it on real devices, RTL, largest
       text size.
@@ -644,16 +693,35 @@ proposal. Each item is held against the founding principles, and the first
 one sits right against a line in "Deliberately excluded", so its shape
 matters more than the feature.
 
-1. **Prayer check-off, with something that grows.** A tick per prayer once
-   its time has passed. The motivator she showed is an app where a tree
-   grows as you pray. Rules: private and local (no accounts, no sharing, no
-   leaderboard); the "no streak-shaming" exclusion stands, so nothing wilts
-   and nothing scolds — a missed prayer is simply unmarked, and the tree
-   grows but never dies. Calm, in the app's palette. Natural homes: five
-   small ticks under the clock, the month grid showing each day's marks.
-   Open design questions, to decide with her: a tree, or something in this
-   app's own language (a star that lights per prayer on the sun arc, a
-   garden per month); and whether a past day can be ticked (qadāʾ).
+1. **Prayer Pause (وقفة الصلاة)** — replaces the prayer check-off with a
+   growing tree (decided 2026-10-14). The aim is the same, keeping young
+   people committed to prayer; the shape changed twice on the way.
+   - *Mohamed's first idea:* at prayer time the whole phone locks until a
+     parent gives a PIN. Dropped the same day, by Mohamed: a child outside
+     who needs to make a call must always be able to. It is also not
+     buildable as an ordinary app: Android has no lock API for third-party
+     apps (the apps that do it lean on the Accessibility service, which
+     Play rejects for non-accessibility use since 2023, risking the whole
+     listing), and iOS only allows it through Screen Time.
+   - *What gets built:* a family mode a parent switches on. When the adhan
+     comes, the apps the parent chose (games, social) pause for about 15
+     minutes. Phone calls, messages, maps and emergency calls never pause.
+     The pause ends by itself, or earlier with a parent code.
+   - *The parent code works offline:* parent and child pair once by QR code
+     (a shared secret); the parent's phone then shows a code that changes
+     every 30 seconds (TOTP, like a bank's 2FA). No server, no accounts, so
+     both stores' privacy answers stay "no data collected".
+   - *Platforms:* iOS through the Screen Time API (FamilyControls /
+     ManagedSettings / DeviceActivity), which needs the Family Controls
+     entitlement requested from Apple first. Android through a usage-stats
+     check plus an overlay over the paused apps only, declared to Play as a
+     parental-control feature; read the current Play policy before writing
+     any of it.
+   - *Rules that stand:* opt-in and set up by a parent, never by default;
+     nothing scolds, no streaks, no reports of missed prayers; unlocking
+     early is normal, not a failure.
+   - Big (native work on both platforms plus an entitlement), so it comes
+     after the small items.
 
 2. **Quran reader** — already specified as 1.1 above. Unchanged, still
    first in line.
@@ -663,10 +731,14 @@ matters more than the feature.
    custom "rate us" dialog; both stores' guidelines prefer the native one,
    and it needs no network of our own, so Data Safety stays "no data
    collected". Trigger after a good moment, never on first launch: about the
-   tenth open across at least a week, or the first completed month in the
-   tracker once that exists. Ask once; both OSes rate-limit it anyway.
+   tenth open across at least a week. Ask once; both OSes rate-limit it
+   anyway.
 
-4. **Sun and moon on the clock screen.** The sky already shifts hue with
+4. **Sun and moon on the clock screen** — *on hold since 2026-10-14.* The
+   sun is a sign of Allah but not to be venerated (Fuṣṣilat 41:37), and the
+   app should not make it a centrepiece; the SunArc showing its position as
+   timing data is a different thing and stays. Ask Mohamed before reviving
+   this. Original note: the sky already shifts hue with
    the day's prayer times (`lib/sky.ts`) and the SunArc already carries a
    sun by day and a crescent by night. The ask is to make them present in
    the scene, not only on the arc: a soft sun disc that climbs and warms
@@ -694,13 +766,23 @@ matters more than the feature.
    its labels (the bar is labelled on purpose; see the comment in
    `components/TabBar.tsx`).
 
+7. **New app icon.** The current icon is a sun on its arc, which runs
+   into the same concern as item 4. Explored 2026-10-14 with the
+   logo-design skill: rounds of symbols, letterforms and architecture, then
+   an Islamic-geometry family that Mohamed chose as the direction. Twelve
+   variants in `docs/logo-2026-10/geometry-variants.png` (sources in
+   `docs/logo-2026-10/geometry/`) are in a poll with his friends. When a
+   winner is picked: refine it, a small-size cut, then the iOS icon,
+   Android adaptive + monochrome, splash, favicon/web icons and the Play
+   512 icon. An icon change is a new version.
+
 Not from her, but belonging to the same release: the accessibility pass and
 the iOS widget listed under "Next".
 
-**Proposed order:** 1.1 Quran first (specified), then the icons (small and
-visible), the review prompt (small), sun and moon (medium), the adhkar
-growth (bound by the content review), and the prayer check-off last, because
-it needs the design decisions above made with her first.
+**Order (agreed 2026-10-14):** 1.1 Quran reader first (started 2026-10-14),
+then the SVG tab icons, the review prompt, the adhkar growth (bound by the
+content review), the new app icon once the poll is in, and Prayer Pause
+last, because it is the biggest.
 
 ### After 2.0: low-maintenance mode (clarified 2026-09-25)
 

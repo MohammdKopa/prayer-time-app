@@ -474,6 +474,36 @@ list beats a long doubtful one:
 
 ---
 
+## Sajda note in the Quran reader (added 2026-10-14)
+
+**Status: NOT REVIEWED. Off in the app (`SAJDA_TIME_NOTE_REVIEWED = false` in
+`mobile/src/lib/quran/sajda-time.ts`) until the sheikh answers below.**
+
+When someone reads one of the fifteen āyāt of prostration during a time in
+which voluntary prayer is avoided, the reader shows a short, gentle note under
+the āyah. It reminds; it does not rule. The app cannot know whether the person
+has already prayed, so a window starts when the prayer's time comes in.
+
+Questions for Sheikh Ayman:
+
+1. **Should the note exist at all,** given the difference of opinion on
+   sajdat al-tilāwa in these times (Ḥanafī: avoided; Shāfiʿī: allowed, as it
+   has a cause)? If yes, which position does the mosque follow?
+2. **Which windows?** As built: from Fajr time until 15 minutes after sunrise;
+   10 minutes before Dhuhr; from ʿAṣr time until Maghrib. Are 15 and 10
+   minutes right, and should "after ʿAṣr" start at ʿAṣr's time or only near
+   sunset (yellowing of the sun)?
+3. **The wording.** Proposed:
+   - AR: «هذه آية سجدة، والوقت الآن وقت كراهة للصلاة (بعد العصر). يمكنك أن تسجد بعد المغرب.»
+   - The bracket changes per window: (بعد الفجر) · (وقت الشروق) · (وقت الزوال) · (بعد العصر).
+   - DE / TR / EN follow once the Arabic is settled.
+
+- [ ] Note approved (or dropped)
+- [ ] Position and windows confirmed
+- [ ] Wording approved
+
+---
+
 
 ## Sign-off
 
