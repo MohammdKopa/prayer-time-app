@@ -626,6 +626,20 @@ worshipper who wants to read a juzʾ shouldn't have to switch apps.
       sizes, long-press bookmarks, last position, previous/next sūrah. Juzʾ
       index; search by name, number or `2:255`. Font: Amiri Quran (drawn for
       the Uthmani text). Riwāyat Ḥafṣ ʿan ʿĀṣim, said on the tab.
+- [x] **Mushaf pages** (Mohamed, 2026-10-14: "missing pages and bookmark
+      and the overall UI/UX"). The reader is now the Madani mushaf page by
+      page: 604 pages with the printed page numbers (Tanzil metadata →
+      `PAGE_STARTS`/`QUARTER_STARTS` in meta.ts, `lib/quran/pages.ts`),
+      swiped right to left, sūrah bands + basmala, juzʾ/ḥizb in the running
+      head. One WebView for plain and tajweed (`lib/quran/mushaf-html.ts`,
+      `components/quran/MushafPager.tsx`); pages filled on demand (±2, dropped
+      beyond ±4). Tap an āyah → bookmark / copy / share (`AyahActions`); a
+      ribbon marks the page; "Aa" sheet for size + tajweed (`ReaderSettings`).
+      Quran tab: page numbers everywhere, Pages index + go to page, page search
+      ("p 411", "ص 411"), bookmarks always visible. `tests/quran-mushaf.test.ts`
+      proves all 604 pages show AYAT verbatim, tajweed on and off. Text flows
+      and is justified; it is not the line-exact printed layout (that needs the
+      QPC page fonts, see "Mushaf page view" below).
 - [x] **Tajweed colours** (Mohamed, 2026-10-14, he practises tajweed with
       the app; confirmed correct on his phone the same evening). Data:
       quran-tajweed by Collin Fair (CC BY 4.0, credited), computed on a 2017
