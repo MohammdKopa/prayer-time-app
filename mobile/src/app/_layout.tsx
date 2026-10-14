@@ -18,6 +18,7 @@ import { Platform } from "react-native";
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import { restoreDefaultOrientation } from "@/lib/orientation";
 import { PlaceProvider } from "@/lib/place-context";
+import { countOpenAndMaybeAsk } from "@/lib/review-prompt-run";
 import { COLORS } from "@/theme";
 
 SplashScreen.preventAutoHideAsync();
@@ -50,6 +51,11 @@ function Navigator() {
   useEffect(() => {
     if (canRender) SplashScreen.hideAsync();
   }, [canRender]);
+
+  // Once per cold start; the effect has no deps so a re-render never recounts.
+  useEffect(() => {
+    void countOpenAndMaybeAsk();
+  }, []);
 
   if (!canRender) return null;
 
