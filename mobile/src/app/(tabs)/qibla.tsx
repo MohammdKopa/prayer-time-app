@@ -11,6 +11,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { qiblaBearing } from "@shared/qibla";
+import {
+  compassAvailable,
+  watchFusedHeading,
+  type CompassSubscription,
+} from "../../../modules/prayer-compass";
 import { angleBetween, followAngle, isAligned } from "@/lib/compass";
 import { useI18n, type Strings } from "@/lib/i18n";
 import { usePlaceContext } from "@/lib/place-context";
@@ -39,6 +44,13 @@ import { COLORS, FONTS, TEXT } from "@/theme";
 // state holds just what the text shows (rounded degrees off, accuracy bucket,
 // aligned flag) and is written only when one of those actually changes, so the
 // screen does not re-render at sensor rate.
+//
+// The heading source: on Android, the OS's fused rotation-vector sensor
+// (modules/prayer-compass) — expo-location there reads the raw magnetometer at
+// ~5 Hz in ~2° steps, which no smoothing can make fluid. It needs no location
+// permission: the declination comes from the place's coordinates. iOS, and
+// any phone without the sensor, keep expo-location (Core Location's heading
+// is already fused on iOS).
 //
 // Each sample animates the dial LINEARLY over the measured sample interval:
 // consecutive samples then join into one continuous piecewise-linear motion.
@@ -95,78 +107,86 @@ export default function QiblaScreen() {
   }, []);
 
   useEffect(() => {
-    let sub: Location.LocationSubscription | null = null;
+    let sub: Location.LocationSubscription | CompassSubscription | null = null;
     let cancelled = false;
 
-    (async () => {
-      try {
-        const { status } = await Location.getForegroundPermissionsAsync();
-        if (status !== Location.PermissionStatus.GRANTED) {
-          if (!cancelled) setUnavailable(true);
-          return;
+    const onSample = (h: { trueHeading: number; accuracy: number }) => {
+      if (cancelled) return;
+      const last = shown.current;
+      if (h.trueHeading < 0) {
+        if (!last.unavailable) {
+          last.unavailable = true;
+          setUnavailable(true);
         }
-        sub = await Location.watchHeadingAsync((h) => {
-          if (cancelled) return;
-          const last = shown.current;
-          if (h.trueHeading < 0) {
-            if (!last.unavailable) {
-              last.unavailable = true;
-              setUnavailable(true);
-            }
-            if (last.off !== null) {
-              last.off = null;
-              setOff(null);
-            }
-            return;
-          }
-          if (last.unavailable) {
-            last.unavailable = false;
-            setUnavailable(false);
-          }
-          const nextOff = Math.round(angleBetween(h.trueHeading, target));
-          if (nextOff !== last.off) {
-            last.off = nextOff;
-            setOff(nextOff);
-          }
-          if (h.accuracy !== last.accuracy) {
-            last.accuracy = h.accuracy;
-            setAccuracy(h.accuracy);
-          }
-          const nextAligned = isAligned(h.trueHeading, target);
-          if (nextAligned !== last.aligned) {
-            last.aligned = nextAligned;
-            setAligned(nextAligned);
-          }
-
-          // The dial turns opposite the phone, so north stays north.
-          const prev = unwrapped.current;
-          const next = followAngle(prev, -h.trueHeading);
-          unwrapped.current = next;
-          const now = Date.now();
-          const interval = now - lastSampleAt.current;
-          lastSampleAt.current = now;
-          if (next === prev) return;
-          if (reduceMotion.current) {
-            dial.setValue(next);
-            return;
-          }
-          Animated.timing(dial, {
-            toValue: next,
-            duration: Math.min(120, Math.max(40, interval)),
-            easing: Easing.linear,
-            useNativeDriver: true,
-          }).start();
-        });
-      } catch {
-        if (!cancelled) setUnavailable(true);
+        if (last.off !== null) {
+          last.off = null;
+          setOff(null);
+        }
+        return;
       }
-    })();
+      if (last.unavailable) {
+        last.unavailable = false;
+        setUnavailable(false);
+      }
+      const nextOff = Math.round(angleBetween(h.trueHeading, target));
+      if (nextOff !== last.off) {
+        last.off = nextOff;
+        setOff(nextOff);
+      }
+      if (h.accuracy !== last.accuracy) {
+        last.accuracy = h.accuracy;
+        setAccuracy(h.accuracy);
+      }
+      const nextAligned = isAligned(h.trueHeading, target);
+      if (nextAligned !== last.aligned) {
+        last.aligned = nextAligned;
+        setAligned(nextAligned);
+      }
+
+      // The dial turns opposite the phone, so north stays north.
+      const prev = unwrapped.current;
+      const next = followAngle(prev, -h.trueHeading);
+      unwrapped.current = next;
+      const now = Date.now();
+      const interval = now - lastSampleAt.current;
+      lastSampleAt.current = now;
+      if (next === prev) return;
+      if (reduceMotion.current) {
+        dial.setValue(next);
+        return;
+      }
+      Animated.timing(dial, {
+        toValue: next,
+        duration: Math.min(120, Math.max(40, interval)),
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    if (compassAvailable) {
+      sub = watchFusedHeading(place.latitude, place.longitude, onSample);
+    } else {
+      (async () => {
+        try {
+          const { status } = await Location.getForegroundPermissionsAsync();
+          if (status !== Location.PermissionStatus.GRANTED) {
+            if (!cancelled) setUnavailable(true);
+            return;
+          }
+          const s = await Location.watchHeadingAsync(onSample);
+          if (cancelled) s.remove();
+          else sub = s;
+        } catch {
+          if (!cancelled) setUnavailable(true);
+        }
+      })();
+    }
 
     return () => {
       cancelled = true;
       sub?.remove();
     };
-  }, [target, dial]);
+  }, [target, dial, place.latitude, place.longitude]);
   const spin = dial.interpolate({
     inputRange: [-360, 360],
     outputRange: ["-360deg", "360deg"],

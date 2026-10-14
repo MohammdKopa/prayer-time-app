@@ -1,0 +1,9 @@
+{
+  "name": "prayer-compass",
+  "version": "1.0.0",
+  "description": "Local Expo module: a smooth compass heading from Android's fused rotation-vector sensor. Not published, Android only.",
+  "main": "index.ts",
+  "types": "index.ts",
+  "license": "UNLICENSED",
+  "private": true
+}
