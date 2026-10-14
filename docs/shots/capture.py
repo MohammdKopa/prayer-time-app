@@ -25,7 +25,7 @@ def scrub(name):
             bar = y; break
     im.paste(bg, (0, 0, w, bar)); im.save(clean / f"{prefix}_{name}.png", optimize=True)
 sh("adb", "shell", "am", "force-stop", PKG)
-sh("adb", "shell", "am", "start", "-W", "-n", f"{PKG}/app.kametrix.prayer.MainActivity"); time.sleep(14)
+sh("adb", "shell", "am", "start", "-W", "-n", f"{PKG}/app.kametrix.prayer.MainActivity"); time.sleep(22)  # GPS fix, so the clock shows the city
 cap("home")
 for r in ["qibla", "month", "dua", "mosques", "settings", "tasbih"]:
     sh("adb", "shell", "am", "start", "-W", "-a", "android.intent.action.VIEW", "-d", f"prayer://{r}", PKG); time.sleep(5)
