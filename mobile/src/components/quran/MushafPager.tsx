@@ -76,12 +76,13 @@ export function MushafPager(props: Props) {
     }
   }, [props.page]);
 
-  const first = useRef(true);
+  // Whether the document has loaded (anything injected before is dropped),
+  // and whether its pages are drawn with tajweed colours.
+  const loaded = useRef(false);
+  const drawnTajweed = useRef(props.tajweed);
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
+    if (!loaded.current || drawnTajweed.current === tajweed) return;
+    drawnTajweed.current = tajweed;
     inject("window.__reset&&window.__reset()");
   }, [tajweed]);
 
@@ -98,6 +99,20 @@ export function MushafPager(props: Props) {
   useEffect(() => {
     inject(`window.__select&&window.__select(${JSON.stringify(selectedKey)})`);
   }, [selectedKey]);
+
+  // The reader's settings and bookmarks load from storage a moment after the
+  // document is built, often before it has loaded. Once it has, bring it up
+  // to date with what is current now; without this a saved "tajweed on"
+  // showed plain text until it was toggled off and on.
+  const onLoadEnd = () => {
+    loaded.current = true;
+    inject(`window.__setSize&&window.__setSize(${props.fontSize})`);
+    inject(`window.__setMarked&&window.__setMarked(${JSON.stringify(marked)})`);
+    if (drawnTajweed.current !== tajweed) {
+      drawnTajweed.current = tajweed;
+      inject("window.__reset&&window.__reset()");
+    }
+  };
 
   const onMessage = (e: WebViewMessageEvent) => {
     let msg: MushafMessage;
@@ -130,6 +145,7 @@ export function MushafPager(props: Props) {
       // navigation away from it.
       onShouldStartLoadWithRequest={(r) => r.url === "about:blank"}
       onMessage={onMessage}
+      onLoadEnd={onLoadEnd}
       javaScriptEnabled
       domStorageEnabled={false}
       cacheEnabled={false}

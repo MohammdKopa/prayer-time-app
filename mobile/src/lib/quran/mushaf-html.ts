@@ -100,7 +100,7 @@ export function pageContentHtml(page: number, opts: MushafOptions): string {
     body +=
       `<span class="a${opts.marked.has(key) ? " m" : ""}" data-k="${key}">` +
       `${ayahText(i, raw, from, opts.tajweed)}</span>` +
-      `<span class="n"> ﴿${ayah}﴾ </span>`;
+      `<span class="n"> <b>﴿${ayah}﴾</b> </span>`;
   }
   closePara();
 
@@ -146,7 +146,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:${c.bg};color:${c.text
 .bd{flex:1;padding:6px 0 4px;font-family:Mushaf,serif;font-size:var(--fs);line-height:2.05;font-variant-ligatures:no-common-ligatures no-discretionary-ligatures no-historical-ligatures;font-feature-settings:"liga" 0,"dlig" 0,"hlig" 0}
 .t{margin:0;text-align:justify;text-align-last:right}
 .a{border-radius:6px;padding:0 2px;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-color .15s}
-.a.m{background:${c.wash}}
+.a.m{background:${c.gold}24}
+.n b{font-weight:normal;white-space:nowrap}
+.a.m+.n b::before{content:"";display:inline-block;width:.42em;height:.62em;margin:0 .12em;vertical-align:.05em;background:${c.gold};clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
 .a.sel{background:${c.raised};box-shadow:0 0 0 1px ${c.gold}55}
 .n,.r{color:${c.gold}}
 .sh{margin:14px 0 6px;padding:6px 10px;text-align:center;color:${c.gold};font-size:calc(var(--fs) * .85);line-height:1.6;border:1px solid ${c.gold}66;border-radius:10px;box-shadow:inset 0 0 0 3px ${c.bg},inset 0 0 0 4px ${c.gold}33;background:${c.raised}}
