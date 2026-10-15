@@ -74,10 +74,10 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 ### Short description
 
 ```
-مواقيت الصلاة في ألمانيا بدون إنترنت، بلا إعلانات ولا تتبّع.
+مواقيت الصلاة والقرآن بالتجويد، بدون إنترنت، بلا إعلانات ولا تتبّع.
 ```
 
-**60 characters** (limit 80)
+**67 characters** (limit 80)
 
 ### Full description
 
@@ -85,6 +85,10 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 مواقيت صلاة تُحسب داخل هاتفك. بدون إنترنت، وبدون إعلانات، وبدون حساب.
 
 يحسب التطبيق أوقات الصلوات الخمس اعتمادًا على موقعك الجغرافي مباشرةً على جهازك. لا خادم، ولا اتصال، ولا انتظار. يعمل في وضع الطيران، وفي القطار، وفي الطوابق السفلية التي لا تصلها الشبكة، وفي أول يوم لك في بلد جديد قبل أن تشتري شريحة.
+
+القرآن الكريم بلا إنترنت
+
+المصحف كاملًا: ٦٠٤ صفحات من مصحف المدينة بالرسم العثماني برواية حفص، تقلّبها صفحةً صفحة كالمصحف المطبوع. فعّل ألوان التجويد لترى أحكام التلاوة وأنت تقرأ. مع العلامات، والمتابعة من حيث توقفت، والانتقال إلى أي سورة أو جزء أو صفحة، وخمسة أحجام للخط.
 
 موقعك لا يغادر هاتفك
 
@@ -117,8 +121,8 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 وفي التطبيق أيضًا
 
 • جدول الشهر كاملًا، يُحفظ صورةً تُشارَك مع المصلّين
-• أدعية وأذكار، ولكلٍّ منها تذكير مستقل، وجميعها مغلقة حتى تفتحها بنفسك
-• سبحة
+• أدعية وأذكار، منها أذكار بعد الصلاة، ولكلٍّ منها تذكير مستقل، وجميعها مغلقة حتى تفتحها بنفسك
+• سبحة، مع تسبيح موجَّه بعد كل صلاة ٣٣ · ٣٣ · ٣٤
 • دليل يضم أكثر من 1500 مسجد في ألمانيا
 • تقويم هجري، ووضع خاص لشهر رمضان
 • أداة على الشاشة الرئيسية تعرض الصلاة القادمة
@@ -154,15 +158,15 @@ The copy describes the fixed 90-minute Fajr and Isha rule accurately, and it doe
 Gebetszeiten
 ```
 
-**12 characters** (limit 30)
+**2485 characters** (limit 4000)
 
 ### Short description
 
 ```
-Gebetszeiten für Deutschland – offline, ohne Werbung, ohne Tracking.
+Gebetszeiten & Koran mit Tajweed – offline, ohne Werbung, ohne Tracking.
 ```
 
-**68 characters** (limit 80)
+**72 characters** (limit 80)
 
 ### Full description
 
@@ -170,6 +174,10 @@ Gebetszeiten für Deutschland – offline, ohne Werbung, ohne Tracking.
 Gebetszeiten, die auf deinem Gerät berechnet werden. Ohne Internet, ohne Werbung, ohne Konto.
 
 Die App berechnet die fünf täglichen Gebetszeiten direkt auf dem Telefon, aus deinen Standortkoordinaten. Kein Server, keine Verbindung, kein Warten. Sie funktioniert im Flugmodus, im Zug, im Keller ohne Empfang und am ersten Tag in einem neuen Land, bevor die SIM-Karte da ist.
+
+Der edle Koran, offline
+
+Alle 604 Seiten des Madina-Mushafs in uthmanischer Schrift (Hafs), Seite für Seite zum Umblättern wie ein gedruckter Mushaf. Mit Tajweed-Farben siehst du die Regeln der Rezitation direkt beim Lesen. Dazu Lesezeichen, Weiterlesen, wo du aufgehört hast, Sprung zu jeder Sure, jedem Juz und jeder Seite und fünf Schriftgrößen.
 
 Dein Standort verlässt das Gerät nicht
 
@@ -202,8 +210,8 @@ Per GPS orten oder die Stadt manuell wählen und gespeichert lassen.
 Außerdem enthalten
 
 • Eine Monatstabelle, als Bild teilbar
-• Bittgebete und Adhkar, jeweils mit eigener Erinnerung, alle standardmäßig aus
-• Ein Tasbih-Zähler
+• Bittgebete und Adhkar, auch Adhkar nach dem Gebet, jeweils mit eigener Erinnerung, alle standardmäßig aus
+• Ein Tasbih-Zähler, mit geführtem Tasbih nach dem Gebet (33 · 33 · 34)
 • Ein Verzeichnis von über 1.500 Moscheen in Deutschland
 • Ein islamischer Kalender und ein Ramadan-Modus
 • Ein Widget für den Startbildschirm mit dem nächsten Gebet
@@ -239,15 +247,15 @@ Kontakt: mohamedkeba@kametrix.com
 Namaz Vakitleri
 ```
 
-**15 characters** (limit 30)
+**3264 characters** (limit 4000)
 
 ### Short description
 
 ```
-Almanya için namaz vakitleri – çevrimdışı, reklamsız, takipsiz.
+Namaz vakitleri ve tecvidli Kuran – çevrimdışı, reklamsız, takipsiz.
 ```
 
-**63 characters** (limit 80)
+**68 characters** (limit 80)
 
 ### Full description
 
@@ -255,6 +263,10 @@ Almanya için namaz vakitleri – çevrimdışı, reklamsız, takipsiz.
 Namaz vakitleri, telefonunuzun içinde hesaplanır. İnternetsiz, reklamsız, hesapsız.
 
 Uygulama beş vakti doğrudan cihazınızda, konum koordinatlarınızdan hesaplar. Sunucu yok, bağlantı yok, bekleme yok. Uçak modunda, trende, çekmeyen bir bodrumda ve yeni bir ülkedeki ilk gününüzde, daha hat almadan çalışır.
+
+Kur'an-ı Kerim, çevrimdışı
+
+Medine Mushafı'nın 604 sayfasının tamamı, Resm-i Osmanî ile (Hafs rivayeti), basılı bir Mushaf gibi sayfa sayfa çevrilir. Tecvid renklerini açın, okurken tecvid kurallarını görün. Yer imleri, kaldığınız yerden devam, istediğiniz sure, cüz veya sayfaya geçiş ve beş yazı boyutu.
 
 Konumunuz cihazdan çıkmaz
 
@@ -287,8 +299,8 @@ GPS ile konumlanın veya şehrinizi elle seçip kayıtlı bırakın.
 Ayrıca içinde
 
 • Görsel olarak paylaşılabilen aylık vakit çizelgesi
-• Dualar ve zikirler; her biri için ayrı, varsayılan olarak kapalı hatırlatmalar
-• Tesbih sayacı
+• Dualar ve zikirler, namaz sonrası zikirler dahil; her biri için ayrı, varsayılan olarak kapalı hatırlatmalar
+• Tesbih sayacı; her namazdan sonra 33 · 33 · 34 rehberli tesbih
 • Almanya'daki 1.500'den fazla cami için rehber
 • Hicri takvim ve Ramazan modu
 • Sonraki vakti gösteren ana ekran widget'ı
@@ -324,15 +336,15 @@ Gizlilik politikası: https://prayer.kametrix.com/privacy
 Prayer Times
 ```
 
-**12 characters** (limit 30)
+**2887 characters** (limit 4000)
 
 ### Short description
 
 ```
-Prayer times for Germany – offline, no ads, no tracking, no accounts.
+Prayer times & tajweed Quran – offline, no ads, no tracking, no account.
 ```
 
-**69 characters** (limit 80)
+**72 characters** (limit 80)
 
 ### Full description
 
@@ -340,6 +352,10 @@ Prayer times for Germany – offline, no ads, no tracking, no accounts.
 Prayer times calculated inside your phone. No internet, no ads, no account.
 
 The app works out the five daily prayer times on the device itself, from your location coordinates. No server, no connection, no waiting. It works in airplane mode, on the train, in a basement with no signal, and on your first day in a new country before the SIM card arrives.
+
+The Holy Quran, offline
+
+All 604 pages of the Madani mushaf in Uthmani script (Hafs), turned page by page like a printed mushaf. Switch on tajweed colours to see the rules of recitation as you read. Bookmarks, continue where you stopped, jump to any surah, juz or page, and five text sizes.
 
 Your location never leaves the device
 
@@ -372,8 +388,8 @@ Locate by GPS, or pick your city by hand and leave it saved.
 Also inside
 
 • A full month timetable, shareable as an image
-• Duas and adhkar, each with its own reminder, all off until you turn them on
-• A tasbih counter
+• Duas and adhkar, including adhkar after prayer, each with its own reminder, all off until you turn them on
+• A tasbih counter, with a guided 33 · 33 · 34 after each prayer
 • A directory of over 1,500 mosques in Germany
 • An Islamic calendar and a Ramadan mode
 • A home-screen widget showing the next prayer
@@ -403,7 +419,7 @@ Contact: mohamedkeba@kametrix.com
 
 # Data Safety answers
 
-Play Console → **Policy → App content → Data safety**. Every app on a closed, open or production track must complete this form, including apps that collect nothing. The answers below are for an app that collects and shares no user data.
+Play Console → **2951 characters** (limit 4000)
 
 ### Section 1 — Data collection and security
 
