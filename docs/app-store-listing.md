@@ -70,26 +70,26 @@ Keywords are measured in bytes (limit 100); Arabic letters count double. Words a
 ### Subtitle
 
 ```
-أذان وقبلة وأذكار
+أذان وقبلة وقرآن بالتجويد
 ```
 
-**17 characters** (limit 30)
+**25 characters** (limit 30)
 
 ### Promotional text
 
 ```
-مواقيت الصلاة تُحسب داخل هاتفك: بلا إنترنت، بلا إعلانات، بلا حساب. أذان في وقته، وبوصلة قبلة، وجدول الشهر، وأكثر من ١٥٠٠ مسجد في ألمانيا.
+جديد: القرآن الكريم كاملًا، ٦٠٤ صفحات بالرسم العثماني وبألوان التجويد، بلا إنترنت. ومعه مواقيت صلاة تُحسب داخل هاتفك، بلا إعلانات ولا حساب.
 ```
 
-**137 characters** (limit 170)
+**139 characters** (limit 170)
 
 ### Keywords
 
 ```
-قبلة,صلاة,إسلام,قرآن,دعاء,مسجد,رمضان,تسبيح,salah,namaz,adhan
+صلاة,إسلام,أذكار,مصحف,دعاء,مسجد,رمضان,تسبيح,salah,namaz,mushaf
 ```
 
-**95 bytes** (limit 100)
+**98 bytes** (limit 100)
 
 ### Description
 
@@ -97,6 +97,10 @@ Keywords are measured in bytes (limit 100); Arabic letters count double. Words a
 مواقيت صلاة تُحسب داخل هاتفك. بدون إنترنت، وبدون إعلانات، وبدون حساب.
 
 يحسب التطبيق أوقات الصلوات الخمس اعتمادًا على موقعك الجغرافي مباشرةً على جهازك. لا خادم، ولا اتصال، ولا انتظار. يعمل في وضع الطيران، وفي القطار، وفي الطوابق السفلية التي لا تصلها الشبكة، وفي أول يوم لك في بلد جديد قبل أن تشتري شريحة.
+
+القرآن الكريم بلا إنترنت
+
+المصحف كاملًا: ٦٠٤ صفحات من مصحف المدينة بالرسم العثماني برواية حفص، تقلّبها صفحةً صفحة كالمصحف المطبوع. فعّل ألوان التجويد لترى أحكام التلاوة وأنت تقرأ. مع العلامات، والمتابعة من حيث توقفت، والانتقال إلى أي سورة أو جزء أو صفحة، وخمسة أحجام للخط.
 
 موقعك لا يغادر هاتفك
 
@@ -129,8 +133,8 @@ Keywords are measured in bytes (limit 100); Arabic letters count double. Words a
 وفي التطبيق أيضًا
 
 • جدول الشهر كاملًا، يُحفظ صورةً تُشارَك مع المصلّين
-• أدعية وأذكار، ولكلٍّ منها تذكير مستقل، وجميعها مغلقة حتى تفتحها بنفسك
-• سبحة
+• أدعية وأذكار، منها أذكار بعد الصلاة، ولكلٍّ منها تذكير مستقل، وجميعها مغلقة حتى تفتحها بنفسك
+• سبحة، مع تسبيح موجَّه بعد كل صلاة ٣٣ · ٣٣ · ٣٤
 • دليل يضم أكثر من 1500 مسجد في ألمانيا
 • تقويم هجري، ووضع خاص لشهر رمضان
 • شاشة المسجد: عرضٌ للجدار فيه الساعة والمواقيت وقوس النهار
@@ -147,7 +151,7 @@ Keywords are measured in bytes (limit 100); Arabic letters count double. Words a
 للتواصل: mohamedkeba@kametrix.com
 ```
 
-**2099 characters** (limit 4000)
+**2438 characters** (limit 4000)
 
 ---
 
@@ -164,26 +168,26 @@ Prayer Times Offline
 ### Subtitle
 
 ```
-Adhan, Qibla and Adhkar
+Adhan, Qibla & Tajweed Quran
 ```
 
-**23 characters** (limit 30)
+**28 characters** (limit 30)
 
 ### Promotional text
 
 ```
-Prayer times calculated on your iPhone: no internet, no ads, no account. Adhan on time, a Qibla compass, the month timetable and over 1,500 mosques in Germany.
+New: the complete Quran – all 604 Uthmani mushaf pages in tajweed colours, offline. Plus prayer times calculated on your iPhone: no ads, no account.
 ```
 
-**159 characters** (limit 170)
+**159 characters**148 characters** (limit 170)
 
 ### Keywords
 
 ```
-salah,namaz,azan,athan,muslim,islam,quran,dua,mosque,ramadan,hijri,tasbih,fajr,isha,germany
+salah,namaz,azan,athan,muslim,islam,mushaf,dua,adhkar,mosque,ramadan,hijri,tasbih,fajr,germany
 ```
 
-**91 bytes** (limit 100)
+**94 bytes** (limit 100)
 
 ### Description
 
@@ -191,6 +195,10 @@ salah,namaz,azan,athan,muslim,islam,quran,dua,mosque,ramadan,hijri,tasbih,fajr,i
 Prayer times calculated inside your phone. No internet, no ads, no account.
 
 The app works out the five daily prayer times on the device itself, from your location coordinates. No server, no connection, no waiting. It works in airplane mode, on the train, in a basement with no signal, and on your first day in a new country before the SIM card arrives.
+
+The Holy Quran, offline
+
+All 604 pages of the Madani mushaf in Uthmani script (Hafs), turned page by page like a printed mushaf. Switch on tajweed colours to see the rules of recitation as you read. Bookmarks, continue where you stopped, jump to any surah, juz or page, and five text sizes.
 
 Your location never leaves the device
 
@@ -223,8 +231,8 @@ Locate by GPS, or pick your city by hand and leave it saved.
 Also inside
 
 • A full month timetable, shareable as an image
-• Duas and adhkar, each with its own reminder, all off until you turn them on
-• A tasbih counter
+• Duas and adhkar, including adhkar after prayer, each with its own reminder, all off until you turn them on
+• A tasbih counter, with a guided 33 · 33 · 34 after each prayer
 • A directory of over 1,500 mosques in Germany
 • An Islamic calendar and a Ramadan mode
 • The mosque display: a wall view with the clock, the times and the day's arc
@@ -241,7 +249,7 @@ Privacy policy: https://prayer.kametrix.com/privacy
 Contact: mohamedkeba@kametrix.com
 ```
 
-**2535 characters** (limit 4000)
+**2904 characters** (limit 4000)
 
 ---
 
@@ -258,23 +266,23 @@ Gebetszeiten offline
 ### Subtitle
 
 ```
-Adhan, Qibla und Adhkar
+Adhan, Qibla & Tajweed-Koran
 ```
 
-**23 characters** (limit 30)
+**28 characters** (limit 30)
 
 ### Promotional text
 
 ```
-Gebetszeiten, direkt auf dem iPhone berechnet: ohne Internet, ohne Werbung, ohne Konto. Adhan pünktlich, Qibla-Kompass, Monatstabelle und über 1.500 Moscheen.
+Neu: der ganze Koran – alle 604 Mushaf-Seiten mit Tajweed-Farben, offline. Dazu Gebetszeiten, direkt auf dem iPhone berechnet: ohne Werbung, ohne Konto.
 ```
 
-**158 characters** (limit 170)
+**158 characters**152 characters** (limit 170)
 
 ### Keywords
 
 ```
-namaz,salah,azan,muslim,islam,moschee,koran,dua,ramadan,tasbih,fajr,ezan,gebet,kalender,hidschri
+namaz,salah,azan,muslim,islam,moschee,quran,mushaf,dua,adhkar,ramadan,tasbih,ezan,gebet,hidschri
 ```
 
 **96 bytes** (limit 100)
@@ -285,6 +293,10 @@ namaz,salah,azan,muslim,islam,moschee,koran,dua,ramadan,tasbih,fajr,ezan,gebet,k
 Gebetszeiten, die auf deinem Gerät berechnet werden. Ohne Internet, ohne Werbung, ohne Konto.
 
 Die App berechnet die fünf täglichen Gebetszeiten direkt auf dem Telefon, aus deinen Standortkoordinaten. Kein Server, keine Verbindung, kein Warten. Sie funktioniert im Flugmodus, im Zug, im Keller ohne Empfang und am ersten Tag in einem neuen Land, bevor die SIM-Karte da ist.
+
+Der edle Koran, offline
+
+Alle 604 Seiten des Madina-Mushafs in uthmanischer Schrift (Hafs), Seite für Seite zum Umblättern wie ein gedruckter Mushaf. Mit Tajweed-Farben siehst du die Regeln der Rezitation direkt beim Lesen. Dazu Lesezeichen, Weiterlesen, wo du aufgehört hast, Sprung zu jeder Sure, jedem Juz und jeder Seite und fünf Schriftgrößen.
 
 Dein Standort verlässt das Gerät nicht
 
@@ -317,8 +329,8 @@ Per GPS orten oder die Stadt manuell wählen und gespeichert lassen.
 Außerdem enthalten
 
 • Eine Monatstabelle, als Bild teilbar
-• Bittgebete und Adhkar, jeweils mit eigener Erinnerung, alle standardmäßig aus
-• Ein Tasbih-Zähler
+• Bittgebete und Adhkar, auch Adhkar nach dem Gebet, jeweils mit eigener Erinnerung, alle standardmäßig aus
+• Ein Tasbih-Zähler, mit geführtem Tasbih nach dem Gebet (33 · 33 · 34)
 • Ein Verzeichnis von über 1.500 Moscheen in Deutschland
 • Ein islamischer Kalender und ein Ramadan-Modus
 • Die Moschee-Anzeige: eine Wandansicht mit Uhr, Gebetszeiten und Tagesbogen
@@ -335,7 +347,7 @@ Datenschutzerklärung: https://prayer.kametrix.com/privacy
 Kontakt: mohamedkeba@kametrix.com
 ```
 
-**2774 characters** (limit 4000)
+**3204 characters** (limit 4000)
 
 ---
 
@@ -352,26 +364,26 @@ Namaz Vakitleri Çevrimdışı
 ### Subtitle
 
 ```
-Ezan, Kıble ve Zikirler
+Ezan, Kıble ve Tecvidli Kuran
 ```
 
-**23 characters** (limit 30)
+**29 characters** (limit 30)
 
 ### Promotional text
 
 ```
-Namaz vakitleri iPhone'unda hesaplanır: internet yok, reklam yok, hesap yok. Zamanında ezan, kıble pusulası, aylık çizelge ve Almanya'da 1.500'den fazla cami.
+Yeni: Kur'an-ı Kerim'in tamamı – 604 sayfalık Mushaf, tecvid renkleriyle, çevrimdışı. Ayrıca iPhone'unda hesaplanan namaz vakitleri: reklamsız, hesapsız.
 ```
 
-**158 characters** (limit 170)
+**158 characters**153 characters** (limit 170)
 
 ### Keywords
 
 ```
-salah,muslim,islam,cami,kuran,dua,ramazan,imsakiye,tesbih,hicri,takvim,almanya,vakit,sabah,akşam
+namaz,salah,muslim,cami,mushaf,dua,zikir,ramazan,imsakiye,tesbih,hicri,takvim,almanya,vakit
 ```
 
-**97 bytes** (limit 100)
+**97 bytes**91 bytes** (limit 100)
 
 ### Description
 
@@ -379,6 +391,10 @@ salah,muslim,islam,cami,kuran,dua,ramazan,imsakiye,tesbih,hicri,takvim,almanya,v
 Namaz vakitleri, telefonunuzun içinde hesaplanır. İnternetsiz, reklamsız, hesapsız.
 
 Uygulama beş vakti doğrudan cihazınızda, konum koordinatlarınızdan hesaplar. Sunucu yok, bağlantı yok, bekleme yok. Uçak modunda, trende, çekmeyen bir bodrumda ve yeni bir ülkedeki ilk gününüzde, daha hat almadan çalışır.
+
+Kur'an-ı Kerim, çevrimdışı
+
+Medine Mushafı'nın 604 sayfasının tamamı, Resm-i Osmanî ile (Hafs rivayeti), basılı bir Mushaf gibi sayfa sayfa çevrilir. Tecvid renklerini açın, okurken tecvid kurallarını görün. Yer imleri, kaldığınız yerden devam, istediğiniz sure, cüz veya sayfaya geçiş ve beş yazı boyutu.
 
 Konumunuz cihazdan çıkmaz
 
@@ -411,8 +427,8 @@ GPS ile konumlanın veya şehrinizi elle seçip kayıtlı bırakın.
 Ayrıca içinde
 
 • Görsel olarak paylaşılabilen aylık vakit çizelgesi
-• Dualar ve zikirler; her biri için ayrı, varsayılan olarak kapalı hatırlatmalar
-• Tesbih sayacı
+• Dualar ve zikirler, namaz sonrası zikirler dahil; her biri için ayrı, varsayılan olarak kapalı hatırlatmalar
+• Tesbih sayacı; her namazdan sonra 33 · 33 · 34 rehberli tesbih
 • Almanya'daki 1.500'den fazla cami için rehber
 • Hicri takvim ve Ramazan modu
 • Cami ekranı: saat, vakitler ve günün yayı ile duvar görünümü
@@ -429,4 +445,46 @@ Gizlilik politikası: https://prayer.kametrix.com/privacy
 İletişim: mohamedkeba@kametrix.com
 ```
 
-**2457 characters** (limit 4000)
+**2843 characters** (limit 4000)
+
+---
+
+# What's New in 1.1.0 (version page, per language)
+
+Submit only after the tajweed font has been checked on a real iPhone.
+
+```
+القرآن الكريم: ٦٠٤ صفحات بالرسم العثماني بألوان التجويد، مع العلامات وآخر قراءة، بلا إنترنت
+تسبيح بعد الصلاة: ٣٣ · ٣٣ · ٣٤ خطوة بخطوة
+أذكار جديدة وقسم أذكار بعد الصلاة
+بوصلة قبلة أكثر ثباتًا
+أيقونة جديدة للتطبيق
+الإشعارات تفتح الصفحة المناسبة مباشرة
+```
+
+```
+The Holy Quran: all 604 Uthmani mushaf pages in tajweed colours, with bookmarks and "continue reading" – fully offline
+Tasbih after prayer: 33 · 33 · 34, step by step
+New adhkar and an after-prayer section
+A steadier Qibla compass
+New app icon
+Notifications now open the right screen
+```
+
+```
+Der Koran: alle 604 Mushaf-Seiten mit Tajweed-Farben, Lesezeichen und „Weiterlesen“ – komplett offline
+Tasbih nach dem Gebet: 33 · 33 · 34, Schritt für Schritt
+Neue Adhkar und ein Bereich für Adhkar nach dem Gebet
+Ruhigerer Qibla-Kompass
+Neues App-Icon
+Benachrichtigungen öffnen direkt die richtige Seite
+```
+
+```
+Kur'an-ı Kerim: 604 sayfalık Mushaf, tecvid renkleriyle; yer imleri ve kaldığın yerden devam – tamamen çevrimdışı
+Namaz sonrası tesbih: 33 · 33 · 34, adım adım
+Yeni zikirler ve namaz sonrası zikirler bölümü
+Daha sakin kıble pusulası
+Yeni uygulama simgesi
+Bildirimler artık doğrudan doğru sayfayı açıyor
+```
